@@ -8,7 +8,7 @@ signal interaction_unavailable()
 
 @export var slot_id: String = "slot_1"
 @export var allowed_types: Array[String] = ["mg_turret"]
-@export var interaction_radius: float = 2.5
+@export var interaction_radius: float = 5.0
 
 var is_occupied: bool = false
 var installed_turret: TurretController = null

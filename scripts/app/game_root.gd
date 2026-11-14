@@ -105,17 +105,9 @@ func _ready() -> void:
 	# 5. Wire DefenseSlots proximity
 	if trench_map:
 		for slot in trench_map.get_defense_slots():
-			slot.interaction_available.connect(func(can_inst, can_rep):
-				active_slot_nearby = slot
-				var label := "포탑 설치 [E]" if can_inst else ("포탑 수리 [E]" if can_rep else "")
-				if touch_controls:
-					touch_controls.set_interact_available(can_inst or can_rep, label)
-			)
-			slot.interaction_unavailable.connect(func():
-				if active_slot_nearby == slot:
-					active_slot_nearby = null
-					if touch_controls:
-						touch_controls.set_interact_available(false)
+			slot.turret_installed.connect(func(_t):
+				if touch_controls and active_slot_nearby == slot:
+					touch_controls.set_interact_available(slot.can_repair(), "포탑 수리 [E]")
 			)
 			
 	# 6. Wire WaveDirector
@@ -161,10 +153,37 @@ func _ready() -> void:
 		wave_director.start_run(3)
 
 func _physics_process(_delta: float) -> void:
-	# Update slots with player position for proximity detection
 	if trench_map and player:
-		for slot in trench_map.get_defense_slots():
+		var slots = trench_map.get_defense_slots()
+		for slot in slots:
 			slot.update_player_proximity(player.global_position)
+			
+		# Look-targeted slot selection for stationary bunker defense
+		var best_slot: DefenseSlot = null
+		var best_dot: float = 0.25 # Require facing toward the slot sector
+		var cam_forward := Vector3.FORWARD
+		if player.camera_rig:
+			cam_forward = player.camera_rig.get_camera_forward()
+			
+		for slot in slots:
+			if slot.is_player_nearby and (slot.can_install() or slot.can_repair()):
+				var to_slot = (slot.global_position - player.global_position).normalized()
+				var dot = cam_forward.dot(to_slot)
+				if dot > best_dot:
+					best_dot = dot
+					best_slot = slot
+					
+		if best_slot != active_slot_nearby:
+			active_slot_nearby = best_slot
+			if active_slot_nearby:
+				var slot_name = "좌측 포탑" if active_slot_nearby.slot_id.contains("left") else ("우측 포탑" if active_slot_nearby.slot_id.contains("right") else "포탑")
+				var action_str = "설치" if active_slot_nearby.can_install() else "수리"
+				var label_text = "%s %s [E]" % [slot_name, action_str]
+				if touch_controls:
+					touch_controls.set_interact_available(true, label_text)
+			else:
+				if touch_controls:
+					touch_controls.set_interact_available(false)
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Keyboard shortcut for DefenseSlot interaction
