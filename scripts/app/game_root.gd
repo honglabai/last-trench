@@ -45,6 +45,7 @@ var enemy_container: Node3D:
 
 var active_slot_nearby: DefenseSlot = null
 var turret_scene: PackedScene = preload("res://scenes/defenses/mg_turret.tscn")
+var tracer_scene: PackedScene = preload("res://scenes/effects/bullet_tracer.tscn")
 var _is_initialized: bool = false
 
 func _ready() -> void:
@@ -62,6 +63,7 @@ func _ready() -> void:
 		battle_hud.update_player_health(player.current_health, player.max_health)
 		
 		if player.weapon:
+			player.weapon.bullet_fired.connect(_on_bullet_fired)
 			player.weapon.fired.connect(func(cur, _max):
 				battle_hud.update_ammo(cur, player.weapon.reserve_ammo)
 			)
@@ -105,7 +107,11 @@ func _ready() -> void:
 	# 5. Wire DefenseSlots proximity
 	if trench_map:
 		for slot in trench_map.get_defense_slots():
-			slot.turret_installed.connect(func(_t):
+			slot.turret_installed.connect(func(t):
+				if t and t.has_signal("bullet_fired"):
+					t.bullet_fired.connect(func(start_p, target_p):
+						_spawn_tracer(start_p, target_p, 200.0, Color(1.0, 0.45, 0.1))
+					)
 				if touch_controls and active_slot_nearby == slot:
 					touch_controls.set_interact_available(slot.can_repair(), "포탑 수리 [E]")
 			)
@@ -214,3 +220,13 @@ func _on_interact_requested() -> void:
 		active_slot_nearby.install_turret(turret)
 	elif active_slot_nearby.can_repair():
 		active_slot_nearby.repair_turret(50.0)
+
+func _on_bullet_fired(start_pos: Vector3, target_pos: Vector3) -> void:
+	_spawn_tracer(start_pos, target_pos, 220.0, Color(1.0, 0.88, 0.25))
+
+func _spawn_tracer(start_pos: Vector3, target_pos: Vector3, speed: float, color: Color) -> void:
+	if not tracer_scene:
+		return
+	var tracer := tracer_scene.instantiate() as BulletTracer
+	add_child(tracer)
+	tracer.setup(start_pos, target_pos, speed, color)

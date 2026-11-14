@@ -3,6 +3,7 @@ extends EnemyBase
 
 var hit_recovery_timer: float = 0.0
 var death_sink_timer: float = 0.0
+var walk_cycle: float = 0.0
 
 func _physics_process(delta: float) -> void:
 	if current_state == State.DEAD:
@@ -49,7 +50,9 @@ func _process_approach(delta: float) -> void:
 	velocity.x = horiz_dir.x * move_speed
 	velocity.z = horiz_dir.z * move_speed
 	
+	walk_cycle += delta * 10.0
 	if visual_mesh:
+		visual_mesh.position.y = abs(sin(walk_cycle)) * 0.08
 		visual_mesh.rotation.y = lerp_angle(visual_mesh.rotation.y, atan2(horiz_dir.x, horiz_dir.z), 10.0 * delta)
 		
 	if is_inside_tree() and get_world_3d() and get_world_3d().space.is_valid():
@@ -98,8 +101,9 @@ func _process_hit(delta: float) -> void:
 func _process_dead(delta: float) -> void:
 	velocity = Vector3.ZERO
 	death_sink_timer += delta
-	# Slight fall/sink visual
+	# Collapse and sink visual
 	if visual_mesh:
-		visual_mesh.position.y = -0.3 * death_sink_timer
+		visual_mesh.rotation.x = lerp_angle(visual_mesh.rotation.x, deg_to_rad(-75.0), 8.0 * delta)
+		visual_mesh.position.y = -0.4 * death_sink_timer
 	if death_sink_timer >= 1.5:
 		queue_free()

@@ -5,6 +5,7 @@ signal turret_fired(target: Node3D, damage: float)
 signal turret_damaged(current_hp: float, max_hp: float)
 signal turret_broken()
 signal turret_repaired()
+signal bullet_fired(origin: Vector3, target_point: Vector3)
 
 @export var max_health: float = 150.0
 @export var attack_range: float = 22.0
@@ -117,6 +118,9 @@ func _fire_at_target(target_node: Node3D) -> void:
 	if target_node.has_method("apply_damage"):
 		target_node.apply_damage(damage)
 	turret_fired.emit(target_node, damage)
+	var origin := (barrel.global_position if (barrel and barrel.is_inside_tree()) else global_position) if is_inside_tree() else (position + Vector3(0.0, 1.2, 0.0))
+	var target_pos := (target_node.global_position if target_node.is_inside_tree() else target_node.position) + Vector3(0.0, 0.8, 0.0)
+	bullet_fired.emit(origin, target_pos)
 
 func apply_damage(amount: float) -> void:
 	if is_broken:

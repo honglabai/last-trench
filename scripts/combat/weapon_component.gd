@@ -6,6 +6,7 @@ signal reload_started()
 signal reload_completed(current_ammo: int, reserve_ammo: int)
 signal ammo_depleted()
 signal hit_target(target: Object, point: Vector3, normal: Vector3, damage: float)
+signal bullet_fired(origin: Vector3, target_point: Vector3)
 
 @export var weapon_id: String = "rifle_basic"
 @export var damage: float = 25.0
@@ -84,13 +85,19 @@ func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpa
 		query.collide_with_bodies = true
 		
 		var result := space_state.intersect_ray(query)
+		var target_pos := end_pos
 		if not result.is_empty():
 			var collider: Object = result.collider
 			var hit_point: Vector3 = result.position
 			var hit_normal: Vector3 = result.normal
+			target_pos = hit_point
 			
 			_apply_hit(collider, hit_point, hit_normal)
 			hit_target.emit(collider, hit_point, hit_normal, damage)
+			
+		bullet_fired.emit(origin, target_pos)
+	else:
+		bullet_fired.emit(origin, origin + direction.normalized() * range_distance)
 			
 	if current_ammo == 0:
 		ammo_depleted.emit()
