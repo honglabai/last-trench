@@ -14,6 +14,7 @@ signal player_died()
 var current_health: float = 100.0
 var is_aiming: bool = false
 var is_dead: bool = false
+var is_invulnerable: bool = false
 
 # Input adapter fields (can be driven by keys or mobile touch adapter in P10)
 # Convention: X = (-1 Left, +1 Right), Y = (-1 Forward, +1 Backward) matching Input.get_vector
@@ -121,7 +122,7 @@ func _physics_process(delta: float) -> void:
 		weapon.try_fire(origin, fire_dir, space, [get_rid()])
 
 func apply_damage(amount: float) -> void:
-	if is_dead:
+	if is_dead or is_invulnerable:
 		return
 	current_health = maxf(0.0, current_health - amount)
 	player_damaged.emit(current_health, max_health)
