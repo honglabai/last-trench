@@ -1,0 +1,257 @@
+{
+  "_notice": "적 수치는 누적 출현 수 예시이며 동시에 활성화되는 적 수는 최대 12개(설정 cap)를 넘으면 안 됨. 1~3웨이브만 MVP1 적용, 이후 ID는 P17+ 구현.",
+  "schema_version": 1,
+  "spawn_policy": "front_focused_only",
+  "max_active_enemies": 12,
+  "boss_waves": [
+    5,
+    10,
+    15
+  ],
+  "waves": [
+    {
+      "id": 1,
+      "label_ko": "기본 보병",
+      "enemy_total": {
+        "infantry_basic": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 2,
+      "label_ko": "보병+드론",
+      "enemy_total": {
+        "infantry_basic": 5,
+        "drone_attack": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 3,
+      "label_ko": "MVP 종료",
+      "enemy_total": {
+        "infantry_basic": 6,
+        "drone_attack": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 4,
+      "label_ko": "돌격/RPG",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "rpg_infantry": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 5,
+      "label_ko": "드론 군집 지휘체",
+      "enemy_total": {
+        "drone_attack": 8,
+        "drone_swarm_commander": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_air"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 6,
+      "label_ko": "보병+엄폐 파손",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 4
+      },
+      "boss": false,
+      "events": [
+        "partial_cover_damage"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 7,
+      "label_ko": "전투로봇",
+      "enemy_total": {
+        "infantry_basic": 8,
+        "combat_robot": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 8,
+      "label_ko": "정찰+재밍",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 4
+      },
+      "boss": false,
+      "events": [
+        "jamming"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 9,
+      "label_ko": "야간 드론",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 7
+      },
+      "boss": false,
+      "events": [
+        "night",
+        "dust"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 10,
+      "label_ko": "중장갑 전투로봇",
+      "enemy_total": {
+        "infantry_basic": 8,
+        "armored_robot_boss": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_ground"
+      ],
+      "spawn_zones": [
+        "front_ground"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 11,
+      "label_ko": "복합 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 7,
+        "rpg_infantry": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 12,
+      "label_ko": "포격+보병",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 6
+      },
+      "boss": false,
+      "events": [
+        "artillery_warning"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 13,
+      "label_ko": "헬기/날씨",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 7
+      },
+      "boss": false,
+      "events": [
+        "helicopter_event",
+        "rain",
+        "fog"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 14,
+      "label_ko": "방사포 공세",
+      "enemy_total": {
+        "infantry_basic": 15,
+        "rpg_infantry": 4,
+        "combat_robot": 4
+      },
+      "boss": false,
+      "events": [
+        "rocket_artillery"
+      ],
+      "spawn_zones": [
+        "front_ground"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    },
+    {
+      "id": 15,
+      "label_ko": "최종 복합 보스",
+      "enemy_total": {
+        "infantry_basic": 14,
+        "drone_attack": 12,
+        "final_assault_boss": 1
+      },
+      "boss": true,
+      "events": [
+        "final_combined_assault",
+        "artillery_warning"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+    }
+  ]
+}

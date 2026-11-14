@@ -1,0 +1,84 @@
+{
+  "package": "LAST_TRENCH_Development_Package",
+  "version": "1.0",
+  "created_on": "2026-11-13",
+  "status": "DESIGN_AND_PROMPTS_ONLY_NOT_GAME_IMPLEMENTATION",
+  "files": [
+    {
+      "path": "00_시작용_첫프롬프트.txt",
+      "size_bytes": 1303,
+      "sha256": "0fce9c2d53658a3724597f4d99ec157f3972a5914a9389f959d410878f00903c"
+    },
+    {
+      "path": "01_Game_Design_Document.md",
+      "size_bytes": 16293,
+      "sha256": "4ff24cd22beb12a587eb824749e96da157c6408a9cf8bca7cd78c1c84f9de393"
+    },
+    {
+      "path": "02_Development_Roadmap.md",
+      "size_bytes": 12540,
+      "sha256": "4ff57ca59c4c75941006415587aa67b849f04f849c3c2c7117544e828ccd2ff4"
+    },
+    {
+      "path": "03_Godot_Technical_Design.md",
+      "size_bytes": 23062,
+      "sha256": "19c8ef198ed2b0a972017b511798f82da4bae5dadc0e33032bd76576f94f9f48"
+    },
+    {
+      "path": "04_Antigravity_Master_Prompt.md",
+      "size_bytes": 9486,
+      "sha256": "27c8ba423b7166c0a9f04836830749eaddfb9b4be5c0f74fe28524f0dd558042"
+    },
+    {
+      "path": "05_Antigravity_Step_by_Step_Prompts.md",
+      "size_bytes": 52365,
+      "sha256": "bf7b1cecb06f8f37cd3b358c749c25ce7fde0f57d6480539a9c229885a664f77"
+    },
+    {
+      "path": "06_Test_Android_Release_Guide.md",
+      "size_bytes": 18015,
+      "sha256": "e4ede3c8d02328f28712e7ff391f45ad1d5362bc345154a78bd4d17664ebfe6e"
+    },
+    {
+      "path": "07_Requirements_Traceability.md",
+      "size_bytes": 11412,
+      "sha256": "a404e1ff44e6a945faf9af7f1cc61eb5f48146225d83f98ae58d7deea2f0b345"
+    },
+    {
+      "path": "README_먼저읽기.md",
+      "size_bytes": 5983,
+      "sha256": "02b7d12767ee2048aa9214c244f810ff764124193c20accf82fa9d489b19dda0"
+    },
+    {
+      "path": "config_examples/README.md",
+      "size_bytes": 969,
+      "sha256": "d48a0b7162485b583433fbb069413579d58f94cd0f56ab7b2e0975bc8aec3efe"
+    },
+    {
+      "path": "config_examples/balance_v0.json",
+      "size_bytes": 1968,
+      "sha256": "4a8652c6091a717ae0de1149c8b8613df6676333502c48787ec03607fc8d03e0"
+    },
+    {
+      "path": "config_examples/sample_checkpoint_v1.json",
+      "size_bytes": 759,
+      "sha256": "3e27eded0ebb2950de585dfc954bb30d86990fe2bf4a35f084ecf101677240aa"
+    },
+    {
+      "path": "config_examples/sample_profile_v1.json",
+      "size_bytes": 660,
+      "sha256": "155112ad1905abe274dfdb9069a5fb4d445e902972f30cca23690fb9c7f14c7f"
+    },
+    {
+      "path": "config_examples/wave_plan_v0.json",
+      "size_bytes": 6304,
+      "sha256": "6a5743a6f7897e5297eea3d2e451e697e60dfc01e84438093f7a546a19ef420f"
+    }
+  ],
+  "counts": {
+    "files": 14,
+    "antigravity_steps": 26,
+    "interview_decisions": 21,
+    "waves_in_spec": 15
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "_notice": "예시 초기값. 사용자 확정 수치가 아니며 실제 게임 테스트 후 조정.",
+  "schema_version": 1,
+  "target_fps": 30,
+  "active_enemy_cap": 12,
+  "mode_ids": [
+    "trench",
+    "open_field"
+  ],
+  "difficulty": {
+    "easy": {
+      "enemy_hp": 0.8,
+      "enemy_damage": 0.75,
+      "spawn_count": 0.8,
+      "supply_multiplier": 1.2
+    },
+    "normal": {
+      "enemy_hp": 1,
+      "enemy_damage": 1,
+      "spawn_count": 1,
+      "supply_multiplier": 1
+    },
+    "hard": {
+      "enemy_hp": 1.25,
+      "enemy_damage": 1.2,
+      "spawn_count": 1.15,
+      "supply_multiplier": 0.85
+    }
+  },
+  "player": {
+    "max_hp": 100,
+    "move_speed": 5.0,
+    "revives_per_run": 1,
+    "revive_hp_ratio": 0.65,
+    "revive_invulnerability_seconds": 1.5
+  },
+  "base": {
+    "max_hp": 750
+  },
+  "rifle_basic": {
+    "mag_size": 30,
+    "reserve_ammo": 90,
+    "shot_damage": 20,
+    "fire_interval_seconds": 0.18,
+    "reload_seconds": 2.0,
+    "range_meters": 90
+  },
+  "enemy": {
+    "infantry_basic": {
+      "max_hp": 70,
+      "move_speed": 2.5,
+      "damage_to_base": 15,
+      "credits_on_kill": 10
+    },
+    "drone_attack": {
+      "max_hp": 40,
+      "move_speed": 3.5,
+      "damage_to_base": 20,
+      "credits_on_kill": 15
+    }
+  },
+  "defense": {
+    "turret_mg": {
+      "max_hp": 130,
+      "install_supplies": 60,
+      "repair_supplies": 20,
+      "repair_hp": 50,
+      "shot_damage": 9,
+      "fire_interval_seconds": 0.35
+    }
+  },
+  "economy": {
+    "initial_credits": 0,
+    "initial_supplies": 150,
+    "wave_clear_credit_bonus": 40,
+    "wave_clear_supply_bonus_every_n_waves": 3,
+    "wave_clear_supply_bonus": 25,
+    "ammo_refill_supplies": 20
+  },
+  "graphics": {
+    "default_profile": "auto",
+    "available_profiles": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "allow_manual_override": true
+  },
+  "limits": {
+    "minimum_active_enemy_cap": 10,
+    "maximum_active_enemy_cap": 15
+  }
+}

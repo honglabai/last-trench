@@ -1,0 +1,36 @@
+{
+  "_notice": "체크포인트 저장 예시. 맵·포탑·장비는 실제 구현 때 정확한 ID로 교체.",
+  "schema_version": 1,
+  "run_id": "sample_run_001",
+  "mode": "trench",
+  "difficulty": "normal",
+  "next_wave": 3,
+  "checkpoint_phase": "READY_FOR_WAVE",
+  "credits": 120,
+  "supplies": 80,
+  "revives_remaining": 1,
+  "player": {
+    "hp": 100,
+    "weapon_id": "rifle_basic",
+    "ammo_in_mag": 24,
+    "reserve_ammo": 90
+  },
+  "base": {
+    "hp": 690
+  },
+  "defense_slots": [
+    {
+      "slot_id": "trench_slot_01",
+      "defense_id": "turret_mg",
+      "hp": 90
+    }
+  ],
+  "temporary_upgrades": [
+    "rifle_reload_1"
+  ],
+  "completed_reward_tx": [
+    "sample_run_001-wave1",
+    "sample_run_001-wave2"
+  ],
+  "rng_state": 12345
+}

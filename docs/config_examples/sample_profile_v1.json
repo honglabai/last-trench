@@ -1,0 +1,32 @@
+{
+  "_notice": "문서용 구조 예제. 실제 사용자 저장 정보가 아님.",
+  "schema_version": 1,
+  "language": "ko",
+  "unlocked_equipment": [
+    "rifle_basic"
+  ],
+  "achievements": [],
+  "best_records": {
+    "trench_easy": {
+      "highest_wave": 0,
+      "best_score": 0
+    },
+    "trench_normal": {
+      "highest_wave": 0,
+      "best_score": 0
+    },
+    "open_field_normal": {
+      "highest_wave": 0,
+      "best_score": 0
+    }
+  },
+  "settings": {
+    "aim_assist": "weak",
+    "vibration": true,
+    "camera_shake": false,
+    "audio_bgm": 0.6,
+    "audio_sfx": 0.8,
+    "graphics_profile": "auto",
+    "touch_button_scale": 1.0
+  }
+}
