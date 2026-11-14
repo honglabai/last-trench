@@ -10,6 +10,7 @@ signal player_died()
 @export var acceleration: float = 14.0
 @export var gravity: float = 9.8
 @export var max_health: float = 100.0
+@export var stationary_defense_mode: bool = true
 
 var current_health: float = 100.0
 var is_aiming: bool = false
@@ -47,6 +48,9 @@ var weapon: WeaponComponent:
 
 func _ready() -> void:
 	current_health = max_health
+	if camera_rig and camera_rig.is_first_person:
+		if visual_mesh:
+			visual_mesh.visible = false
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_dead:
@@ -89,17 +93,21 @@ func _physics_process(delta: float) -> void:
 		
 	var forward: Vector3 = -camera_yaw.z
 	var right: Vector3 = camera_yaw.x
-	# move_vec.y is negative when moving forward (Godot convention)
-	var target_dir: Vector3 = (right * move_vec.x + forward * (-move_vec.y)).normalized()
 	
-	var current_speed := aim_move_speed if is_aiming else move_speed
-	var target_vel := target_dir * current_speed
-	
-	velocity.x = lerpf(velocity.x, target_vel.x, acceleration * delta)
-	velocity.z = lerpf(velocity.z, target_vel.z, acceleration * delta)
+	if stationary_defense_mode:
+		velocity.x = 0.0
+		velocity.z = 0.0
+	else:
+		# move_vec.y is negative when moving forward (Godot convention)
+		var target_dir: Vector3 = (right * move_vec.x + forward * (-move_vec.y)).normalized()
+		var current_speed := aim_move_speed if is_aiming else move_speed
+		var target_vel := target_dir * current_speed
+		velocity.x = lerpf(velocity.x, target_vel.x, acceleration * delta)
+		velocity.z = lerpf(velocity.z, target_vel.z, acceleration * delta)
 	
 	# 4. Mesh rotation
-	if visual_mesh and is_inside_tree():
+	if visual_mesh and is_inside_tree() and visual_mesh.visible:
+		var target_dir: Vector3 = (right * move_vec.x + forward * (-move_vec.y)).normalized()
 		if is_aiming and camera_rig:
 			var look_dir := Vector3(forward.x, 0.0, forward.z).normalized()
 			if look_dir.length_squared() > 0.001:
@@ -119,7 +127,9 @@ func _physics_process(delta: float) -> void:
 		weapon.start_reload()
 		
 	if wants_fire and weapon:
-		var origin := global_position + Vector3(0.0, 1.4, 0.0)
+		var origin := global_position + Vector3(0.0, 1.5, 0.0)
+		if camera_rig and camera_rig.camera:
+			origin = camera_rig.camera.global_position
 		var fire_dir := -camera_yaw.z
 		if camera_rig:
 			fire_dir = camera_rig.get_camera_forward()
