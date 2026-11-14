@@ -1,0 +1,91 @@
+[gd_scene load_steps=10 format=3 uid="uid://bvx4j9pm65r8w"]
+
+[ext_resource type="Script" path="res://scripts/ai/drone_ai.gd" id="1_drone"]
+[ext_resource type="Script" path="res://scripts/combat/damageable_component.gd" id="2_dmg"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_drone"]
+radius = 0.65
+
+[sub_resource type="BoxMesh" id="BoxMesh_hub"]
+size = Vector3(0.5, 0.2, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hull"]
+albedo_color = Color(0.2, 0.22, 0.26, 1)
+metallic = 0.8
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_arm"]
+size = Vector3(1.3, 0.06, 0.1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rotor"]
+top_radius = 0.22
+bottom_radius = 0.22
+height = 0.02
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rotor"]
+albedo_color = Color(0.9, 0.35, 0.1, 1)
+emission_enabled = true
+emission = Color(0.9, 0.35, 0.1, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="SphereMesh" id="SphereMesh_sensor"]
+radius = 0.1
+height = 0.2
+
+[node name="EnemyDrone" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_drone")
+cruise_altitude = 9.0
+max_health = 35.0
+move_speed = 4.2
+attack_range = 18.0
+attack_damage = 6.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_drone")
+
+[node name="VisualMesh" type="Node3D" parent="."]
+
+[node name="HubMesh" type="MeshInstance3D" parent="VisualMesh"]
+mesh = SubResource("BoxMesh_hub")
+surface_material_override/0 = SubResource("StandardMaterial3D_hull")
+
+[node name="Arm1" type="MeshInstance3D" parent="VisualMesh"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_arm")
+surface_material_override/0 = SubResource("StandardMaterial3D_hull")
+
+[node name="Arm2" type="MeshInstance3D" parent="VisualMesh"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_arm")
+surface_material_override/0 = SubResource("StandardMaterial3D_hull")
+
+[node name="Rotor1" type="MeshInstance3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.08, 0.45)
+mesh = SubResource("CylinderMesh_rotor")
+surface_material_override/0 = SubResource("StandardMaterial3D_rotor")
+
+[node name="Rotor2" type="MeshInstance3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.08, 0.45)
+mesh = SubResource("CylinderMesh_rotor")
+surface_material_override/0 = SubResource("StandardMaterial3D_rotor")
+
+[node name="Rotor3" type="MeshInstance3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.08, -0.45)
+mesh = SubResource("CylinderMesh_rotor")
+surface_material_override/0 = SubResource("StandardMaterial3D_rotor")
+
+[node name="Rotor4" type="MeshInstance3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.08, -0.45)
+mesh = SubResource("CylinderMesh_rotor")
+surface_material_override/0 = SubResource("StandardMaterial3D_rotor")
+
+[node name="SensorEye" type="MeshInstance3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -0.28)
+mesh = SubResource("SphereMesh_sensor")
+surface_material_override/0 = SubResource("StandardMaterial3D_rotor")
+
+[node name="DamageableComponent" type="Node" parent="."]
+script = ExtResource("2_dmg")
+max_health = 35.0
