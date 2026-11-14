@@ -6,6 +6,8 @@ extends EnemyBase
 
 var fall_timer: float = 0.0
 var hit_recovery_timer: float = 0.0
+var hover_time: float = 0.0
+@onready var beacon_light: OmniLight3D = get_node_or_null("VisualMesh/BeaconLight")
 
 func _ready() -> void:
 	max_health = 35.0
@@ -26,6 +28,10 @@ func _physics_process(delta: float) -> void:
 	if current_state == State.DEAD:
 		_process_falling_dead(delta)
 		return
+		
+	hover_time += delta
+	if beacon_light:
+		beacon_light.light_energy = 0.8 + 0.6 * sin(hover_time * 6.0)
 		
 	# Drones fly: maintain cruise altitude instead of standard ground gravity
 	var current_y := global_position.y if is_inside_tree() else position.y
@@ -119,6 +125,7 @@ func _process_falling_dead(delta: float) -> void:
 	if visual_mesh:
 		visual_mesh.rotation.y += 12.0 * delta
 		visual_mesh.rotation.x += 8.0 * delta
+		visual_mesh.rotation.z += 10.0 * delta
 		
 	if is_inside_tree() and get_world_3d() and get_world_3d().space.is_valid():
 		move_and_slide()

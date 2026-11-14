@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dp6b83f4e1h5w"]
+[gd_scene load_steps=23 format=3 uid="uid://dp6b83f4e1h5w"]
 
 [ext_resource type="Script" path="res://scripts/maps/trench_map.gd" id="1_map"]
 [ext_resource type="Script" path="res://scripts/combat/base_objective.gd" id="2_base"]
@@ -7,6 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://p5nilnrc4ets" path="res://assets/textures/tex_trench_ground.png" id="5_dirt"]
 [ext_resource type="Texture2D" uid="uid://cr46vc8sgyaql" path="res://assets/textures/tex_sandbag.png" id="6_sandbag"]
 [ext_resource type="Texture2D" uid="uid://jrpij0qkeb87" path="res://assets/textures/tex_base_bunker.png" id="7_bunker"]
+[ext_resource type="Texture2D" uid="uid://d02ig6xnifohv" path="res://assets/textures/tex_trench_wall_gabion.png" id="8_gabion"]
+[ext_resource type="Texture2D" uid="uid://dtuixk0pdex0q" path="res://assets/textures/tex_barbed_wire.png" id="9_wire"]
+[ext_resource type="Texture2D" uid="uid://blahjmnpi26nx" path="res://assets/textures/tex_smoke_plume.png" id="10_smoke"]
+[ext_resource type="PackedScene" uid="uid://bvy8n3w5612kq" path="res://scenes/defenses/czech_hedgehog.tscn" id="11_hedgehog"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_front_ground"]
 size = Vector3(50, 1, 40)
@@ -64,6 +68,26 @@ texture_filter = 5
 height = 2.5
 radius = 1.0
 
+[sub_resource type="BoxMesh" id="BoxMesh_trench_wall_front"]
+size = Vector3(20, 1.2, 0.4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gabion"]
+albedo_color = Color(0.9, 0.85, 0.8, 1)
+albedo_texture = ExtResource("8_gabion")
+roughness = 0.85
+uv1_scale = Vector3(8, 1, 1)
+texture_filter = 5
+
+[sub_resource type="BoxMesh" id="BoxMesh_trench_wall_side"]
+size = Vector3(0.4, 1.2, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gabion_side"]
+albedo_color = Color(0.9, 0.85, 0.8, 1)
+albedo_texture = ExtResource("8_gabion")
+roughness = 0.85
+uv1_scale = Vector3(2, 1, 1)
+texture_filter = 5
+
 [node name="TrenchMap" type="Node3D"]
 script = ExtResource("1_map")
 
@@ -104,6 +128,118 @@ surface_material_override/0 = SubResource("StandardMaterial3D_dirt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/RearGround"]
 shape = SubResource("BoxShape3D_front_ground")
+
+[node name="FrontRevetmentWall" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, -0.5)
+mesh = SubResource("BoxMesh_trench_wall_front")
+surface_material_override/0 = SubResource("StandardMaterial3D_gabion")
+
+[node name="RearRevetmentWall" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 4.5)
+mesh = SubResource("BoxMesh_trench_wall_front")
+surface_material_override/0 = SubResource("StandardMaterial3D_gabion")
+
+[node name="LeftRevetmentWall" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.6, 2)
+mesh = SubResource("BoxMesh_trench_wall_side")
+surface_material_override/0 = SubResource("StandardMaterial3D_gabion_side")
+
+[node name="RightRevetmentWall" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.6, 2)
+mesh = SubResource("BoxMesh_trench_wall_side")
+surface_material_override/0 = SubResource("StandardMaterial3D_gabion_side")
+
+[node name="BarbedWires" type="Node3D" parent="Environment"]
+
+[node name="Wire1" type="Sprite3D" parent="Environment/BarbedWires"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.5, -1.8)
+pixel_size = 0.005
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("9_wire")
+
+[node name="Wire2" type="Sprite3D" parent="Environment/BarbedWires"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.5, -1.8)
+pixel_size = 0.005
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("9_wire")
+
+[node name="Wire3" type="Sprite3D" parent="Environment/BarbedWires"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.5, -1.8)
+pixel_size = 0.005
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("9_wire")
+
+[node name="Wire4" type="Sprite3D" parent="Environment/BarbedWires"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.5, -1.8)
+pixel_size = 0.005
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("9_wire")
+
+[node name="Wire5" type="Sprite3D" parent="Environment/BarbedWires"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.5, -1.8)
+pixel_size = 0.005
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("9_wire")
+
+[node name="Wire6" type="Sprite3D" parent="Environment/BarbedWires"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.5, -1.8)
+pixel_size = 0.005
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("9_wire")
+
+[node name="Hedgehogs" type="Node3D" parent="Environment"]
+
+[node name="Hedgehog1" parent="Environment/Hedgehogs" instance=ExtResource("11_hedgehog")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -7.5, 0, -3.8)
+
+[node name="Hedgehog2" parent="Environment/Hedgehogs" instance=ExtResource("11_hedgehog")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -2.5, 0, -4.8)
+
+[node name="Hedgehog3" parent="Environment/Hedgehogs" instance=ExtResource("11_hedgehog")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 2.5, 0, -4.8)
+
+[node name="Hedgehog4" parent="Environment/Hedgehogs" instance=ExtResource("11_hedgehog")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 7.5, 0, -3.8)
+
+[node name="BattlefieldAtmosphere" type="Node3D" parent="Environment"]
+
+[node name="SmokePlume1" type="Sprite3D" parent="Environment/BattlefieldAtmosphere"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 13, -40)
+pixel_size = 0.06
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("10_smoke")
+
+[node name="SmokePlume2" type="Sprite3D" parent="Environment/BattlefieldAtmosphere"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 12, -36)
+pixel_size = 0.05
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("10_smoke")
+
+[node name="SmokePlume3" type="Sprite3D" parent="Environment/BattlefieldAtmosphere"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 14, -38)
+pixel_size = 0.06
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("10_smoke")
+
+[node name="SmokePlume4" type="Sprite3D" parent="Environment/BattlefieldAtmosphere"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 13, -42)
+pixel_size = 0.055
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("10_smoke")
 
 [node name="Covers" type="Node3D" parent="."]
 

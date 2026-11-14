@@ -53,6 +53,7 @@ func _process_approach(delta: float) -> void:
 	walk_cycle += delta * 10.0
 	if visual_mesh:
 		visual_mesh.position.y = abs(sin(walk_cycle)) * 0.08
+		visual_mesh.rotation.z = sin(walk_cycle) * 0.04
 		visual_mesh.rotation.y = lerp_angle(visual_mesh.rotation.y, atan2(horiz_dir.x, horiz_dir.z), 10.0 * delta)
 		
 	if is_inside_tree() and get_world_3d() and get_world_3d().space.is_valid():
