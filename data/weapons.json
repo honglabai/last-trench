@@ -1,0 +1,13 @@
+{
+  "rifle_basic": {
+    "name": "Standard Assault Rifle",
+    "damage": 25.0,
+    "fire_rate": 0.12,
+    "magazine_size": 30,
+    "max_reserve_ammo": 180,
+    "reload_time": 1.8,
+    "range": 80.0,
+    "spread_normal": 0.02,
+    "spread_aim": 0.005
+  }
+}

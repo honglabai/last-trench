@@ -20,6 +20,8 @@ var is_dead: bool = false
 var input_move_vector: Vector2 = Vector2.ZERO
 var input_look_vector: Vector2 = Vector2.ZERO
 var manual_input_override: bool = false
+var is_firing_requested: bool = false
+var is_reload_requested: bool = false
 
 var _camera_rig: ThirdPersonCamera
 var camera_rig: ThirdPersonCamera:
@@ -34,6 +36,13 @@ var visual_mesh: Node3D:
 		if not _visual_mesh:
 			_visual_mesh = get_node_or_null("VisualMesh")
 		return _visual_mesh
+
+var _weapon: WeaponComponent
+var weapon: WeaponComponent:
+	get:
+		if not _weapon:
+			_weapon = get_node_or_null("WeaponComponent")
+		return _weapon
 
 func _ready() -> void:
 	current_health = max_health
@@ -95,6 +104,21 @@ func _physics_process(delta: float) -> void:
 	# 5. Move and slide (if inside a valid physics space)
 	if is_inside_tree() and get_world_3d() and get_world_3d().space.is_valid():
 		move_and_slide()
+		
+	# 6. Firing and Reloading
+	var wants_reload := is_reload_requested if manual_input_override else Input.is_action_just_pressed("reload")
+	var wants_fire := is_firing_requested if manual_input_override else Input.is_action_pressed("fire")
+	
+	if wants_reload and weapon:
+		weapon.start_reload()
+		
+	if wants_fire and weapon:
+		var origin := global_position + Vector3(0.0, 1.4, 0.0)
+		var fire_dir := -camera_yaw.z
+		if camera_rig:
+			fire_dir = camera_rig.get_camera_forward()
+		var space := get_world_3d().direct_space_state if is_inside_tree() and get_world_3d() else null
+		weapon.try_fire(origin, fire_dir, space, [get_rid()])
 
 func apply_damage(amount: float) -> void:
 	if is_dead:
