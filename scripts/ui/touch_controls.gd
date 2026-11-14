@@ -140,6 +140,7 @@ func _handle_touch(event: InputEventScreenTouch) -> void:
 func _handle_drag(event: InputEventScreenDrag) -> void:
 	if event.index == joystick_touch_id:
 		_update_joystick(event.position)
+		look_delta_produced.emit(event.relative * look_sensitivity)
 	elif event.index == look_touch_id:
 		look_delta_produced.emit(event.relative * look_sensitivity)
 

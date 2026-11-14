@@ -185,7 +185,7 @@ grow_vertical = 0
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.9, 0.95, 0.75)
 theme_override_font_sizes/font_size = 12
-text = "[화면 클릭] 조준 모드 | [WASD] 이동 | [좌클릭] 사격 | [우클릭] 견착 조준 | [R] 재장전 | [E] 포탑 설치·수리 | [ESC] 커서 해제"
+text = "[화면 클릭] 조준 모드 | [마우스] 시점 및 과녁 조준 | [좌클릭] 사격 | [우클릭] 견착 조준 | [R] 재장전 | [E] 포탑 설치·수리 | [ESC] 커서 해제"
 horizontal_alignment = 1
 vertical_alignment = 1
 

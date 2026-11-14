@@ -63,8 +63,8 @@ func _init() -> void:
 		push_error("BattleHUD help_label missing")
 		quit(1)
 		return
-	if not game_root.battle_hud.help_label.text.contains("[WASD]"):
-		push_error("BattleHUD help text missing WASD guide")
+	if not game_root.battle_hud.help_label.text.contains("[마우스]"):
+		push_error("BattleHUD help text missing mouse aim guide")
 		quit(1)
 		return
 	print("[PASS] BattleHUD PC controls guide text verified: ", game_root.battle_hud.help_label.text)
