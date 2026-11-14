@@ -4,13 +4,19 @@
 [ext_resource type="Script" path="res://scripts/combat/base_objective.gd" id="2_base"]
 [ext_resource type="PackedScene" path="res://scenes/defenses/defense_slot.tscn" id="3_slot"]
 [ext_resource type="Script" path="res://scripts/defense/destructible_cover.gd" id="4_cover"]
+[ext_resource type="Texture2D" uid="uid://p5nilnrc4ets" path="res://assets/textures/tex_trench_ground.png" id="5_dirt"]
+[ext_resource type="Texture2D" uid="uid://cr46vc8sgyaql" path="res://assets/textures/tex_sandbag.png" id="6_sandbag"]
+[ext_resource type="Texture2D" uid="uid://jrpij0qkeb87" path="res://assets/textures/tex_base_bunker.png" id="7_bunker"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_front_ground"]
 size = Vector3(50, 1, 40)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dirt"]
-albedo_color = Color(0.32, 0.26, 0.18, 1)
-roughness = 0.9
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+albedo_texture = ExtResource("5_dirt")
+roughness = 0.85
+uv1_scale = Vector3(10, 8, 1)
+texture_filter = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_front_ground"]
 size = Vector3(50, 1, 40)
@@ -19,8 +25,11 @@ size = Vector3(50, 1, 40)
 size = Vector3(20, 1, 5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mud"]
-albedo_color = Color(0.22, 0.18, 0.14, 1)
+albedo_color = Color(0.65, 0.6, 0.55, 1)
+albedo_texture = ExtResource("5_dirt")
 roughness = 0.95
+uv1_scale = Vector3(5, 2, 1)
+texture_filter = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trench_floor"]
 size = Vector3(20, 1, 5)
@@ -29,7 +38,11 @@ size = Vector3(20, 1, 5)
 size = Vector3(3, 0.8, 0.8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sandbag"]
-albedo_color = Color(0.65, 0.55, 0.35, 1)
+albedo_color = Color(1, 1, 1, 1)
+albedo_texture = ExtResource("6_sandbag")
+roughness = 0.75
+uv1_scale = Vector3(2, 1, 1)
+texture_filter = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sandbag"]
 size = Vector3(3, 0.8, 0.8)
@@ -40,7 +53,12 @@ bottom_radius = 1.0
 height = 2.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_base"]
-albedo_color = Color(0.2, 0.3, 0.7, 1)
+albedo_color = Color(1, 1, 1, 1)
+albedo_texture = ExtResource("7_bunker")
+metallic = 0.5
+roughness = 0.4
+uv1_scale = Vector3(2, 2, 1)
+texture_filter = 5
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_base"]
 height = 2.5

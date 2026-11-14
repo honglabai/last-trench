@@ -1,6 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://b5m8vyc1k2r8q"]
 
 [ext_resource type="Script" path="res://scripts/defense/defense_slot.gd" id="1_slot"]
+[ext_resource type="Texture2D" uid="uid://bdvf4sr2h6tls" path="res://assets/textures/tex_defense_slot.png" id="2_slot_tex"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_marker"]
 top_radius = 1.0
@@ -8,9 +9,12 @@ bottom_radius = 1.1
 height = 0.15
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_marker"]
-albedo_color = Color(0.2, 0.6, 0.8, 0.7)
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.9)
+albedo_texture = ExtResource("2_slot_tex")
 metallic = 0.5
 roughness = 0.4
+texture_filter = 5
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_area"]
 height = 2.0

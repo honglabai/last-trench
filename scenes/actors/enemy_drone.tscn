@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ai/drone_ai.gd" id="1_drone"]
 [ext_resource type="Script" path="res://scripts/combat/damageable_component.gd" id="2_dmg"]
+[ext_resource type="Texture2D" uid="uid://cin0e41hkb4fi" path="res://assets/textures/tex_enemy_drone.png" id="3_drone_tex"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_drone"]
 radius = 0.65
@@ -10,9 +11,11 @@ radius = 0.65
 size = Vector3(0.5, 0.2, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hull"]
-albedo_color = Color(0.2, 0.22, 0.26, 1)
+albedo_color = Color(1, 1, 1, 1)
+albedo_texture = ExtResource("3_drone_tex")
 metallic = 0.8
 roughness = 0.3
+texture_filter = 5
 
 [sub_resource type="BoxMesh" id="BoxMesh_arm"]
 size = Vector3(1.3, 0.06, 0.1)

@@ -1,16 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://cbattlehud92x"]
+[gd_scene load_steps=9 format=3 uid="uid://cbattlehud92x"]
 
 [ext_resource type="Script" path="res://scripts/ui/battle_hud.gd" id="1_hud"]
+[ext_resource type="Texture2D" uid="uid://bt6mojb2081aw" path="res://assets/ui/icon_hp_soldier.png" id="2_soldier_hp"]
+[ext_resource type="Texture2D" uid="uid://cmgxkewfsgmmg" path="res://assets/ui/icon_hp_base.png" id="3_base_hp"]
+[ext_resource type="Texture2D" uid="uid://7xbpdcb6mrtv" path="res://assets/ui/icon_revive.png" id="4_revive"]
+[ext_resource type="Texture2D" uid="uid://dbf2x6rvsi7u5" path="res://assets/ui/icon_ammo.png" id="5_ammo"]
+[ext_resource type="Texture2D" uid="uid://bswmry17vxbd0" path="res://assets/ui/ui_crosshair.png" id="6_crosshair"]
+[ext_resource type="Texture2D" uid="uid://csb5ysd10xllk" path="res://assets/ui/banner_victory.png" id="7_vic_banner"]
+[ext_resource type="Texture2D" uid="uid://bs5h2fnmv2ijj" path="res://assets/ui/banner_defeat.png" id="8_def_banner"]
 
 [node name="BattleHUD" type="CanvasLayer"]
 layer = 10
 script = ExtResource("1_hud")
 
 [node name="TopLeft" type="MarginContainer" parent="."]
-offset_left = 20.0
+offset_left = 40.0
 offset_top = 20.0
-offset_right = 260.0
-offset_bottom = 140.0
+offset_right = 300.0
+offset_bottom = 150.0
 
 [node name="VBox" type="VBoxContainer" parent="TopLeft"]
 layout_mode = 2
@@ -22,16 +29,27 @@ layout_mode = 2
 value = 100.0
 show_percentage = false
 
+[node name="Icon" type="TextureRect" parent="TopLeft/VBox/PlayerHPBar"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 24.0
+offset_bottom = 22.0
+mouse_filter = 2
+texture = ExtResource("2_soldier_hp")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Label" type="Label" parent="TopLeft/VBox/PlayerHPBar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 28.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 14
 text = "병사 HP: 100 / 100"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="RevivesLabel" type="Label" parent="TopLeft/VBox"]
@@ -39,22 +57,44 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "즉시 부활: 1 / 1"
 
+[node name="Icon" type="TextureRect" parent="TopLeft/VBox/RevivesLabel"]
+layout_mode = 0
+offset_left = -26.0
+offset_top = -1.0
+offset_right = -6.0
+offset_bottom = 19.0
+mouse_filter = 2
+texture = ExtResource("4_revive")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="BaseHPBar" type="ProgressBar" parent="TopLeft/VBox"]
 custom_minimum_size = Vector2(240, 24)
 layout_mode = 2
 value = 100.0
 show_percentage = false
 
+[node name="Icon" type="TextureRect" parent="TopLeft/VBox/BaseHPBar"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 24.0
+offset_bottom = 22.0
+mouse_filter = 2
+texture = ExtResource("3_base_hp")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Label" type="Label" parent="TopLeft/VBox/BaseHPBar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 28.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 14
 text = "참호 거점: 500 / 500"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TopCenter" type="MarginContainer" parent="."]
@@ -113,6 +153,21 @@ theme_override_font_sizes/font_size = 32
 text = "30 / 120"
 horizontal_alignment = 2
 
+[node name="Icon" type="TextureRect" parent="BottomRight/VBox/AmmoLabel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -38.0
+offset_top = -16.0
+offset_right = -6.0
+offset_bottom = 16.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_ammo")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="BottomCenter" type="MarginContainer" parent="."]
 anchors_preset = 7
 anchor_left = 0.5
@@ -157,37 +212,23 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TopLine" type="ColorRect" parent="Center/Crosshair/Ring"]
-layout_mode = 0
-offset_left = -1.0
-offset_top = -14.0
-offset_right = 1.0
-offset_bottom = -4.0
+[node name="ReticleTexture" type="TextureRect" parent="Center/Crosshair/Ring"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-
-[node name="BottomLine" type="ColorRect" parent="Center/Crosshair/Ring"]
-layout_mode = 0
-offset_left = -1.0
-offset_top = 4.0
-offset_right = 1.0
-offset_bottom = 14.0
-mouse_filter = 2
-
-[node name="LeftLine" type="ColorRect" parent="Center/Crosshair/Ring"]
-layout_mode = 0
-offset_left = -14.0
-offset_top = -1.0
-offset_right = -4.0
-offset_bottom = 1.0
-mouse_filter = 2
-
-[node name="RightLine" type="ColorRect" parent="Center/Crosshair/Ring"]
-layout_mode = 0
-offset_left = 4.0
-offset_top = -1.0
-offset_right = 14.0
-offset_bottom = 1.0
-mouse_filter = 2
+texture = ExtResource("6_crosshair")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Dot" type="ColorRect" parent="Center/Crosshair"]
 layout_mode = 1
@@ -222,9 +263,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -220.0
-offset_top = -150.0
+offset_top = -180.0
 offset_right = 220.0
-offset_bottom = 150.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -234,24 +275,32 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = 20.0
+offset_top = 16.0
 offset_right = -20.0
-offset_bottom = -20.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 alignment = 1
+
+[node name="Banner" type="TextureRect" parent="Overlay/VictoryPanel/VBox"]
+custom_minimum_size = Vector2(360, 56)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("7_vic_banner")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Title" type="Label" parent="Overlay/VictoryPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 1, 0.4, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 26
 text = "작전 성공 (VICTORY)"
 horizontal_alignment = 1
 
 [node name="Desc" type="Label" parent="Overlay/VictoryPanel/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "최후의 참호를 사수했습니다!
 (3웨이브 완주 성공)"
 horizontal_alignment = 1
@@ -274,9 +323,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -220.0
-offset_top = -150.0
+offset_top = -180.0
 offset_right = 220.0
-offset_bottom = 150.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -286,24 +335,32 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = 20.0
+offset_top = 16.0
 offset_right = -20.0
-offset_bottom = -20.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 alignment = 1
+
+[node name="Banner" type="TextureRect" parent="Overlay/DefeatPanel/VBox"]
+custom_minimum_size = Vector2(360, 56)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_def_banner")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Title" type="Label" parent="Overlay/DefeatPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 26
 text = "작전 실패 (DEFEAT)"
 horizontal_alignment = 1
 
 [node name="ReasonLabel" type="Label" parent="Overlay/DefeatPanel/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "참호 방어선이 함락되었습니다."
 horizontal_alignment = 1
 

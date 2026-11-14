@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/combat/player_controller.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/combat/third_person_camera.gd" id="2_cam"]
 [ext_resource type="Script" path="res://scripts/combat/weapon_component.gd" id="3_wep"]
+[ext_resource type="Texture2D" uid="uid://ditggg0afcd2s" path="res://assets/textures/tex_soldier_camo.png" id="4_camo"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.4
@@ -13,8 +14,10 @@ radius = 0.4
 height = 1.8
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_soldier"]
-albedo_color = Color(0.28, 0.35, 0.25, 1)
-roughness = 0.8
+albedo_color = Color(1, 1, 1, 1)
+albedo_texture = ExtResource("4_camo")
+roughness = 0.7
+texture_filter = 5
 
 [sub_resource type="BoxMesh" id="BoxMesh_visor"]
 size = Vector3(0.3, 0.15, 0.2)
