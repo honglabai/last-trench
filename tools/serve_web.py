@@ -9,11 +9,17 @@ import sys
 import webbrowser
 
 PORT = 8080
-WEB_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "builds", "web"))
+# 우선 배포용 public 디렉터리를 탐색하고 없으면 builds/web 탐색
+PUBLIC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "public"))
+BUILDS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "builds", "web"))
 
-if not os.path.isdir(WEB_DIR) or not os.path.isfile(os.path.join(WEB_DIR, "index.html")):
-    print(f"[오류] Web 빌드 디렉터리를 찾을 수 없습니다: {WEB_DIR}")
-    print("먼저 godot --export-release 'Web' builds/web/index.html 명령어로 빌드해 주세요.")
+if os.path.isdir(PUBLIC_DIR) and os.path.isfile(os.path.join(PUBLIC_DIR, "index.html")):
+    WEB_DIR = PUBLIC_DIR
+elif os.path.isdir(BUILDS_DIR) and os.path.isfile(os.path.join(BUILDS_DIR, "index.html")):
+    WEB_DIR = BUILDS_DIR
+else:
+    print(f"[오류] Web 빌드 디렉터리를 찾을 수 없습니다: {PUBLIC_DIR} 또는 {BUILDS_DIR}")
+    print("먼저 godot --export-release 'Web' public/index.html 명령어로 빌드해 주세요.")
     sys.exit(1)
 
 class CustomHTTPHandler(http.server.SimpleHTTPRequestHandler):
