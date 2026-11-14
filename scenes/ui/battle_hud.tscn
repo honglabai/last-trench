@@ -1,0 +1,297 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbattlehud92x"]
+
+[ext_resource type="Script" path="res://scripts/ui/battle_hud.gd" id="1_hud"]
+
+[node name="BattleHUD" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_hud")
+
+[node name="TopLeft" type="MarginContainer" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 260.0
+offset_bottom = 140.0
+
+[node name="VBox" type="VBoxContainer" parent="TopLeft"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PlayerHPBar" type="ProgressBar" parent="TopLeft/VBox"]
+custom_minimum_size = Vector2(240, 24)
+layout_mode = 2
+value = 100.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="TopLeft/VBox/PlayerHPBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 14
+text = "병사 HP: 100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RevivesLabel" type="Label" parent="TopLeft/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "즉시 부활: 1 / 1"
+
+[node name="BaseHPBar" type="ProgressBar" parent="TopLeft/VBox"]
+custom_minimum_size = Vector2(240, 24)
+layout_mode = 2
+value = 100.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="TopLeft/VBox/BaseHPBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 14
+text = "참호 거점: 500 / 500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TopCenter" type="MarginContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 20.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="VBox" type="VBoxContainer" parent="TopCenter"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="WaveTitleLabel" type="Label" parent="TopCenter/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "WAVE 1 / 3"
+horizontal_alignment = 1
+
+[node name="WaveInfoLabel" type="Label" parent="TopCenter/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "전투 준비 중..."
+horizontal_alignment = 1
+
+[node name="BottomRight" type="MarginContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -120.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="VBox" type="VBoxContainer" parent="BottomRight"]
+layout_mode = 2
+alignment = 2
+
+[node name="ReloadLabel" type="Label" parent="BottomRight/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_font_sizes/font_size = 16
+text = "재장전 중..."
+horizontal_alignment = 2
+
+[node name="AmmoLabel" type="Label" parent="BottomRight/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "30 / 120"
+horizontal_alignment = 2
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Crosshair" type="Control" parent="Center"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Ring" type="Control" parent="Center/Crosshair"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TopLine" type="ColorRect" parent="Center/Crosshair/Ring"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = -14.0
+offset_right = 1.0
+offset_bottom = -4.0
+mouse_filter = 2
+
+[node name="BottomLine" type="ColorRect" parent="Center/Crosshair/Ring"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 4.0
+offset_right = 1.0
+offset_bottom = 14.0
+mouse_filter = 2
+
+[node name="LeftLine" type="ColorRect" parent="Center/Crosshair/Ring"]
+layout_mode = 0
+offset_left = -14.0
+offset_top = -1.0
+offset_right = -4.0
+offset_bottom = 1.0
+mouse_filter = 2
+
+[node name="RightLine" type="ColorRect" parent="Center/Crosshair/Ring"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = -1.0
+offset_right = 14.0
+offset_bottom = 1.0
+mouse_filter = 2
+
+[node name="Dot" type="ColorRect" parent="Center/Crosshair"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.2, 0.2, 1)
+
+[node name="Overlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VictoryPanel" type="Panel" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -150.0
+offset_right = 220.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Overlay/VictoryPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Title" type="Label" parent="Overlay/VictoryPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 28
+text = "작전 성공 (VICTORY)"
+horizontal_alignment = 1
+
+[node name="Desc" type="Label" parent="Overlay/VictoryPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "최후의 참호를 사수했습니다!
+(3웨이브 완주 성공)"
+horizontal_alignment = 1
+
+[node name="RestartBtn" type="Button" parent="Overlay/VictoryPanel/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "다시 출격 (Restart)"
+
+[node name="MenuBtn" type="Button" parent="Overlay/VictoryPanel/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "메인 메뉴로 (Main Menu)"
+
+[node name="DefeatPanel" type="Panel" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -150.0
+offset_right = 220.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Overlay/DefeatPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Title" type="Label" parent="Overlay/DefeatPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_font_sizes/font_size = 28
+text = "작전 실패 (DEFEAT)"
+horizontal_alignment = 1
+
+[node name="ReasonLabel" type="Label" parent="Overlay/DefeatPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "참호 방어선이 함락되었습니다."
+horizontal_alignment = 1
+
+[node name="RestartBtn" type="Button" parent="Overlay/DefeatPanel/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "재도전 (Retry)"
+
+[node name="MenuBtn" type="Button" parent="Overlay/DefeatPanel/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "메인 메뉴로 (Main Menu)"
