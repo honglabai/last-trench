@@ -51,6 +51,8 @@ func _ready() -> void:
 	if camera_rig and camera_rig.is_first_person:
 		if visual_mesh:
 			visual_mesh.visible = false
+	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios"):
+		manual_input_override = true
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_dead:
@@ -121,7 +123,11 @@ func _physics_process(delta: float) -> void:
 		
 	# 6. Firing and Reloading (Supports both Keyboard/Mouse and Mobile Touch)
 	var wants_reload := Input.is_action_just_pressed("reload") or (manual_input_override and is_reload_requested)
-	var wants_fire := Input.is_action_pressed("fire") or (manual_input_override and is_firing_requested)
+	var wants_fire := false
+	if manual_input_override:
+		wants_fire = is_firing_requested
+	else:
+		wants_fire = Input.is_action_pressed("fire")
 	
 	if wants_reload and weapon:
 		weapon.start_reload()

@@ -122,12 +122,35 @@ func _init() -> void:
 		return
 		
 	root.add_child(game_root)
+	game_root._ready()
 	
 	if not game_root.trench_map or not game_root.player or not game_root.wave_director or not game_root.game_session or not game_root.touch_controls or not game_root.battle_hud:
 		push_error("GameRoot components failed to wire properly")
 		quit(1)
 		return
 	print("[PASS] GameRoot full integration (Map, Player, WaveDirector, Session, Touch, HUD) verified with 0 errors")
+	
+	# 4. Verify Independent Joystick Direction and Fire Button Separation
+	# Joystick drag must ONLY affect move/direction, NOT fire
+	game_root.touch_controls._update_joystick(Vector2(50 + 80 + 50, 450 + 80))
+	if game_root.player.is_firing_requested:
+		push_error("Left joystick movement incorrectly triggered firing!")
+		quit(1)
+		return
+	print("[PASS] Left joystick direction movement verified (0 firing triggered)")
+	
+	# Only right fire button triggers firing
+	game_root.touch_controls._on_fire_down()
+	if not game_root.player.is_firing_requested:
+		push_error("Right fire button failed to set is_firing_requested")
+		quit(1)
+		return
+	game_root.touch_controls._on_fire_up()
+	if game_root.player.is_firing_requested:
+		push_error("Releasing right fire button failed to reset is_firing_requested")
+		quit(1)
+		return
+	print("[PASS] Right fire button exclusive firing trigger verified")
 	
 	touch.queue_free()
 	hud.queue_free()

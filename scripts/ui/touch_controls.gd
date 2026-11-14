@@ -7,17 +7,21 @@ signal fire_pressed(pressed: bool)
 signal aim_toggled()
 signal reload_requested()
 signal interact_requested()
+signal touch_detected()
 
 @export var joystick_radius: float = 70.0
 @export var look_sensitivity: float = 1.0
+@export var joystick_look_speed: float = 400.0
 
 var joystick_touch_id: int = -1
 var look_touch_id: int = -1
+var fire_touch_id: int = -1
 
 var joystick_center: Vector2 = Vector2.ZERO
 var current_move_vector: Vector2 = Vector2.ZERO
 var is_aim_active: bool = false
 var can_interact: bool = false
+var _is_firing: bool = false
 
 var _joystick_base: Control
 var joystick_base: Control:
@@ -85,11 +89,21 @@ func _ready() -> void:
 			interact_button.pressed.connect(_on_interact_pressed)
 		interact_button.visible = false
 
+func _process(delta: float) -> void:
+	# Left joystick controls direction: held deflection continuously pans the view/aim direction
+	if current_move_vector.length_squared() > 0.01:
+		var look_delta := current_move_vector * joystick_look_speed * look_sensitivity * delta
+		look_delta_produced.emit(look_delta)
+
 func _on_fire_down() -> void:
-	fire_pressed.emit(true)
+	if not _is_firing:
+		_is_firing = true
+		fire_pressed.emit(true)
 
 func _on_fire_up() -> void:
-	fire_pressed.emit(false)
+	if _is_firing:
+		_is_firing = false
+		fire_pressed.emit(false)
 
 func _on_reload_pressed() -> void:
 	reload_requested.emit()
@@ -116,36 +130,58 @@ func _input(event: InputEvent) -> void:
 		_handle_drag(event)
 
 func _handle_touch(event: InputEventScreenTouch) -> void:
+	touch_detected.emit()
 	var viewport_size := get_viewport().get_visible_rect().size
 	var half_width := viewport_size.x * 0.45
 	
 	if event.pressed:
-		# Left side: Joystick
+		# 1. Right Fire Button check (firing happens ONLY on this button)
+		if fire_button and fire_button.is_visible_in_tree() and fire_button.get_global_rect().has_point(event.position):
+			fire_touch_id = event.index
+			_on_fire_down()
+			return
+			
+		# 2. Check other action buttons (Aim, Reload, Interact)
+		if _is_touch_on_other_buttons(event.position):
+			return
+			
+		# 3. Left side: Joystick (controls direction only, never fires)
 		if event.position.x < half_width and joystick_touch_id == -1:
 			joystick_touch_id = event.index
 			if joystick_base:
 				joystick_base.global_position = event.position - joystick_center
 				_update_joystick(event.position)
-		# Right side: Look drag zone (only if outside action button area)
+		# 4. Right side: Look drag zone (swiping for fine aim)
 		elif event.position.x >= half_width and look_touch_id == -1:
-			if not _is_touch_on_buttons(event.position):
-				look_touch_id = event.index
+			look_touch_id = event.index
 	else:
-		if event.index == joystick_touch_id:
+		if event.index == fire_touch_id:
+			fire_touch_id = -1
+			_on_fire_up()
+		elif event.index == joystick_touch_id:
 			joystick_touch_id = -1
 			_reset_joystick()
 		elif event.index == look_touch_id:
 			look_touch_id = -1
 
 func _handle_drag(event: InputEventScreenDrag) -> void:
-	if event.index == joystick_touch_id:
+	if event.index == fire_touch_id:
+		return
+	elif event.index == joystick_touch_id:
 		_update_joystick(event.position)
-		look_delta_produced.emit(event.relative * look_sensitivity)
 	elif event.index == look_touch_id:
 		look_delta_produced.emit(event.relative * look_sensitivity)
 
 func _is_touch_on_buttons(pos: Vector2) -> bool:
 	var buttons = [fire_button, aim_button, reload_button, interact_button]
+	for btn in buttons:
+		if btn and btn.is_visible_in_tree():
+			if btn.get_global_rect().has_point(pos):
+				return true
+	return false
+
+func _is_touch_on_other_buttons(pos: Vector2) -> bool:
+	var buttons = [aim_button, reload_button, interact_button]
 	for btn in buttons:
 		if btn and btn.is_visible_in_tree():
 			if btn.get_global_rect().has_point(pos):

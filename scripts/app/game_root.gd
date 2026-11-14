@@ -84,6 +84,9 @@ func _ready() -> void:
 		
 	# 4. Wire TouchControls to Player
 	if touch_controls and player:
+		touch_controls.touch_detected.connect(func():
+			player.manual_input_override = true
+		)
 		touch_controls.move_vector_changed.connect(func(vec):
 			player.manual_input_override = true
 			player.input_move_vector = vec
@@ -93,12 +96,15 @@ func _ready() -> void:
 				player.camera_rig.handle_look_input(delta_look)
 		)
 		touch_controls.fire_pressed.connect(func(pressed):
+			player.manual_input_override = true
 			player.is_firing_requested = pressed
 		)
 		touch_controls.aim_toggled.connect(func():
+			player.manual_input_override = true
 			player.is_aiming = touch_controls.is_aim_active
 		)
 		touch_controls.reload_requested.connect(func():
+			player.manual_input_override = true
 			if player.weapon:
 				player.weapon.start_reload()
 		)
