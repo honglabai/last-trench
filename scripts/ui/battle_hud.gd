@@ -58,6 +58,12 @@ var reload_label: Label:
 		if not _reload_label: _reload_label = get_node_or_null("BottomRight/VBox/ReloadLabel")
 		return _reload_label
 
+var _help_label: Label
+var help_label: Label:
+	get:
+		if not _help_label: _help_label = get_node_or_null("BottomCenter/HelpLabel")
+		return _help_label
+
 var _crosshair_dot: Control
 var crosshair_dot: Control:
 	get:
@@ -116,6 +122,8 @@ func _ready() -> void:
 	if victory_panel: victory_panel.visible = false
 	if defeat_panel: defeat_panel.visible = false
 	if reload_label: reload_label.visible = false
+	if OS.has_feature("mobile") and help_label:
+		help_label.visible = false
 	
 	if victory_restart_btn: victory_restart_btn.pressed.connect(func(): restart_requested.emit())
 	if victory_menu_btn: victory_menu_btn.pressed.connect(func(): menu_requested.emit())

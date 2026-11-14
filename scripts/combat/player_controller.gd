@@ -51,7 +51,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if is_dead:
 		return
-	if not manual_input_override and event is InputEventMouseMotion:
+	if event is InputEventMouseMotion:
 		if camera_rig:
 			camera_rig.handle_look_input(event.relative)
 
@@ -59,13 +59,18 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 		
-	# 1. Read input
+	# 1. Read input (Supports both Keyboard/Mouse and Mobile Touch)
+	var keyboard_vec := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var move_vec := Vector2.ZERO
-	if manual_input_override:
+	if keyboard_vec.length_squared() > 0.01:
+		move_vec = keyboard_vec
+	elif manual_input_override:
 		move_vec = input_move_vector
-	else:
-		move_vec = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-		is_aiming = Input.is_action_pressed("aim")
+		
+	if Input.is_action_pressed("aim"):
+		is_aiming = true
+	elif not manual_input_override:
+		is_aiming = false
 		
 	if camera_rig:
 		camera_rig.set_aiming(is_aiming)
@@ -106,9 +111,9 @@ func _physics_process(delta: float) -> void:
 	if is_inside_tree() and get_world_3d() and get_world_3d().space.is_valid():
 		move_and_slide()
 		
-	# 6. Firing and Reloading
-	var wants_reload := is_reload_requested if manual_input_override else Input.is_action_just_pressed("reload")
-	var wants_fire := is_firing_requested if manual_input_override else Input.is_action_pressed("fire")
+	# 6. Firing and Reloading (Supports both Keyboard/Mouse and Mobile Touch)
+	var wants_reload := Input.is_action_just_pressed("reload") or (manual_input_override and is_reload_requested)
+	var wants_fire := Input.is_action_pressed("fire") or (manual_input_override and is_firing_requested)
 	
 	if wants_reload and weapon:
 		weapon.start_reload()

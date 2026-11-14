@@ -107,7 +107,7 @@ func _ready() -> void:
 		for slot in trench_map.get_defense_slots():
 			slot.interaction_available.connect(func(can_inst, can_rep):
 				active_slot_nearby = slot
-				var label := "포탑 설치" if can_inst else ("포탑 수리" if can_rep else "")
+				var label := "포탑 설치 [E]" if can_inst else ("포탑 수리 [E]" if can_rep else "")
 				if touch_controls:
 					touch_controls.set_interact_available(can_inst or can_rep, label)
 			)
@@ -165,6 +165,19 @@ func _physics_process(_delta: float) -> void:
 	if trench_map and player:
 		for slot in trench_map.get_defense_slots():
 			slot.update_player_proximity(player.global_position)
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Keyboard shortcut for DefenseSlot interaction
+	if event.is_action_pressed("interact"):
+		_on_interact_requested()
+	# Web/Desktop Mouse capture: click to lock, ESC to unlock
+	elif event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	elif event is InputEventKey:
+		if event.pressed and event.keycode == KEY_ESCAPE:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _on_wave_state_changed(state: int) -> void:
 	if not battle_hud or not wave_director:
