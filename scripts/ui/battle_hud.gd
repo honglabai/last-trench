@@ -94,26 +94,26 @@ var defeat_reason_label: Label:
 		if not _defeat_reason_label: _defeat_reason_label = get_node_or_null("Overlay/DefeatPanel/VBox/ReasonLabel")
 		return _defeat_reason_label
 
-var _victory_restart_btn: Button
-var victory_restart_btn: Button:
+var _victory_restart_btn: BaseButton
+var victory_restart_btn: BaseButton:
 	get:
 		if not _victory_restart_btn: _victory_restart_btn = get_node_or_null("Overlay/VictoryPanel/VBox/RestartBtn")
 		return _victory_restart_btn
 
-var _victory_menu_btn: Button
-var victory_menu_btn: Button:
+var _victory_menu_btn: BaseButton
+var victory_menu_btn: BaseButton:
 	get:
 		if not _victory_menu_btn: _victory_menu_btn = get_node_or_null("Overlay/VictoryPanel/VBox/MenuBtn")
 		return _victory_menu_btn
 
-var _defeat_restart_btn: Button
-var defeat_restart_btn: Button:
+var _defeat_restart_btn: BaseButton
+var defeat_restart_btn: BaseButton:
 	get:
 		if not _defeat_restart_btn: _defeat_restart_btn = get_node_or_null("Overlay/DefeatPanel/VBox/RestartBtn")
 		return _defeat_restart_btn
 
-var _defeat_menu_btn: Button
-var defeat_menu_btn: Button:
+var _defeat_menu_btn: BaseButton
+var defeat_menu_btn: BaseButton:
 	get:
 		if not _defeat_menu_btn: _defeat_menu_btn = get_node_or_null("Overlay/DefeatPanel/VBox/MenuBtn")
 		return _defeat_menu_btn

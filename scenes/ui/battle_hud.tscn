@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cbattlehud92x"]
+[gd_scene load_steps=14 format=3 uid="uid://cbattlehud92x"]
 
 [ext_resource type="Script" path="res://scripts/ui/battle_hud.gd" id="1_hud"]
 [ext_resource type="Texture2D" uid="uid://bt6mojb2081aw" path="res://assets/ui/icon_hp_soldier.png" id="2_soldier_hp"]
@@ -9,6 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://csb5ysd10xllk" path="res://assets/ui/banner_victory.png" id="7_vic_banner"]
 [ext_resource type="Texture2D" uid="uid://bs5h2fnmv2ijj" path="res://assets/ui/banner_defeat.png" id="8_def_banner"]
 [ext_resource type="PackedScene" path="res://scenes/ui/fps_viewmodel.tscn" id="9_vm"]
+[ext_resource type="Texture2D" uid="uid://d35jnqln36j7l" path="res://assets/ui/buttons/btn_retry_normal.png" id="10_ret_n"]
+[ext_resource type="Texture2D" uid="uid://d3x3qbag6sqlb" path="res://assets/ui/buttons/btn_retry_pressed.png" id="11_ret_p"]
+[ext_resource type="Texture2D" uid="uid://bbhjsipk7rdrg" path="res://assets/ui/buttons/btn_menu_normal.png" id="12_men_n"]
+[ext_resource type="Texture2D" uid="uid://byj55ya18uun0" path="res://assets/ui/buttons/btn_menu_pressed.png" id="13_men_p"]
 
 [node name="BattleHUD" type="CanvasLayer"]
 layer = 10
@@ -308,15 +312,21 @@ text = "최후의 참호를 사수했습니다!
 (3웨이브 완주 성공)"
 horizontal_alignment = 1
 
-[node name="RestartBtn" type="Button" parent="Overlay/VictoryPanel/VBox"]
-custom_minimum_size = Vector2(0, 44)
+[node name="RestartBtn" type="TextureButton" parent="Overlay/VictoryPanel/VBox"]
+custom_minimum_size = Vector2(360, 56)
 layout_mode = 2
-text = "다시 출격 (Restart)"
+texture_normal = ExtResource("10_ret_n")
+texture_pressed = ExtResource("11_ret_p")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="MenuBtn" type="Button" parent="Overlay/VictoryPanel/VBox"]
-custom_minimum_size = Vector2(0, 44)
+[node name="MenuBtn" type="TextureButton" parent="Overlay/VictoryPanel/VBox"]
+custom_minimum_size = Vector2(360, 56)
 layout_mode = 2
-text = "메인 메뉴로 (Main Menu)"
+texture_normal = ExtResource("12_men_n")
+texture_pressed = ExtResource("13_men_p")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="DefeatPanel" type="Panel" parent="Overlay"]
 layout_mode = 1
@@ -367,12 +377,18 @@ theme_override_font_sizes/font_size = 16
 text = "참호 방어선이 함락되었습니다."
 horizontal_alignment = 1
 
-[node name="RestartBtn" type="Button" parent="Overlay/DefeatPanel/VBox"]
-custom_minimum_size = Vector2(0, 44)
+[node name="RestartBtn" type="TextureButton" parent="Overlay/DefeatPanel/VBox"]
+custom_minimum_size = Vector2(360, 56)
 layout_mode = 2
-text = "재도전 (Retry)"
+texture_normal = ExtResource("10_ret_n")
+texture_pressed = ExtResource("11_ret_p")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="MenuBtn" type="Button" parent="Overlay/DefeatPanel/VBox"]
-custom_minimum_size = Vector2(0, 44)
+[node name="MenuBtn" type="TextureButton" parent="Overlay/DefeatPanel/VBox"]
+custom_minimum_size = Vector2(360, 56)
 layout_mode = 2
-text = "메인 메뉴로 (Main Menu)"
+texture_normal = ExtResource("12_men_n")
+texture_pressed = ExtResource("13_men_p")
+ignore_texture_size = true
+stretch_mode = 5
