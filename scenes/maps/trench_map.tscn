@@ -170,42 +170,42 @@ surface_material_override/0 = SubResource("StandardMaterial3D_gabion_side")
 [node name="BarbedWires" type="Node3D" parent="Environment"]
 
 [node name="Wire1" type="Sprite3D" parent="Environment/BarbedWires"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.5, -1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0.5, -3.5)
 pixel_size = 0.005
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("9_wire")
 
 [node name="Wire2" type="Sprite3D" parent="Environment/BarbedWires"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.5, -1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.5, -3.5)
 pixel_size = 0.005
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("9_wire")
 
 [node name="Wire3" type="Sprite3D" parent="Environment/BarbedWires"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.5, -1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0.5, -3.5)
 pixel_size = 0.005
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("9_wire")
 
 [node name="Wire4" type="Sprite3D" parent="Environment/BarbedWires"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.5, -1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0.5, -3.5)
 pixel_size = 0.005
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("9_wire")
 
 [node name="Wire5" type="Sprite3D" parent="Environment/BarbedWires"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.5, -1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0.5, -3.5)
 pixel_size = 0.005
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("9_wire")
 
 [node name="Wire6" type="Sprite3D" parent="Environment/BarbedWires"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.5, -1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0.5, -3.5)
 pixel_size = 0.005
 alpha_cut = 1
 texture_filter = 5
@@ -214,16 +214,16 @@ texture = ExtResource("9_wire")
 [node name="Hedgehogs" type="Node3D" parent="Environment"]
 
 [node name="Hedgehog1" parent="Environment/Hedgehogs" instance=ExtResource("11_hedgehog")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -7.5, 0, -3.8)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -12, 0, -8)
 
 [node name="Hedgehog2" parent="Environment/Hedgehogs" instance=ExtResource("11_hedgehog")]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -2.5, 0, -4.8)
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -9, 0, -12)
 
 [node name="Hedgehog3" parent="Environment/Hedgehogs" instance=ExtResource("11_hedgehog")]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 2.5, 0, -4.8)
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 9, 0, -12)
 
 [node name="Hedgehog4" parent="Environment/Hedgehogs" instance=ExtResource("11_hedgehog")]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 7.5, 0, -3.8)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 12, 0, -8)
 
 [node name="BattlefieldAtmosphere" type="Node3D" parent="Environment"]
 

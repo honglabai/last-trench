@@ -80,11 +80,19 @@ func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpa
 	
 	if space_state:
 		var end_pos := origin + direction.normalized() * range_distance
-		var query := PhysicsRayQueryParameters3D.create(origin, end_pos, 1 | 4 | 8 | 16, exclude)
-		query.collide_with_areas = true
-		query.collide_with_bodies = true
+		# Priority 1: Check Enemies (Layer 4) and Destructible units (Layer 8) so obstacles NEVER block hits on enemies
+		var enemy_query := PhysicsRayQueryParameters3D.create(origin, end_pos, 4 | 8, exclude)
+		enemy_query.collide_with_areas = true
+		enemy_query.collide_with_bodies = true
+		var result := space_state.intersect_ray(enemy_query)
 		
-		var result := space_state.intersect_ray(query)
+		# Priority 2: If no enemy in line of fire, check environment/covers (Layer 1 | 16) for impact
+		if result.is_empty():
+			var env_query := PhysicsRayQueryParameters3D.create(origin, end_pos, 1 | 16, exclude)
+			env_query.collide_with_areas = true
+			env_query.collide_with_bodies = true
+			result = space_state.intersect_ray(env_query)
+		
 		var target_pos := end_pos
 		if not result.is_empty():
 			var collider: Object = result.collider

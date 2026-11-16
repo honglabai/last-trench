@@ -3,7 +3,7 @@ extends SceneTree
 func _init() -> void:
 	print("[TEST] Running P11 FPS ViewModel, Parapet & Obstacle Non-blocking Tests...")
 	
-	# 1. Test FPS ViewModel component
+	# 1. Test FPS ViewModel component with Iron Sights
 	var vm_scene = load("res://scenes/ui/fps_viewmodel.tscn")
 	if not vm_scene:
 		push_error("Failed to load res://scenes/ui/fps_viewmodel.tscn")
@@ -17,11 +17,11 @@ func _init() -> void:
 		return
 	root.add_child(vm)
 	
-	if not vm.rifle_rect or not vm.rifle_rect.texture:
-		push_error("FPSViewModel rifle texture missing")
+	if not vm.rifle_rect or not vm.rifle_rect.texture or not vm.rifle_rect.texture.resource_path.contains("tex_fps_iron_sights"):
+		push_error("FPSViewModel iron sights texture missing or not tex_fps_iron_sights")
 		quit(1)
 		return
-	print("[PASS] FPSViewModel instantiated with rifle texture: ", vm.rifle_rect.texture.resource_path)
+	print("[PASS] FPSViewModel instantiated with true iron sights texture: ", vm.rifle_rect.texture.resource_path)
 	
 	# Test firing recoil
 	var pre_recoil = vm.recoil_offset
@@ -121,6 +121,23 @@ func _init() -> void:
 		return
 	var clearance = eye_y - sandbag_top_y
 	print("[PASS] Clear line of sight verified: Eye level = %.2fm, Sandbag top = %.2fm (Clearance = +%.2fm)" % [eye_y, sandbag_top_y, clearance])
+	
+	# 5. Test central combat sector obstacle clearance (enemies cannot hide)
+	var hedgehogs = map.find_child("Hedgehogs", true, false)
+	if hedgehogs:
+		for child in hedgehogs.get_children():
+			if child is Node3D and abs(child.position.x) < 7.0:
+				push_error("Hedgehog found in central combat sector X=%f (enemies could hide behind it)" % child.position.x)
+				quit(1)
+				return
+	var wires = map.find_child("BarbedWires", true, false)
+	if wires:
+		for child in wires.get_children():
+			if child is Node3D and abs(child.position.x) < 7.0:
+				push_error("Barbed wire found in central combat sector X=%f (enemies could hide behind it)" % child.position.x)
+				quit(1)
+				return
+	print("[PASS] Open central killzone verified (zero obstacles between X=-7.0 and X=+7.0, enemies cannot hide)")
 	map.queue_free()
 	
 	print("[TEST COMPLETE] P11 FPS ViewModel, Parapet & Obstacle tests passed with 0 errors!")
