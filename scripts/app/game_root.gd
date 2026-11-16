@@ -136,6 +136,16 @@ func _ready() -> void:
 		wave_director.wave_cleared.connect(func(w_num):
 			battle_hud.update_wave(w_num, wave_director.max_waves_in_run, "웨이브 %d 클리어!" % w_num)
 		)
+		wave_director.enemy_spawned.connect(func(enemy, _count):
+			if enemy and enemy.has_signal("bullet_fired"):
+				enemy.bullet_fired.connect(func(start_p, target_p):
+					_spawn_tracer(start_p, target_p, 140.0, Color(1.0, 0.22, 0.12), 0.045, 0.85)
+				)
+			if enemy and enemy.has_signal("rocket_fired"):
+				enemy.rocket_fired.connect(func(start_p, target_p):
+					_spawn_tracer(start_p, target_p, 68.0, Color(1.0, 0.18, 0.35), 0.09, 1.4)
+				)
+		)
 		
 	# 7. Wire GameSession
 	if game_session:
@@ -231,9 +241,9 @@ func _on_interact_requested() -> void:
 func _on_bullet_fired(start_pos: Vector3, target_pos: Vector3) -> void:
 	_spawn_tracer(start_pos, target_pos, 220.0, Color(1.0, 0.88, 0.25))
 
-func _spawn_tracer(start_pos: Vector3, target_pos: Vector3, speed: float, color: Color) -> void:
+func _spawn_tracer(start_pos: Vector3, target_pos: Vector3, speed: float, color: Color, custom_radius: float = 0.035, custom_len: float = 0.9) -> void:
 	if not tracer_scene:
 		return
 	var tracer := tracer_scene.instantiate() as BulletTracer
 	add_child(tracer)
-	tracer.setup(start_pos, target_pos, speed, color)
+	tracer.setup(start_pos, target_pos, speed, color, custom_radius, custom_len)

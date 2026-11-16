@@ -61,8 +61,11 @@ func _process(delta: float) -> void:
 			spring_arm.position = spring_arm.position.lerp(target_offset, transition_speed * delta)
 
 func handle_look_input(relative: Vector2) -> void:
-	yaw -= relative.x * mouse_sensitivity
-	pitch = clampf(pitch - relative.y * mouse_sensitivity, deg_to_rad(min_pitch), deg_to_rad(max_pitch))
+	var sens := mouse_sensitivity * GameSettings.get_aim_sensitivity()
+	if is_aiming:
+		sens *= 0.65 # Slower, steadier precision control when aiming down iron sights
+	yaw -= relative.x * sens
+	pitch = clampf(pitch - relative.y * sens, deg_to_rad(min_pitch), deg_to_rad(max_pitch))
 	
 	rotation.y = yaw
 	rotation.x = pitch

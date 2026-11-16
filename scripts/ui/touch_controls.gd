@@ -11,7 +11,7 @@ signal touch_detected()
 
 @export var joystick_radius: float = 70.0
 @export var look_sensitivity: float = 1.0
-@export var joystick_look_speed: float = 400.0
+@export var joystick_look_speed: float = 240.0
 
 var joystick_touch_id: int = -1
 var look_touch_id: int = -1
@@ -92,7 +92,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	# Left joystick controls direction: held deflection continuously pans the view/aim direction
 	if current_move_vector.length_squared() > 0.01:
-		var look_delta := current_move_vector * joystick_look_speed * look_sensitivity * delta
+		var sens := look_sensitivity * GameSettings.get_aim_sensitivity()
+		var look_delta := current_move_vector * joystick_look_speed * sens * delta
 		look_delta_produced.emit(look_delta)
 
 func _on_fire_down() -> void:
@@ -170,7 +171,8 @@ func _handle_drag(event: InputEventScreenDrag) -> void:
 	elif event.index == joystick_touch_id:
 		_update_joystick(event.position)
 	elif event.index == look_touch_id:
-		look_delta_produced.emit(event.relative * look_sensitivity)
+		var sens := look_sensitivity * GameSettings.get_aim_sensitivity()
+		look_delta_produced.emit(event.relative * sens)
 
 func _is_touch_on_buttons(pos: Vector2) -> bool:
 	var buttons = [fire_button, aim_button, reload_button, interact_button]

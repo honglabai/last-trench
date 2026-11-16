@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cx6rvyb4g0q1h"]
+[gd_scene load_steps=12 format=3 uid="uid://cx6rvyb4g0q1h"]
 
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_1"]
 [ext_resource type="Texture2D" uid="uid://b0l0yjutgsfl4" path="res://assets/ui/bg_landing_title.png" id="2_bg"]
@@ -6,9 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://dc4cl42d1j70g" path="res://assets/ui/buttons/btn_deploy_pressed.png" id="4_dep_p"]
 [ext_resource type="Texture2D" uid="uid://dplqs78c1fjs" path="res://assets/ui/buttons/btn_guide_normal.png" id="5_gui_n"]
 [ext_resource type="Texture2D" uid="uid://fsnwi7oh7lkv" path="res://assets/ui/buttons/btn_guide_pressed.png" id="6_gui_p"]
-[ext_resource type="Texture2D" uid="uid://bb3vmq86en2j5" path="res://assets/ui/buttons/btn_exit_normal.png" id="7_exi_n"]
-[ext_resource type="Texture2D" uid="uid://ercp13wgrnee" path="res://assets/ui/buttons/btn_exit_pressed.png" id="8_exi_p"]
-[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="9_thm"]
+[ext_resource type="Texture2D" uid="uid://0lnp3vnqebh3" path="res://assets/ui/buttons/btn_settings_normal.png" id="7_set_n"]
+[ext_resource type="Texture2D" uid="uid://dy06tpxfkfdi" path="res://assets/ui/buttons/btn_settings_pressed.png" id="8_set_p"]
+[ext_resource type="Texture2D" uid="uid://bb3vmq86en2j5" path="res://assets/ui/buttons/btn_exit_normal.png" id="9_exi_n"]
+[ext_resource type="Texture2D" uid="uid://ercp13wgrnee" path="res://assets/ui/buttons/btn_exit_pressed.png" id="10_exi_p"]
+[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="11_thm"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -17,7 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("9_thm")
+theme = ExtResource("11_thm")
 script = ExtResource("1_1")
 
 [node name="Background" type="TextureRect" parent="."]
@@ -40,19 +42,19 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -200.0
-offset_top = -340.0
+offset_top = -350.0
 offset_right = 200.0
-offset_bottom = -20.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="StartButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(360, 64)
+custom_minimum_size = Vector2(360, 58)
 layout_mode = 2
 texture_normal = ExtResource("3_dep_n")
 texture_pressed = ExtResource("4_dep_p")
@@ -60,18 +62,26 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="GuideButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(360, 64)
+custom_minimum_size = Vector2(360, 58)
 layout_mode = 2
 texture_normal = ExtResource("5_gui_n")
 texture_pressed = ExtResource("6_gui_p")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ExitButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(360, 64)
+[node name="SettingsButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(360, 58)
 layout_mode = 2
-texture_normal = ExtResource("7_exi_n")
-texture_pressed = ExtResource("8_exi_p")
+texture_normal = ExtResource("7_set_n")
+texture_pressed = ExtResource("8_set_p")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ExitButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(360, 58)
+layout_mode = 2
+texture_normal = ExtResource("9_exi_n")
+texture_pressed = ExtResource("10_exi_p")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -146,3 +156,84 @@ custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 size_flags_vertical = 10
 text = "작전 확인 및 복귀 (Close)"
+
+[node name="SettingsDialog" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -220.0
+offset_right = 280.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="SettingsDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 18.0
+offset_right = -24.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="SettingsDialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "[⚙] 작전 설정 (SETTINGS)"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="SettingsDialog/VBox"]
+layout_mode = 2
+
+[node name="SensitivityTitle" type="Label" parent="SettingsDialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "과녁 조준 감도 (Aim Sensitivity): 60%"
+
+[node name="SensitivitySlider" type="HSlider" parent="SettingsDialog/VBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+min_value = 0.2
+max_value = 2.0
+step = 0.05
+value = 0.6
+
+[node name="SensitivityDesc" type="Label" parent="SettingsDialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.85, 0.9, 0.8)
+theme_override_font_sizes/font_size = 12
+text = "• 과녁 이동 속도를 조절합니다. (낮출수록 세밀하고 흔들림 없이 조준)"
+
+[node name="HSeparator2" type="HSeparator" parent="SettingsDialog/VBox"]
+layout_mode = 2
+
+[node name="FullscreenBtn" type="Button" parent="SettingsDialog/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "⛶ 전체화면 모드 전환 (FULLSCREEN)"
+
+[node name="FullscreenDesc" type="Label" parent="SettingsDialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.85, 0.9, 0.8)
+theme_override_font_sizes/font_size = 12
+text = "• 상단 브라우저 주소창을 숨기고 게임 화면을 최대로 확장합니다."
+
+[node name="HSeparator3" type="HSeparator" parent="SettingsDialog/VBox"]
+layout_mode = 2
+
+[node name="CloseSettingsBtn" type="Button" parent="SettingsDialog/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_vertical = 10
+text = "설정 적용 및 닫기 (Apply & Close)"

@@ -19,11 +19,12 @@ func _ready() -> void:
 	if not tracer_mesh:
 		_create_visual_mesh()
 
-func setup(origin: Vector3, destination: Vector3, custom_speed: float = 160.0, custom_color: Color = Color(1.0, 0.85, 0.25)) -> void:
+func setup(origin: Vector3, destination: Vector3, custom_speed: float = 160.0, custom_color: Color = Color(1.0, 0.85, 0.25), custom_radius: float = 0.035, custom_len: float = 0.9) -> void:
 	start_point = origin
 	target_point = destination
 	speed = custom_speed
 	tracer_color = custom_color
+	tracer_length = custom_len
 	global_position = origin
 	
 	var diff := destination - origin
@@ -34,6 +35,14 @@ func setup(origin: Vector3, destination: Vector3, custom_speed: float = 160.0, c
 		if abs(travel_direction.dot(Vector3.UP)) > 0.95:
 			up_vec = Vector3.RIGHT
 		look_at(global_position + travel_direction, up_vec)
+		
+	if not tracer_mesh:
+		_create_visual_mesh()
+	elif tracer_mesh.mesh is CylinderMesh:
+		var cyl := tracer_mesh.mesh as CylinderMesh
+		cyl.top_radius = custom_radius
+		cyl.bottom_radius = custom_radius
+		cyl.height = custom_len
 		
 	if tracer_mesh and tracer_mesh.get_surface_override_material(0):
 		var mat := tracer_mesh.get_surface_override_material(0) as StandardMaterial3D

@@ -118,6 +118,42 @@ var defeat_menu_btn: BaseButton:
 		if not _defeat_menu_btn: _defeat_menu_btn = get_node_or_null("Overlay/DefeatPanel/VBox/MenuBtn")
 		return _defeat_menu_btn
 
+var _settings_btn: BaseButton
+var settings_btn: BaseButton:
+	get:
+		if not _settings_btn: _settings_btn = get_node_or_null("SettingsBtn")
+		return _settings_btn
+
+var _settings_dialog: Control
+var settings_dialog: Control:
+	get:
+		if not _settings_dialog: _settings_dialog = get_node_or_null("Overlay/SettingsDialog")
+		return _settings_dialog
+
+var _sensitivity_slider: Slider
+var sensitivity_slider: Slider:
+	get:
+		if not _sensitivity_slider: _sensitivity_slider = get_node_or_null("Overlay/SettingsDialog/VBox/SensitivitySlider")
+		return _sensitivity_slider
+
+var _sensitivity_title: Label
+var sensitivity_title: Label:
+	get:
+		if not _sensitivity_title: _sensitivity_title = get_node_or_null("Overlay/SettingsDialog/VBox/SensitivityTitle")
+		return _sensitivity_title
+
+var _fullscreen_btn: BaseButton
+var fullscreen_btn: BaseButton:
+	get:
+		if not _fullscreen_btn: _fullscreen_btn = get_node_or_null("Overlay/SettingsDialog/VBox/FullscreenBtn")
+		return _fullscreen_btn
+
+var _close_settings_btn: BaseButton
+var close_settings_btn: BaseButton:
+	get:
+		if not _close_settings_btn: _close_settings_btn = get_node_or_null("Overlay/SettingsDialog/VBox/CloseSettingsBtn")
+		return _close_settings_btn
+
 var _viewmodel: FPSViewModel
 var viewmodel: FPSViewModel:
 	get:
@@ -128,6 +164,7 @@ func _ready() -> void:
 	if victory_panel: victory_panel.visible = false
 	if defeat_panel: defeat_panel.visible = false
 	if reload_label: reload_label.visible = false
+	if settings_dialog: settings_dialog.visible = false
 	if viewmodel: viewmodel.visible = true
 	if OS.has_feature("mobile") and help_label:
 		help_label.visible = false
@@ -136,6 +173,34 @@ func _ready() -> void:
 	if victory_menu_btn: victory_menu_btn.pressed.connect(func(): menu_requested.emit())
 	if defeat_restart_btn: defeat_restart_btn.pressed.connect(func(): restart_requested.emit())
 	if defeat_menu_btn: defeat_menu_btn.pressed.connect(func(): menu_requested.emit())
+	if settings_btn: settings_btn.pressed.connect(_on_settings_pressed)
+	if close_settings_btn: close_settings_btn.pressed.connect(_on_settings_close_pressed)
+	if fullscreen_btn: fullscreen_btn.pressed.connect(func(): GameSettings.toggle_fullscreen())
+	if sensitivity_slider:
+		sensitivity_slider.value = GameSettings.get_aim_sensitivity()
+		sensitivity_slider.value_changed.connect(_on_sensitivity_changed)
+		_update_sensitivity_label(sensitivity_slider.value)
+
+func _on_settings_pressed() -> void:
+	if settings_dialog:
+		if sensitivity_slider:
+			sensitivity_slider.value = GameSettings.get_aim_sensitivity()
+			_update_sensitivity_label(sensitivity_slider.value)
+		settings_dialog.visible = true
+
+func _on_settings_close_pressed() -> void:
+	if settings_dialog:
+		settings_dialog.visible = false
+
+func _on_sensitivity_changed(val: float) -> void:
+	GameSettings.set_aim_sensitivity(val)
+	_update_sensitivity_label(val)
+
+func _update_sensitivity_label(val: float) -> void:
+	if sensitivity_title:
+		var pct := int(val * 100.0)
+		var desc := "매우 안정적 (권장)" if pct <= 65 else ("표준 속도" if pct <= 100 else "고속 회전")
+		sensitivity_title.text = "과녁 조준 감도 (Aim Sensitivity): %d%% [%s]" % [pct, desc]
 
 func update_player_health(current: float, max_val: float) -> void:
 	if player_hp_bar:
