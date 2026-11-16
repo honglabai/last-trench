@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cr435vunmcy4x" path="res://assets/ui/btn_aim.png" id="5_aim"]
 [ext_resource type="Texture2D" uid="uid://6c0nunhn6akn" path="res://assets/ui/btn_reload.png" id="6_reload"]
 [ext_resource type="Texture2D" uid="uid://bqxpkhxebff42" path="res://assets/ui/btn_interact.png" id="7_interact"]
+[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="8_thm"]
 
 [node name="TouchControls" type="CanvasLayer"]
 layer = 5
@@ -51,6 +52,7 @@ anchor_bottom = 1.0
 offset_left = -600.0
 grow_horizontal = 0
 grow_vertical = 2
+theme = ExtResource("8_thm")
 mouse_filter = 1
 
 [node name="ActionButtons" type="Control" parent="RightZone"]

@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://fsnwi7oh7lkv" path="res://assets/ui/buttons/btn_guide_pressed.png" id="6_gui_p"]
 [ext_resource type="Texture2D" uid="uid://bb3vmq86en2j5" path="res://assets/ui/buttons/btn_exit_normal.png" id="7_exi_n"]
 [ext_resource type="Texture2D" uid="uid://ercp13wgrnee" path="res://assets/ui/buttons/btn_exit_pressed.png" id="8_exi_p"]
+[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="9_thm"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -16,6 +17,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("9_thm")
 script = ExtResource("1_1")
 
 [node name="Background" type="TextureRect" parent="."]

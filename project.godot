@@ -19,6 +19,11 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
 window/handheld/orientation=6
 
+[gui]
+
+theme/custom="res://assets/ui/theme_trench.tres"
+theme/custom_font="res://assets/fonts/Pretendard-SemiBold.otf"
+
 [input]
 
 move_forward={
