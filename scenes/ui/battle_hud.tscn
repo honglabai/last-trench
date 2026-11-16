@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cbattlehud92x"]
+[gd_scene load_steps=10 format=3 uid="uid://cbattlehud92x"]
 
 [ext_resource type="Script" path="res://scripts/ui/battle_hud.gd" id="1_hud"]
 [ext_resource type="Texture2D" uid="uid://bt6mojb2081aw" path="res://assets/ui/icon_hp_soldier.png" id="2_soldier_hp"]
@@ -8,10 +8,13 @@
 [ext_resource type="Texture2D" uid="uid://bswmry17vxbd0" path="res://assets/ui/ui_crosshair.png" id="6_crosshair"]
 [ext_resource type="Texture2D" uid="uid://csb5ysd10xllk" path="res://assets/ui/banner_victory.png" id="7_vic_banner"]
 [ext_resource type="Texture2D" uid="uid://bs5h2fnmv2ijj" path="res://assets/ui/banner_defeat.png" id="8_def_banner"]
+[ext_resource type="PackedScene" path="res://scenes/ui/fps_viewmodel.tscn" id="9_vm"]
 
 [node name="BattleHUD" type="CanvasLayer"]
 layer = 10
 script = ExtResource("1_hud")
+
+[node name="FPSViewModel" parent="." instance=ExtResource("9_vm")]
 
 [node name="TopLeft" type="MarginContainer" parent="."]
 offset_left = 40.0

@@ -66,6 +66,7 @@ func _ready() -> void:
 			player.weapon.bullet_fired.connect(_on_bullet_fired)
 			player.weapon.fired.connect(func(cur, _max):
 				battle_hud.update_ammo(cur, player.weapon.reserve_ammo)
+				battle_hud.trigger_weapon_fire()
 			)
 			player.weapon.reload_started.connect(func():
 				battle_hud.set_reload_indicator(true)

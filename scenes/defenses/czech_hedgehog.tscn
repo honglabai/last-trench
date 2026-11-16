@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvy8n3w5612kq"]
+[gd_scene load_steps=4 format=3 uid="uid://bvy8n3w5612kq"]
 
 [ext_resource type="Texture2D" uid="uid://dssx5ktmwwaab" path="res://assets/textures/tex_czech_hedgehog_rust.png" id="1_rust"]
 
@@ -12,16 +12,7 @@ metallic = 0.75
 roughness = 0.5
 texture_filter = 5
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_prop"]
-size = Vector3(1.8, 1.4, 1.8)
-
-[node name="CzechHedgehog" type="StaticBody3D"]
-collision_layer = 1
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
-shape = SubResource("BoxShape3D_prop")
+[node name="CzechHedgehog" type="Node3D"]
 
 [node name="Beams" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)

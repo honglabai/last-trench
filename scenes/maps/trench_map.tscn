@@ -1,11 +1,11 @@
-[gd_scene load_steps=23 format=3 uid="uid://dp6b83f4e1h5w"]
+[gd_scene load_steps=25 format=3 uid="uid://dp6b83f4e1h5w"]
 
 [ext_resource type="Script" path="res://scripts/maps/trench_map.gd" id="1_map"]
 [ext_resource type="Script" path="res://scripts/combat/base_objective.gd" id="2_base"]
 [ext_resource type="PackedScene" path="res://scenes/defenses/defense_slot.tscn" id="3_slot"]
 [ext_resource type="Script" path="res://scripts/defense/destructible_cover.gd" id="4_cover"]
 [ext_resource type="Texture2D" uid="uid://p5nilnrc4ets" path="res://assets/textures/tex_trench_ground.png" id="5_dirt"]
-[ext_resource type="Texture2D" uid="uid://cr46vc8sgyaql" path="res://assets/textures/tex_sandbag.png" id="6_sandbag"]
+[ext_resource type="Texture2D" uid="uid://boylppqbbf5uh" path="res://assets/textures/tex_sandbag_stacked.png" id="6_sandbag"]
 [ext_resource type="Texture2D" uid="uid://jrpij0qkeb87" path="res://assets/textures/tex_base_bunker.png" id="7_bunker"]
 [ext_resource type="Texture2D" uid="uid://d02ig6xnifohv" path="res://assets/textures/tex_trench_wall_gabion.png" id="8_gabion"]
 [ext_resource type="Texture2D" uid="uid://dtuixk0pdex0q" path="res://assets/textures/tex_barbed_wire.png" id="9_wire"]
@@ -39,17 +39,23 @@ texture_filter = 5
 size = Vector3(20, 1, 5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_sandbag"]
-size = Vector3(3, 0.8, 0.8)
+size = Vector3(4.5, 0.5, 0.8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sandbag"]
 albedo_color = Color(1, 1, 1, 1)
 albedo_texture = ExtResource("6_sandbag")
 roughness = 0.75
-uv1_scale = Vector3(2, 1, 1)
+uv1_scale = Vector3(3, 1, 1)
 texture_filter = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sandbag"]
-size = Vector3(3, 0.8, 0.8)
+size = Vector3(4.5, 0.5, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_banquette"]
+size = Vector3(18, 0.55, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_banquette"]
+size = Vector3(18, 0.55, 2.5)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_base"]
 top_radius = 0.8
@@ -116,6 +122,18 @@ surface_material_override/0 = SubResource("StandardMaterial3D_mud")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/TrenchFloor"]
 shape = SubResource("BoxShape3D_trench_floor")
+
+[node name="BanquetteStep" type="StaticBody3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.925, 0.8)
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/BanquetteStep"]
+mesh = SubResource("BoxMesh_banquette")
+surface_material_override/0 = SubResource("StandardMaterial3D_mud")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/BanquetteStep"]
+shape = SubResource("BoxShape3D_banquette")
 
 [node name="RearGround" type="StaticBody3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 12)
@@ -244,7 +262,7 @@ texture = ExtResource("10_smoke")
 [node name="Covers" type="Node3D" parent="."]
 
 [node name="SandbagLeft" type="StaticBody3D" parent="Covers"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.4, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.25, -0.8)
 collision_layer = 1
 script = ExtResource("4_cover")
 
@@ -256,7 +274,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_sandbag")
 shape = SubResource("BoxShape3D_sandbag")
 
 [node name="SandbagCenter" type="StaticBody3D" parent="Covers"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -0.8)
 collision_layer = 1
 script = ExtResource("4_cover")
 
@@ -268,7 +286,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_sandbag")
 shape = SubResource("BoxShape3D_sandbag")
 
 [node name="SandbagRight" type="StaticBody3D" parent="Covers"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.4, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.25, -0.8)
 collision_layer = 1
 script = ExtResource("4_cover")
 
@@ -280,7 +298,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_sandbag")
 shape = SubResource("BoxShape3D_sandbag")
 
 [node name="PlayerStart" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.65, 0.8)
 
 [node name="BaseObjective" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 6)

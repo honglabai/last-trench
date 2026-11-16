@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://fpsviewmod91x"]
+
+[ext_resource type="Script" path="res://scripts/ui/fps_viewmodel.gd" id="1_vm"]
+[ext_resource type="Texture2D" uid="uid://c012fvimovgei" path="res://assets/textures/tex_fps_arms_rifle.png" id="2_gun"]
+
+[node name="FPSViewModel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_vm")
+
+[node name="RifleRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -460.0
+offset_top = -500.0
+offset_right = 460.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("2_gun")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MuzzleFlash" type="ColorRect" parent="RifleRect"]
+visible = false
+layout_mode = 0
+offset_left = 438.0
+offset_top = 85.0
+offset_right = 462.0
+offset_bottom = 115.0
+mouse_filter = 2
+color = Color(1, 0.85, 0.35, 0.9)

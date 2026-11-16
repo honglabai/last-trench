@@ -118,10 +118,17 @@ var defeat_menu_btn: Button:
 		if not _defeat_menu_btn: _defeat_menu_btn = get_node_or_null("Overlay/DefeatPanel/VBox/MenuBtn")
 		return _defeat_menu_btn
 
+var _viewmodel: FPSViewModel
+var viewmodel: FPSViewModel:
+	get:
+		if not _viewmodel: _viewmodel = get_node_or_null("FPSViewModel")
+		return _viewmodel
+
 func _ready() -> void:
 	if victory_panel: victory_panel.visible = false
 	if defeat_panel: defeat_panel.visible = false
 	if reload_label: reload_label.visible = false
+	if viewmodel: viewmodel.visible = true
 	if OS.has_feature("mobile") and help_label:
 		help_label.visible = false
 	
@@ -158,9 +165,15 @@ func update_ammo(current: int, reserve: int) -> void:
 	if ammo_label:
 		ammo_label.text = "%d / %d" % [current, reserve]
 
+func trigger_weapon_fire() -> void:
+	if viewmodel:
+		viewmodel.on_fire()
+
 func set_reload_indicator(is_reloading: bool) -> void:
 	if reload_label:
 		reload_label.visible = is_reloading
+	if viewmodel:
+		viewmodel.set_reloading(is_reloading)
 
 func set_crosshair_aim(is_aiming: bool) -> void:
 	if crosshair_ring:
@@ -170,12 +183,18 @@ func set_crosshair_aim(is_aiming: bool) -> void:
 		else:
 			crosshair_ring.scale = Vector2(1.0, 1.0)
 			crosshair_ring.modulate = Color(1.0, 1.0, 1.0)
+	if viewmodel:
+		viewmodel.set_aiming(is_aiming)
 
 func show_victory() -> void:
+	if viewmodel:
+		viewmodel.visible = false
 	if victory_panel:
 		victory_panel.visible = true
 
 func show_defeat(reason: String) -> void:
+	if viewmodel:
+		viewmodel.visible = false
 	if defeat_panel:
 		defeat_panel.visible = true
 	if defeat_reason_label:
