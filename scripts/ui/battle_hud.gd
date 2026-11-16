@@ -169,19 +169,20 @@ func _ready() -> void:
 	if OS.has_feature("mobile") and help_label:
 		help_label.visible = false
 	
-	if victory_restart_btn: victory_restart_btn.pressed.connect(func(): restart_requested.emit())
-	if victory_menu_btn: victory_menu_btn.pressed.connect(func(): menu_requested.emit())
-	if defeat_restart_btn: defeat_restart_btn.pressed.connect(func(): restart_requested.emit())
-	if defeat_menu_btn: defeat_menu_btn.pressed.connect(func(): menu_requested.emit())
+	if victory_restart_btn: victory_restart_btn.pressed.connect(func(): AudioManager.play_sound("click"); restart_requested.emit())
+	if victory_menu_btn: victory_menu_btn.pressed.connect(func(): AudioManager.play_sound("click"); menu_requested.emit())
+	if defeat_restart_btn: defeat_restart_btn.pressed.connect(func(): AudioManager.play_sound("click"); restart_requested.emit())
+	if defeat_menu_btn: defeat_menu_btn.pressed.connect(func(): AudioManager.play_sound("click"); menu_requested.emit())
 	if settings_btn: settings_btn.pressed.connect(_on_settings_pressed)
 	if close_settings_btn: close_settings_btn.pressed.connect(_on_settings_close_pressed)
-	if fullscreen_btn: fullscreen_btn.pressed.connect(func(): GameSettings.toggle_fullscreen())
+	if fullscreen_btn: fullscreen_btn.pressed.connect(func(): AudioManager.play_sound("click"); GameSettings.toggle_fullscreen())
 	if sensitivity_slider:
 		sensitivity_slider.value = GameSettings.get_aim_sensitivity()
 		sensitivity_slider.value_changed.connect(_on_sensitivity_changed)
 		_update_sensitivity_label(sensitivity_slider.value)
 
 func _on_settings_pressed() -> void:
+	AudioManager.play_sound("click")
 	if settings_dialog:
 		if sensitivity_slider:
 			sensitivity_slider.value = GameSettings.get_aim_sensitivity()
@@ -189,6 +190,7 @@ func _on_settings_pressed() -> void:
 		settings_dialog.visible = true
 
 func _on_settings_close_pressed() -> void:
+	AudioManager.play_sound("click")
 	if settings_dialog:
 		settings_dialog.visible = false
 

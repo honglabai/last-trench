@@ -68,6 +68,7 @@ var close_settings_btn: BaseButton:
 		return _close_settings_btn
 
 func _ready() -> void:
+	AudioManager.ensure_instance(self)
 	if start_button:
 		start_button.pressed.connect(_on_start_pressed)
 	if guide_button:
@@ -92,21 +93,25 @@ func _ready() -> void:
 		settings_dialog.visible = false
 
 func _on_start_pressed() -> void:
+	AudioManager.play_sound("click")
 	# Attempt entering immersive fullscreen on launch
 	GameSettings.toggle_fullscreen()
 	get_tree().change_scene_to_file("res://scenes/app/game_root.tscn")
 
 func _on_guide_pressed() -> void:
+	AudioManager.play_sound("click")
 	if guide_dialog:
 		guide_dialog.visible = true
 	if settings_dialog:
 		settings_dialog.visible = false
 
 func _on_guide_close_pressed() -> void:
+	AudioManager.play_sound("click")
 	if guide_dialog:
 		guide_dialog.visible = false
 
 func _on_settings_pressed() -> void:
+	AudioManager.play_sound("click")
 	if settings_dialog:
 		if sensitivity_slider:
 			sensitivity_slider.value = GameSettings.get_aim_sensitivity()
@@ -116,6 +121,7 @@ func _on_settings_pressed() -> void:
 		guide_dialog.visible = false
 
 func _on_settings_close_pressed() -> void:
+	AudioManager.play_sound("click")
 	if settings_dialog:
 		settings_dialog.visible = false
 

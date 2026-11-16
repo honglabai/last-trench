@@ -71,11 +71,13 @@ func can_fire() -> bool:
 func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpaceState3D = null, exclude: Array[RID] = []) -> bool:
 	if not can_fire():
 		if current_ammo <= 0 and not is_reloading:
+			AudioManager.play_sound("click", 0.05, -3.0)
 			ammo_depleted.emit()
 		return false
 		
 	time_since_last_shot = 0.0
 	current_ammo -= 1
+	AudioManager.play_sound("rifle_shot", 0.04, 0.0)
 	fired.emit(current_ammo, magazine_size)
 	
 	if space_state:
@@ -115,6 +117,7 @@ func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpa
 func _apply_hit(collider: Object, point: Vector3, normal: Vector3) -> void:
 	if not collider:
 		return
+	AudioManager.play_sound("hit_enemy", 0.03, -1.0)
 	if collider.has_method("apply_damage"):
 		collider.apply_damage(damage)
 	elif collider is Node:
@@ -127,6 +130,7 @@ func start_reload() -> bool:
 		return false
 	is_reloading = true
 	reload_timer = 0.0
+	AudioManager.play_sound("reload", 0.02, 0.0)
 	reload_started.emit()
 	return true
 

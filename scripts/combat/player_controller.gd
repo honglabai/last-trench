@@ -58,6 +58,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	if is_dead:
 		return
 	if event is InputEventMouseMotion:
+		# In touch/mobile mode, ignore synthetic mouse motion
+		if manual_input_override:
+			return
+		# Ignore massive sudden spikes (e.g. pointer lock transitions)
+		if event.relative.length_squared() > 10000.0:
+			return
 		if camera_rig:
 			camera_rig.handle_look_input(event.relative)
 

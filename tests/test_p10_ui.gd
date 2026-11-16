@@ -42,18 +42,18 @@ func _init() -> void:
 		return
 	print("[PASS] TouchControls aim toggle verified: is_aim_active = true")
 	
-	# Test Interact Button Context Visibility
+	# Test Interact Button Always-Visible on HUD
 	touch.set_interact_available(true, "포탑 설치")
 	if not touch.interact_button.visible or touch.interact_button.text != "포탑 설치":
-		push_error("Interact button context visibility failed")
+		push_error("Interact button display failed")
 		quit(1)
 		return
 	touch.set_interact_available(false)
-	if touch.interact_button.visible:
-		push_error("Interact button failed to hide when unavailable")
+	if not touch.interact_button.visible:
+		push_error("Interact button must remain displayed on HUD at all times")
 		quit(1)
 		return
-	print("[PASS] TouchControls contextual interact button toggle verified")
+	print("[PASS] TouchControls interact button always displayed on HUD verified")
 	
 	# 2. Test BattleHUD
 	var hud_scene = load("res://scenes/ui/battle_hud.tscn")

@@ -52,6 +52,7 @@ func _ready() -> void:
 	if _is_initialized:
 		return
 	_is_initialized = true
+	AudioManager.ensure_instance(self)
 	# 1. Place player at trench map start transform
 	if trench_map and player:
 		player.global_transform = trench_map.get_player_start_transform()
@@ -230,13 +231,38 @@ func _on_wave_state_changed(state: int) -> void:
 		battle_hud.update_wave(wave_director.current_wave_number, wave_director.max_waves_in_run, "적 공세 방어 중!")
 
 func _on_interact_requested() -> void:
-	if not active_slot_nearby:
-		return
-	if active_slot_nearby.can_install():
-		var turret = turret_scene.instantiate() as TurretController
-		active_slot_nearby.install_turret(turret)
-	elif active_slot_nearby.can_repair():
-		active_slot_nearby.repair_turret(50.0)
+	if active_slot_nearby:
+		if active_slot_nearby.can_install():
+			var turret = turret_scene.instantiate() as TurretController
+			active_slot_nearby.install_turret(turret)
+			AudioManager.play_sound("turret_shot", 0.05, -2.0)
+			return
+		elif active_slot_nearby.can_repair():
+			active_slot_nearby.repair_turret(50.0)
+			AudioManager.play_sound("reload", 0.05)
+			return
+			
+	# If player taps Turret button when not directly colliding with a slot, auto-target nearest slot
+	if trench_map:
+		var slots = [trench_map.defense_slot_left, trench_map.defense_slot_right]
+		var best_slot: DefenseSlot = null
+		var min_dist: float = 999.0
+		var p_pos: Vector3 = player.global_position if (player and player.is_inside_tree()) else Vector3.ZERO
+		for slot in slots:
+			if slot and is_instance_valid(slot):
+				var s_pos: Vector3 = slot.global_position if slot.is_inside_tree() else slot.position
+				var d: float = (s_pos - p_pos).length()
+				if d < min_dist:
+					min_dist = d
+					best_slot = slot
+		if best_slot:
+			if best_slot.can_install():
+				var turret = turret_scene.instantiate() as TurretController
+				best_slot.install_turret(turret)
+				AudioManager.play_sound("turret_shot", 0.05, -2.0)
+			elif best_slot.can_repair():
+				best_slot.repair_turret(50.0)
+				AudioManager.play_sound("reload", 0.05)
 
 func _on_bullet_fired(start_pos: Vector3, target_pos: Vector3) -> void:
 	_spawn_tracer(start_pos, target_pos, 220.0, Color(1.0, 0.88, 0.25))

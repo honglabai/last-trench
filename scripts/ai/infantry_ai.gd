@@ -164,6 +164,7 @@ func _execute_attack() -> void:
 	var tgt_pos := target.global_position if (target.is_inside_tree()) else target.position
 	var muzzle_pos := my_pos + Vector3(0.0, 0.9, 0.5)
 	var target_pos := tgt_pos + Vector3(randf_range(-1.0, 1.0), randf_range(0.2, 0.8), 0.0)
+	AudioManager.play_sound_at("enemy_shot", muzzle_pos, my_pos)
 	bullet_fired.emit(muzzle_pos, target_pos)
 	if target.has_method("apply_damage"):
 		target.apply_damage(attack_damage)

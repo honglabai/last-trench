@@ -87,7 +87,8 @@ func _ready() -> void:
 	if interact_button:
 		if not interact_button.pressed.is_connected(_on_interact_pressed):
 			interact_button.pressed.connect(_on_interact_pressed)
-		interact_button.visible = false
+		interact_button.visible = true
+		set_interact_available(false)
 
 func _process(delta: float) -> void:
 	# Left joystick controls direction: held deflection continuously pans the view/aim direction
@@ -107,18 +108,25 @@ func _on_fire_up() -> void:
 		fire_pressed.emit(false)
 
 func _on_reload_pressed() -> void:
+	AudioManager.play_sound("click")
 	reload_requested.emit()
 
 func _on_interact_pressed() -> void:
+	AudioManager.play_sound("click")
 	interact_requested.emit()
 
-func set_interact_available(available: bool, label_text: String = "설치/수리") -> void:
+func set_interact_available(available: bool, label_text: String = "포탑 설치") -> void:
 	can_interact = available
 	if interact_button:
-		interact_button.visible = available
+		interact_button.visible = true
 		interact_button.text = label_text
+		if available:
+			interact_button.modulate = Color(0.3, 1.0, 0.5, 1.0) # Bright glowing green active
+		else:
+			interact_button.modulate = Color(1.0, 1.0, 1.0, 0.85) # High visibility tactical cyan
 
 func _on_aim_pressed() -> void:
+	AudioManager.play_sound("click")
 	is_aim_active = not is_aim_active
 	aim_toggled.emit()
 	if aim_button:
@@ -146,15 +154,15 @@ func _handle_touch(event: InputEventScreenTouch) -> void:
 		if _is_touch_on_other_buttons(event.position):
 			return
 			
-		# 3. Left side: Joystick (controls direction only, never fires)
+		# 3. Left side: Joystick (STRICTLY FIXED POSITION, NEVER MOVES ITS BASE)
 		if event.position.x < half_width and joystick_touch_id == -1:
 			joystick_touch_id = event.index
-			if joystick_base:
-				joystick_base.global_position = event.position - joystick_center
-				_update_joystick(event.position)
-		# 4. Right side: Look drag zone (swiping for fine aim)
+			# Calculate deflection relative to the permanent, fixed joystick base position
+			_update_joystick(event.position)
+		# 4. Right side: Look drag zone (swiping for fine aim - only when NOT touching buttons)
 		elif event.position.x >= half_width and look_touch_id == -1:
-			look_touch_id = event.index
+			if not _is_touch_on_buttons(event.position):
+				look_touch_id = event.index
 	else:
 		if event.index == fire_touch_id:
 			fire_touch_id = -1
@@ -172,7 +180,11 @@ func _handle_drag(event: InputEventScreenDrag) -> void:
 		_update_joystick(event.position)
 	elif event.index == look_touch_id:
 		var sens := look_sensitivity * GameSettings.get_aim_sensitivity()
-		look_delta_produced.emit(event.relative * sens)
+		var rel := event.relative
+		# Clamp drag relative to prevent sudden touch jumps
+		rel.x = clampf(rel.x, -50.0, 50.0)
+		rel.y = clampf(rel.y, -50.0, 50.0)
+		look_delta_produced.emit(rel * sens)
 
 func _is_touch_on_buttons(pos: Vector2) -> bool:
 	var buttons = [fire_button, aim_button, reload_button, interact_button]
@@ -193,6 +205,7 @@ func _is_touch_on_other_buttons(pos: Vector2) -> bool:
 func _update_joystick(touch_pos: Vector2) -> void:
 	if not joystick_base:
 		return
+	# Fixed center: Never reassigns joystick_base.global_position!
 	var base_center := joystick_base.global_position + joystick_center
 	var diff := touch_pos - base_center
 	var dist := diff.length()

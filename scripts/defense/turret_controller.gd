@@ -120,6 +120,7 @@ func _fire_at_target(target_node: Node3D) -> void:
 	turret_fired.emit(target_node, damage)
 	var origin := (barrel.global_position if (barrel and barrel.is_inside_tree()) else global_position) if is_inside_tree() else (position + Vector3(0.0, 1.2, 0.0))
 	var target_pos := (target_node.global_position if target_node.is_inside_tree() else target_node.position) + Vector3(0.0, 0.8, 0.0)
+	AudioManager.play_sound_at("turret_shot", origin, origin)
 	bullet_fired.emit(origin, target_pos)
 
 func apply_damage(amount: float) -> void:

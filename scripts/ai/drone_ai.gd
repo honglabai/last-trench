@@ -172,6 +172,7 @@ func _execute_attack() -> void:
 	var tgt_pos := target.global_position if target.is_inside_tree() else target.position
 	var launch_pos := my_pos + Vector3(0.0, -0.3, 0.3)
 	var target_pos := tgt_pos + Vector3(randf_range(-1.2, 1.2), randf_range(0.1, 0.8), 0.0)
+	AudioManager.play_sound_at("drone_rocket", launch_pos, my_pos)
 	rocket_fired.emit(launch_pos, target_pos)
 	if target.has_method("apply_damage"):
 		target.apply_damage(attack_damage)
@@ -185,6 +186,8 @@ func _process_hit(delta: float) -> void:
 
 func die() -> void:
 	velocity.y = minf(0.0, velocity.y)
+	var my_pos := global_position if is_inside_tree() else position
+	AudioManager.play_sound_at("explosion", my_pos, my_pos)
 	super.die()
 
 func _process_falling_dead(delta: float) -> void:

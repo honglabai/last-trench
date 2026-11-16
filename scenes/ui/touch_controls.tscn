@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://cr435vunmcy4x" path="res://assets/ui/btn_aim.png" id="5_aim"]
 [ext_resource type="Texture2D" uid="uid://6c0nunhn6akn" path="res://assets/ui/btn_reload.png" id="6_reload"]
 [ext_resource type="Texture2D" uid="uid://bqxpkhxebff42" path="res://assets/ui/btn_interact.png" id="7_interact"]
-[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="8_thm"]
 
 [node name="TouchControls" type="CanvasLayer"]
 layer = 5
@@ -22,22 +21,33 @@ grow_vertical = 2
 mouse_filter = 1
 
 [node name="JoystickBase" type="TextureRect" parent="LeftZone"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 60.0
-offset_top = 460.0
-offset_right = 220.0
-offset_bottom = 620.0
+offset_top = -240.0
+offset_right = 240.0
+offset_bottom = -60.0
+grow_vertical = 0
 mouse_filter = 2
 texture = ExtResource("2_jbase")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Knob" type="TextureRect" parent="LeftZone/JoystickBase"]
-layout_mode = 0
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 110.0
-offset_bottom = 110.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("3_jknob")
 expand_mode = 1
@@ -52,7 +62,6 @@ anchor_bottom = 1.0
 offset_left = -600.0
 grow_horizontal = 0
 grow_vertical = 2
-theme = ExtResource("8_thm")
 mouse_filter = 1
 
 [node name="ActionButtons" type="Control" parent="RightZone"]
@@ -71,10 +80,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -170.0
-offset_top = -170.0
-offset_right = -50.0
-offset_bottom = -50.0
+offset_left = -175.0
+offset_top = -175.0
+offset_right = -35.0
+offset_bottom = -35.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
@@ -88,10 +97,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -140.0
+offset_left = -310.0
+offset_top = -155.0
 offset_right = -190.0
-offset_bottom = -50.0
+offset_bottom = -35.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
@@ -105,10 +114,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -260.0
-offset_right = -70.0
-offset_bottom = -170.0
+offset_left = -165.0
+offset_top = -305.0
+offset_right = -45.0
+offset_bottom = -185.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
@@ -122,15 +131,12 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -290.0
-offset_top = -250.0
-offset_right = -180.0
-offset_bottom = -160.0
+offset_left = -310.0
+offset_top = -295.0
+offset_right = -190.0
+offset_bottom = -175.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_font_sizes/font_size = 14
-text = "설치/수리"
-icon = ExtResource("7_interact")
 flat = true
+icon = ExtResource("7_interact")
 expand_icon = true
-vertical_icon_alignment = 0
