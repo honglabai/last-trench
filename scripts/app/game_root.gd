@@ -111,6 +111,10 @@ func _ready() -> void:
 				player.weapon.start_reload()
 		)
 		touch_controls.interact_requested.connect(_on_interact_requested)
+		touch_controls.weapon_switch_requested.connect(func():
+			if battle_hud:
+				battle_hud.open_armory_shop()
+		)
 		
 	# 5. Wire DefenseSlots proximity
 	if trench_map:

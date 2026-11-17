@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cbattlehud92x"]
+[gd_scene load_steps=27 format=3 uid="uid://cbattlehud92x"]
 
 [ext_resource type="Script" path="res://scripts/ui/battle_hud.gd" id="1_hud"]
 [ext_resource type="Texture2D" uid="uid://bt6mojb2081aw" path="res://assets/ui/icon_hp_soldier.png" id="2_soldier_hp"]
@@ -14,32 +14,19 @@
 [ext_resource type="Texture2D" uid="uid://bbhjsipk7rdrg" path="res://assets/ui/buttons/btn_menu_normal.png" id="12_men_n"]
 [ext_resource type="Texture2D" uid="uid://byj55ya18uun0" path="res://assets/ui/buttons/btn_menu_pressed.png" id="13_men_p"]
 [ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="14_thm"]
-[ext_resource type="Texture2D" uid="uid://cp1sv24mr7ig" path="res://assets/ui/hud_tactical_overlay.png" id="15_hud_overlay"]
-[ext_resource type="PackedScene" uid="uid://armoryshop91x" path="res://scenes/ui/armory_shop.tscn" id="16_shop"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_orange_fill"]
-bg_color = Color(1, 0.55, 0.1, 0.95)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 0.8, 0.4, 0.9)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cyan_fill"]
-bg_color = Color(0.18, 0.85, 0.95, 0.95)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.7, 0.95, 1, 0.9)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+[ext_resource type="PackedScene" uid="uid://armoryshop91x" path="res://scenes/ui/armory_shop.tscn" id="15_shop"]
+[ext_resource type="Texture2D" path="res://assets/ui/frame_tactical_panel.png" id="16_frame"]
+[ext_resource type="Texture2D" path="res://assets/ui/icon_shield_trench.png" id="17_shield"]
+[ext_resource type="Texture2D" path="res://assets/ui/icon_soldier_ekg.png" id="18_ekg"]
+[ext_resource type="Texture2D" path="res://assets/ui/icon_ammo_mag.png" id="19_mag"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_bar_under_durability.png" id="20_dur_u"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_bar_fill_durability.png" id="21_dur_f"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_bar_under_soldier.png" id="22_sol_u"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_bar_fill_soldier.png" id="23_sol_f"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_bar_under_defense.png" id="24_def_u"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_bar_fill_defense.png" id="25_def_f"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_ammo_under.png" id="26_am_u"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_ammo_fill.png" id="27_am_f"]
 
 [node name="BattleHUD" type="CanvasLayer"]
 layer = 10
@@ -47,142 +34,309 @@ script = ExtResource("1_hud")
 
 [node name="FPSViewModel" parent="." instance=ExtResource("9_vm")]
 
-[node name="TacticalHUDOverlay" type="TextureRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("15_hud_overlay")
-expand_mode = 1
-stretch_mode = 5
-
 [node name="TopLeft" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 450.0
-offset_bottom = 320.0
+offset_left = 20.0
+offset_top = 18.0
+offset_right = 380.0
+offset_bottom = 250.0
 mouse_filter = 2
 theme = ExtResource("14_thm")
 
-[node name="VBox" type="Control" parent="TopLeft"]
-layout_mode = 3
+[node name="PanelBg" type="NinePatchRect" parent="TopLeft"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+texture = ExtResource("16_frame")
+patch_margin_left = 14
+patch_margin_top = 14
+patch_margin_right = 14
+patch_margin_bottom = 14
 
-[node name="BaseHPBar" type="ProgressBar" parent="TopLeft/VBox"]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 112.0
-offset_right = 340.0
-offset_bottom = 145.0
-theme_override_styles/fill = SubResource("StyleBoxFlat_orange_fill")
-value = 100.0
-show_percentage = false
-
-[node name="Icon" type="TextureRect" parent="TopLeft/VBox/BaseHPBar"]
-layout_mode = 0
-offset_left = -30.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = 30.0
+[node name="VBox" type="Control" parent="TopLeft"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 10.0
+offset_right = -12.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("3_base_hp")
+
+[node name="DurabilityHeader" type="Label" parent="TopLeft/VBox"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 2.0
+offset_right = 300.0
+offset_bottom = 22.0
+theme_override_colors/font_color = Color(0, 0.9, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_font_sizes/font_size = 14
+text = "디펜스 장애물(참호) 내구도"
+
+[node name="ShieldIcon" type="TextureRect" parent="TopLeft/VBox"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 28.0
+offset_right = 56.0
+offset_bottom = 76.0
+mouse_filter = 2
+texture = ExtResource("17_shield")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="BaseHPBar" type="TextureProgressBar" parent="TopLeft/VBox"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 26.0
+offset_right = 324.0
+offset_bottom = 56.0
+max_value = 500.0
+value = 500.0
+texture_under = ExtResource("20_dur_u")
+texture_progress = ExtResource("21_dur_f")
 
 [node name="Label" type="Label" parent="TopLeft/VBox/BaseHPBar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 36.0
-offset_bottom = 36.0
+offset_top = 30.0
+offset_bottom = 30.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "참호 거점: 500 / 500"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="PlayerHPBar" type="ProgressBar" parent="TopLeft/VBox"]
-layout_mode = 0
-offset_left = 138.0
-offset_top = 232.0
-offset_right = 332.0
-offset_bottom = 262.0
-theme_override_styles/fill = SubResource("StyleBoxFlat_cyan_fill")
-value = 100.0
-show_percentage = false
+[node name="DurabilitySub" type="Label" parent="TopLeft/VBox/BaseHPBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3, 0.85, 1, 0.9)
+theme_override_font_sizes/font_size = 12
+text = "강도(DURABILITY)"
+vertical_alignment = 1
 
-[node name="Icon" type="TextureRect" parent="TopLeft/VBox/PlayerHPBar"]
+[node name="SoldierHeader" type="Label" parent="TopLeft/VBox"]
 layout_mode = 0
-offset_left = -28.0
-offset_top = 3.0
-offset_right = -4.0
-offset_bottom = 27.0
+offset_left = 8.0
+offset_top = 100.0
+offset_right = 300.0
+offset_bottom = 120.0
+theme_override_colors/font_color = Color(0, 0.9, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_font_sizes/font_size = 14
+text = "방어 중인 병사의 HP"
+
+[node name="EkgIcon" type="TextureRect" parent="TopLeft/VBox"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 124.0
+offset_right = 62.0
+offset_bottom = 168.0
 mouse_filter = 2
-texture = ExtResource("2_soldier_hp")
+texture = ExtResource("18_ekg")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="PlayerHPBar" type="TextureProgressBar" parent="TopLeft/VBox"]
+layout_mode = 0
+offset_left = 68.0
+offset_top = 142.0
+offset_right = 288.0
+offset_bottom = 166.0
+max_value = 100.0
+value = 100.0
+texture_under = ExtResource("22_sol_u")
+texture_progress = ExtResource("23_sol_f")
 
 [node name="Label" type="Label" parent="TopLeft/VBox/PlayerHPBar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -28.0
-offset_bottom = -28.0
+offset_top = -20.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.7, 0.95, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "병사 HP: 100 / 100"
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="SoldierSub" type="Label" parent="TopLeft/VBox/PlayerHPBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.35, 0.35, 0.9)
+theme_override_font_sizes/font_size = 11
+text = "SOLDIER HP"
+vertical_alignment = 1
+
 [node name="RevivesLabel" type="Label" parent="TopLeft/VBox"]
 layout_mode = 0
-offset_left = 60.0
-offset_top = 272.0
-offset_right = 330.0
-offset_bottom = 296.0
+offset_left = 180.0
+offset_top = 168.0
+offset_right = 320.0
+offset_bottom = 188.0
 theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 12
 text = "즉시 부활: 1 / 1"
+horizontal_alignment = 2
 
-[node name="Icon" type="TextureRect" parent="TopLeft/VBox/RevivesLabel"]
-layout_mode = 0
-offset_left = -24.0
-offset_top = 1.0
-offset_right = -6.0
-offset_bottom = 19.0
+[node name="TopRightTactical" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -310.0
+offset_top = 18.0
+offset_right = -20.0
+offset_bottom = 200.0
+grow_horizontal = 0
 mouse_filter = 2
-texture = ExtResource("4_revive")
-expand_mode = 1
-stretch_mode = 5
+theme = ExtResource("14_thm")
+
+[node name="PanelBg" type="NinePatchRect" parent="TopRightTactical"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("16_frame")
+patch_margin_left = 14
+patch_margin_top = 14
+patch_margin_right = 14
+patch_margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="TopRightTactical"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = -14.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="LevelTitle" type="Label" parent="TopRightTactical/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.65, 0.1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_font_sizes/font_size = 20
+text = "LEVEL 01"
+horizontal_alignment = 2
+
+[node name="WaveTitleLabel" type="Label" parent="TopRightTactical/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_font_sizes/font_size = 15
+text = "WAVE 01 / 05"
+horizontal_alignment = 2
+
+[node name="WaveInfoLabel" type="Label" parent="TopRightTactical/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "PHASE 1"
+horizontal_alignment = 2
+
+[node name="ProgressRow" type="HBoxContainer" parent="TopRightTactical/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="ProgressTitle" type="Label" parent="TopRightTactical/VBox/ProgressRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.9, 1, 0.9)
+theme_override_font_sizes/font_size = 11
+text = "디펜스 진행률"
+
+[node name="DefenseBar" type="TextureProgressBar" parent="TopRightTactical/VBox/ProgressRow"]
+custom_minimum_size = Vector2(140, 14)
+layout_mode = 2
+size_flags_vertical = 4
+value = 25.0
+texture_under = ExtResource("24_def_u")
+texture_progress = ExtResource("25_def_f")
+
+[node name="CreditsLabel" type="Label" parent="TopRightTactical/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_font_sizes/font_size = 13
+text = "전공 점수: 0 P"
+horizontal_alignment = 2
+
+[node name="ActionRow" type="HBoxContainer" parent="TopRightTactical/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="ShopBtn" type="Button" parent="TopRightTactical/VBox/ActionRow"]
+custom_minimum_size = Vector2(100, 26)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 11
+text = "[무기 상점 🛒]"
+
+[node name="SettingsBtn" type="Button" parent="TopRightTactical/VBox/ActionRow"]
+custom_minimum_size = Vector2(90, 26)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "[전투 설정 ⚙]"
 
 [node name="BottomRight" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 770.0
-offset_top = 430.0
-offset_right = 945.0
-offset_bottom = 525.0
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -380.0
+offset_top = -290.0
+offset_right = -190.0
+offset_bottom = -210.0
+grow_horizontal = 0
+grow_vertical = 0
 mouse_filter = 2
 theme = ExtResource("14_thm")
 
 [node name="VBox" type="Control" parent="BottomRight"]
-layout_mode = 3
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -192,7 +346,9 @@ mouse_filter = 2
 
 [node name="AmmoLabel" type="Label" parent="BottomRight/VBox"]
 layout_mode = 0
-offset_right = 160.0
+offset_left = 10.0
+offset_top = 4.0
+offset_right = 140.0
 offset_bottom = 28.0
 theme_override_colors/font_color = Color(0.2, 0.95, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
@@ -200,141 +356,51 @@ theme_override_font_sizes/font_size = 18
 text = "30 / 120"
 vertical_alignment = 1
 
-[node name="Icon" type="TextureRect" parent="BottomRight/VBox/AmmoLabel"]
+[node name="MagIcon" type="TextureRect" parent="BottomRight/VBox"]
 layout_mode = 0
-offset_left = -26.0
-offset_top = 2.0
-offset_right = -6.0
-offset_bottom = 22.0
+offset_left = 135.0
+offset_top = 16.0
+offset_right = 165.0
+offset_bottom = 56.0
 mouse_filter = 2
-texture = ExtResource("5_ammo")
+texture = ExtResource("19_mag")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AmmoBar" type="ProgressBar" parent="BottomRight/VBox"]
+[node name="AmmoBar" type="TextureProgressBar" parent="BottomRight/VBox"]
 layout_mode = 0
+offset_left = 10.0
 offset_top = 34.0
-offset_right = 150.0
+offset_right = 110.0
 offset_bottom = 54.0
-theme_override_styles/fill = SubResource("StyleBoxFlat_cyan_fill")
-value = 100.0
-show_percentage = false
+max_value = 30.0
+value = 30.0
+texture_under = ExtResource("26_am_u")
+texture_progress = ExtResource("27_am_f")
 
 [node name="ReloadLabel" type="Label" parent="BottomRight/VBox"]
 visible = false
 layout_mode = 0
+offset_left = 10.0
 offset_top = 58.0
 offset_right = 160.0
 offset_bottom = 78.0
 theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
-theme_override_font_sizes/font_size = 13
-text = "재장전 중..."
+theme_override_font_sizes/font_size = 12
+text = "[재장전 중... (RELOAD)]"
 
-[node name="TopRightTactical" type="Control" parent="."]
+[node name="Center" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -280.0
-offset_top = 35.0
-offset_right = -35.0
-offset_bottom = 160.0
-grow_horizontal = 0
-mouse_filter = 2
-theme = ExtResource("14_thm")
-
-[node name="VBox" type="VBoxContainer" parent="TopRightTactical"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="LevelTitle" type="Label" parent="TopRightTactical/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.65, 0.2, 1)
-theme_override_font_sizes/font_size = 18
-text = "LEVEL 01"
-horizontal_alignment = 2
-
-[node name="WaveTitleLabel" type="Label" parent="TopRightTactical/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
-theme_override_font_sizes/font_size = 16
-text = "WAVE 01 / 03"
-horizontal_alignment = 2
-
-[node name="WaveInfoLabel" type="Label" parent="TopRightTactical/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.9, 1, 0.9)
-theme_override_font_sizes/font_size = 13
-text = "적 공세 방어 준비"
-horizontal_alignment = 2
-
-[node name="CreditsLabel" type="Label" parent="TopRightTactical/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 1, 0.7, 1)
-theme_override_font_sizes/font_size = 14
-text = "전공 점수: 500 P"
-horizontal_alignment = 2
-
-[node name="TopCenter" type="MarginContainer" parent="."]
-visible = false
-anchors_preset = 5
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-offset_left = -150.0
-offset_top = 20.0
-offset_right = 150.0
-offset_bottom = 90.0
-grow_horizontal = 2
-mouse_filter = 2
-
-[node name="VBox" type="VBoxContainer" parent="TopCenter"]
-layout_mode = 2
-
-[node name="WaveTitleLabel" type="Label" parent="TopCenter/VBox"]
-layout_mode = 2
-
-[node name="WaveInfoLabel" type="Label" parent="TopCenter/VBox"]
-layout_mode = 2
-
-[node name="BottomCenter" type="MarginContainer" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -60.0
-offset_right = 300.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-theme = ExtResource("14_thm")
-
-[node name="HelpLabel" type="Label" parent="BottomCenter"]
-visible = false
-layout_mode = 2
-text = "[화면 클릭] 조준 모드 | [마우스] 시점 및 과녁 조준 | [좌클릭] 사격 | [우클릭] 견착 조준 | [R] 재장전 | [E] 포탑 설치·수리 | [ESC] 커서 해제"
-horizontal_alignment = 1
-
-[node name="Center" type="CenterContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
 [node name="Crosshair" type="Control" parent="Center"]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Ring" type="Control" parent="Center/Crosshair"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -345,7 +411,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="ReticleTexture" type="TextureRect" parent="Center/Crosshair/Ring"]
+[node name="Ring" type="TextureRect" parent="Center/Crosshair"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -358,6 +424,7 @@ offset_right = 24.0
 offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(24, 24)
 mouse_filter = 2
 texture = ExtResource("6_crosshair")
 expand_mode = 1
@@ -377,29 +444,37 @@ offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+color = Color(1, 1, 1, 0.9)
 
-[node name="TopButtons" type="HBoxContainer" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -240.0
-offset_top = 18.0
-offset_right = -15.0
-offset_bottom = 60.0
-grow_horizontal = 0
+[node name="BottomCenter" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -32.0
+offset_right = 300.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
 theme = ExtResource("14_thm")
-theme_override_constants/separation = 10
-alignment = 2
 
-[node name="ShopBtn" type="Button" parent="TopButtons"]
-custom_minimum_size = Vector2(100, 38)
-layout_mode = 2
-text = "🛒 상점"
-
-[node name="SettingsBtn" type="Button" parent="TopButtons"]
-custom_minimum_size = Vector2(100, 38)
-layout_mode = 2
-text = "⚙ 설정"
+[node name="HelpLabel" type="Label" parent="BottomCenter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.85, 0.9, 0.95, 0.75)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_font_sizes/font_size = 11
+text = "[화면 클릭] 조준 모드 | [마우스] 시점 조준 | [좌클릭] 사격 | [우클릭] 견착 | [R] 재장전 | [E] 포탑 설치 | [ESC] 커서 해제"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Overlay" type="Control" parent="."]
 layout_mode = 3
@@ -411,7 +486,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("14_thm")
 
-[node name="VictoryPanel" type="Panel" parent="Overlay"]
+[node name="VictoryPanel" type="PanelContainer" parent="Overlay"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -445,14 +520,14 @@ stretch_mode = 5
 
 [node name="Title" type="Label" parent="Overlay/VictoryPanel/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 0.9, 0.4, 1)
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
 theme_override_font_sizes/font_size = 28
 text = "작전 성공! 참호 사수 완수"
 horizontal_alignment = 1
 
-[node name="Message" type="Label" parent="Overlay/VictoryPanel/VBox"]
+[node name="Reason" type="Label" parent="Overlay/VictoryPanel/VBox"]
 layout_mode = 2
-text = "모든 적 공세를 성공적으로 격퇴하였습니다."
+text = "모든 적 공세를 격퇴하고 참호를 지켜냈습니다!"
 horizontal_alignment = 1
 
 [node name="HBox" type="HBoxContainer" parent="Overlay/VictoryPanel/VBox"]
@@ -476,7 +551,7 @@ texture_pressed = ExtResource("13_men_p")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="DefeatPanel" type="Panel" parent="Overlay"]
+[node name="DefeatPanel" type="PanelContainer" parent="Overlay"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -642,5 +717,5 @@ custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 text = "설정 저장 및 전투 복귀 (Resume)"
 
-[node name="ArmoryShop" parent="." instance=ExtResource("16_shop")]
+[node name="ArmoryShop" parent="." instance=ExtResource("15_shop")]
 visible = false

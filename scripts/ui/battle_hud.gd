@@ -6,8 +6,8 @@ signal menu_requested()
 signal modal_visibility_changed(is_open: bool)
 signal weapon_changed(weapon_id: String)
 
-var _player_hp_bar: ProgressBar
-var player_hp_bar: ProgressBar:
+var _player_hp_bar: Range
+var player_hp_bar: Range:
 	get:
 		if not _player_hp_bar: _player_hp_bar = get_node_or_null("TopLeft/VBox/PlayerHPBar")
 		return _player_hp_bar
@@ -24,8 +24,8 @@ var revives_label: Label:
 		if not _revives_label: _revives_label = get_node_or_null("TopLeft/VBox/RevivesLabel")
 		return _revives_label
 
-var _base_hp_bar: ProgressBar
-var base_hp_bar: ProgressBar:
+var _base_hp_bar: Range
+var base_hp_bar: Range:
 	get:
 		if not _base_hp_bar: _base_hp_bar = get_node_or_null("TopLeft/VBox/BaseHPBar")
 		return _base_hp_bar
@@ -70,11 +70,17 @@ var ammo_label: Label:
 		if not _ammo_label: _ammo_label = get_node_or_null("BottomRight/VBox/AmmoLabel")
 		return _ammo_label
 
-var _ammo_bar: ProgressBar
-var ammo_bar: ProgressBar:
+var _ammo_bar: Range
+var ammo_bar: Range:
 	get:
 		if not _ammo_bar: _ammo_bar = get_node_or_null("BottomRight/VBox/AmmoBar")
 		return _ammo_bar
+
+var _defense_bar: Range
+var defense_bar: Range:
+	get:
+		if not _defense_bar: _defense_bar = get_node_or_null("TopRightTactical/VBox/ProgressRow/DefenseBar")
+		return _defense_bar
 
 var _reload_label: Label
 var reload_label: Label:
@@ -145,14 +151,17 @@ var defeat_menu_btn: BaseButton:
 var _shop_btn: BaseButton
 var shop_btn: BaseButton:
 	get:
-		if not _shop_btn: _shop_btn = get_node_or_null("TopButtons/ShopBtn")
+		if not _shop_btn:
+			_shop_btn = get_node_or_null("TopRightTactical/VBox/ActionRow/ShopBtn")
+			if not _shop_btn: _shop_btn = get_node_or_null("TopButtons/ShopBtn")
 		return _shop_btn
 
 var _settings_btn: BaseButton
 var settings_btn: BaseButton:
 	get:
 		if not _settings_btn:
-			_settings_btn = get_node_or_null("TopButtons/SettingsBtn")
+			_settings_btn = get_node_or_null("TopRightTactical/VBox/ActionRow/SettingsBtn")
+			if not _settings_btn: _settings_btn = get_node_or_null("TopButtons/SettingsBtn")
 			if not _settings_btn: _settings_btn = get_node_or_null("SettingsBtn")
 		return _settings_btn
 
@@ -421,9 +430,12 @@ func update_wave(current_wave: int, max_waves: int, info_text: String = "") -> v
 	if wave_title_label:
 		wave_title_label.text = "WAVE %02d / %02d" % [current_wave, max_waves]
 	if wave_info_label:
-		wave_info_label.text = info_text
+		wave_info_label.text = info_text if info_text != "" else "PHASE %d" % current_wave
 	if level_title_label:
 		level_title_label.text = "LEVEL %02d" % current_wave
+	if defense_bar and max_waves > 0:
+		defense_bar.max_value = float(max_waves)
+		defense_bar.value = float(current_wave)
 
 func update_credits(amount: int) -> void:
 	if credits_label:

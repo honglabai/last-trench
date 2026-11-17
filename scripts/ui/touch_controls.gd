@@ -7,6 +7,7 @@ signal fire_pressed(pressed: bool)
 signal aim_toggled()
 signal reload_requested()
 signal interact_requested()
+signal weapon_switch_requested()
 signal touch_detected()
 
 @export var joystick_radius: float = 70.0
@@ -75,6 +76,13 @@ var interact_button: Button:
 			_interact_button = get_node_or_null("RightZone/ActionButtons/InteractButton")
 		return _interact_button
 
+var _switch_button: Button
+var switch_button: Button:
+	get:
+		if not _switch_button:
+			_switch_button = get_node_or_null("RightZone/ActionButtons/SwitchButton")
+		return _switch_button
+
 func _ready() -> void:
 	if joystick_base:
 		joystick_center = joystick_base.size / 2.0
@@ -99,6 +107,10 @@ func _ready() -> void:
 			interact_button.pressed.connect(_on_interact_pressed)
 		interact_button.visible = true
 		set_interact_available(false)
+		
+	if switch_button:
+		if not switch_button.pressed.is_connected(_on_switch_pressed):
+			switch_button.pressed.connect(_on_switch_pressed)
 
 func _process(delta: float) -> void:
 	if is_input_locked:
@@ -126,6 +138,10 @@ func _on_reload_pressed() -> void:
 func _on_interact_pressed() -> void:
 	AudioManager.play_sound("click")
 	interact_requested.emit()
+
+func _on_switch_pressed() -> void:
+	AudioManager.play_sound("click")
+	weapon_switch_requested.emit()
 
 func set_interact_available(available: bool, label_text: String = "포탑 설치") -> void:
 	can_interact = available
@@ -201,7 +217,7 @@ func _handle_drag(event: InputEventScreenDrag) -> void:
 		look_delta_produced.emit(rel * sens)
 
 func _is_touch_on_buttons(pos: Vector2) -> bool:
-	var buttons = [fire_button, aim_button, reload_button, interact_button]
+	var buttons = [fire_button, aim_button, reload_button, interact_button, switch_button]
 	for btn in buttons:
 		if btn and btn.is_visible_in_tree():
 			if btn.get_global_rect().has_point(pos):
@@ -209,7 +225,7 @@ func _is_touch_on_buttons(pos: Vector2) -> bool:
 	return false
 
 func _is_touch_on_other_buttons(pos: Vector2) -> bool:
-	var buttons = [aim_button, reload_button, interact_button]
+	var buttons = [aim_button, reload_button, interact_button, switch_button]
 	for btn in buttons:
 		if btn and btn.is_visible_in_tree():
 			if btn.get_global_rect().has_point(pos):
