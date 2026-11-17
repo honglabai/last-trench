@@ -60,6 +60,8 @@ margin = 0.15
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 current = true
 fov = 75.0
+near = 0.1
+far = 500.0
 
 [node name="WeaponComponent" type="Node3D" parent="."]
 script = ExtResource("3_wep")

@@ -25,6 +25,12 @@ texture_filter = 5
 [sub_resource type="BoxShape3D" id="BoxShape3D_front_ground"]
 size = Vector3(50, 1, 40)
 
+[sub_resource type="BoxMesh" id="BoxMesh_rear_ground"]
+size = Vector3(50, 1, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rear_ground"]
+size = Vector3(50, 1, 30)
+
 [sub_resource type="BoxMesh" id="BoxMesh_trench_floor"]
 size = Vector3(20, 1, 5)
 
@@ -100,7 +106,7 @@ script = ExtResource("1_map")
 [node name="Environment" type="Node3D" parent="."]
 
 [node name="FrontGround" type="StaticBody3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -20)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -20.5)
 collision_layer = 1
 collision_mask = 0
 
@@ -136,16 +142,16 @@ surface_material_override/0 = SubResource("StandardMaterial3D_mud")
 shape = SubResource("BoxShape3D_banquette")
 
 [node name="RearGround" type="StaticBody3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 19.5)
 collision_layer = 1
 collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/RearGround"]
-mesh = SubResource("BoxMesh_front_ground")
+mesh = SubResource("BoxMesh_rear_ground")
 surface_material_override/0 = SubResource("StandardMaterial3D_dirt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/RearGround"]
-shape = SubResource("BoxShape3D_front_ground")
+shape = SubResource("BoxShape3D_rear_ground")
 
 [node name="FrontRevetmentWall" type="MeshInstance3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, -0.5)
