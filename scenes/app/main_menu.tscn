@@ -1,29 +1,25 @@
-[gd_scene load_steps=12 format=3 uid="uid://cx6rvyb4g0q1h"]
+[gd_scene load_steps=19 format=3 uid="uid://cx6rvyb4g0q1h"]
 
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_1"]
 [ext_resource type="Texture2D" uid="uid://b0l0yjutgsfl4" path="res://assets/ui/bg_landing_title.png" id="2_bg"]
-[ext_resource type="Texture2D" uid="uid://br4h1fh3s01xy" path="res://assets/ui/buttons/btn_deploy_normal.png" id="3_dep_n"]
-[ext_resource type="Texture2D" uid="uid://dc4cl42d1j70g" path="res://assets/ui/buttons/btn_deploy_pressed.png" id="4_dep_p"]
-[ext_resource type="Texture2D" uid="uid://dplqs78c1fjs" path="res://assets/ui/buttons/btn_guide_normal.png" id="5_gui_n"]
-[ext_resource type="Texture2D" uid="uid://fsnwi7oh7lkv" path="res://assets/ui/buttons/btn_guide_pressed.png" id="6_gui_p"]
-[ext_resource type="Texture2D" uid="uid://0lnp3vnqebh3" path="res://assets/ui/buttons/btn_settings_normal.png" id="7_set_n"]
-[ext_resource type="Texture2D" uid="uid://dy06tpxfkfdi" path="res://assets/ui/buttons/btn_settings_pressed.png" id="8_set_p"]
-[ext_resource type="Texture2D" uid="uid://bb3vmq86en2j5" path="res://assets/ui/buttons/btn_exit_normal.png" id="9_exi_n"]
-[ext_resource type="Texture2D" uid="uid://ercp13wgrnee" path="res://assets/ui/buttons/btn_exit_pressed.png" id="10_exi_p"]
-[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="11_thm"]
-[ext_resource type="PackedScene" uid="uid://armoryshop91x" path="res://scenes/ui/armory_shop.tscn" id="12_shop"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shop_btn"]
-bg_color = Color(0.12, 0.28, 0.45, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.3, 0.85, 1, 0.9)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_deploy_normal.png" id="3_dep_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_deploy_pressed.png" id="4_dep_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_shop_normal.png" id="5_sho_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_shop_pressed.png" id="6_sho_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_guide_normal.png" id="7_gui_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_guide_pressed.png" id="8_gui_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_settings_normal.png" id="9_set_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_settings_pressed.png" id="10_set_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_exit_normal.png" id="11_exi_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_exit_pressed.png" id="12_exi_p"]
+[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="13_thm"]
+[ext_resource type="PackedScene" uid="uid://armoryshop91x" path="res://scenes/ui/armory_shop.tscn" id="14_shop"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_fullscreen_normal.png" id="15_ful_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_fullscreen_pressed.png" id="16_ful_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_close_settings_normal.png" id="17_cls_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_close_settings_pressed.png" id="18_cls_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_close_guide_normal.png" id="19_clg_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_close_guide_pressed.png" id="20_clg_p"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -32,7 +28,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("11_thm")
+theme = ExtResource("13_thm")
 script = ExtResource("1_1")
 
 [node name="Background" type="TextureRect" parent="."]
@@ -55,7 +51,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -200.0
-offset_top = -350.0
+offset_top = -370.0
 offset_right = 200.0
 offset_bottom = -15.0
 grow_horizontal = 2
@@ -67,42 +63,42 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="StartButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(360, 58)
+custom_minimum_size = Vector2(360, 60)
 layout_mode = 2
 texture_normal = ExtResource("3_dep_n")
 texture_pressed = ExtResource("4_dep_p")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ShopButton" type="Button" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(360, 52)
+[node name="ShopButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(360, 60)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.3, 0.95, 1, 1)
-theme_override_font_sizes/font_size = 17
-theme_override_styles/normal = SubResource("StyleBoxFlat_shop_btn")
-text = "⚔ 연합군 병기창 / 무기 상점 (ARMORY)"
+texture_normal = ExtResource("5_sho_n")
+texture_pressed = ExtResource("6_sho_p")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="GuideButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(360, 58)
+custom_minimum_size = Vector2(360, 60)
 layout_mode = 2
-texture_normal = ExtResource("5_gui_n")
-texture_pressed = ExtResource("6_gui_p")
+texture_normal = ExtResource("7_gui_n")
+texture_pressed = ExtResource("8_gui_p")
 ignore_texture_size = true
 stretch_mode = 5
 
 [node name="SettingsButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(360, 58)
+custom_minimum_size = Vector2(360, 60)
 layout_mode = 2
-texture_normal = ExtResource("7_set_n")
-texture_pressed = ExtResource("8_set_p")
+texture_normal = ExtResource("9_set_n")
+texture_pressed = ExtResource("10_set_p")
 ignore_texture_size = true
 stretch_mode = 5
 
 [node name="ExitButton" type="TextureButton" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(360, 58)
+custom_minimum_size = Vector2(360, 60)
 layout_mode = 2
-texture_normal = ExtResource("9_exi_n")
-texture_pressed = ExtResource("10_exi_p")
+texture_normal = ExtResource("11_exi_n")
+texture_pressed = ExtResource("12_exi_p")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -115,9 +111,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -300.0
-offset_top = -220.0
+offset_top = -240.0
 offset_right = 300.0
-offset_bottom = 220.0
+offset_bottom = 240.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -132,13 +128,13 @@ offset_right = -24.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="GuideDialog/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.82, 1, 1)
-theme_override_font_sizes/font_size = 22
-text = "작전 지침 (OPERATION BRIEFING)"
+theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "작전 지침 및 조작법 안내"
 horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="GuideDialog/VBox"]
@@ -146,37 +142,41 @@ layout_mode = 2
 
 [node name="DescPC" type="Label" parent="GuideDialog/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
 theme_override_font_sizes/font_size = 15
-text = "■ PC / 노트북 조작 가이드"
+text = "PC 브라우저 조작 가이드"
 
 [node name="TextPC" type="Label" parent="GuideDialog/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 13
-text = "• [화면 클릭] 조준 모드 진입 | [ESC] 마우스 커서 해제
-• [마우스 이동] 전장 시점 및 가늠좌/가늠쇠 조준
-• [마우스 좌클릭] 소총 사격 | [마우스 우클릭] 정밀 견착(ADS)
-• [R 키] 탄창 재장전 | [E 키] 거점 포탑 설치 및 수리"
+text = "• 화면 클릭: 시점 및 마우스 커서 조준 모드 진입 (ESC 해제)
+• 마우스 이동: 전장 과녁 조준 및 시점 회전
+• 좌클릭: 소총 사격 | 우클릭: 정밀 견착 조준
+• R 키: 탄창 재장전 | E 키: 거점 포탑 설치 및 수리"
 
 [node name="DescMobile" type="Label" parent="GuideDialog/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.9, 0.5, 1)
 theme_override_font_sizes/font_size = 15
-text = "■ 모바일 웹 / 터치 조작 가이드"
+text = "모바일 웹 터치 조작 가이드"
 
 [node name="TextMobile" type="Label" parent="GuideDialog/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 13
-text = "• [좌측 가상 조이스틱] 전장 시점 회전 및 과녁 탐색
-• [우측 사격 버튼] 단발/연사 사격
-• [우측 조준 버튼] 가늠좌 견착 모드 토글
-• [재장전 / 포탑 버튼] 탄창 교체 및 거점 포탑 방어선 유지"
+text = "• 좌측 원형 전술 레이더: 전장 시점 회전 및 과녁 탐색
+• 우측 발사 버튼: 단발 및 연사 사격
+• 우측 조준 버튼: 가늠좌 견착 모드 토글
+• 재장전 / 설치 버튼: 탄창 교체 및 거점 포탑 방어선 유지"
 
-[node name="CloseButton" type="Button" parent="GuideDialog/VBox"]
-custom_minimum_size = Vector2(0, 42)
+[node name="CloseButton" type="TextureButton" parent="GuideDialog/VBox"]
+custom_minimum_size = Vector2(340, 46)
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 10
-text = "작전 확인 및 복귀 (Close)"
+texture_normal = ExtResource("19_clg_n")
+texture_pressed = ExtResource("20_clg_p")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="SettingsDialog" type="Panel" parent="."]
 visible = false
@@ -210,7 +210,7 @@ theme_override_constants/separation = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
 theme_override_font_sizes/font_size = 20
-text = "[⚙] 작전 설정 (SETTINGS)"
+text = "전장 환경 설정"
 horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="SettingsDialog/VBox"]
@@ -223,7 +223,7 @@ theme_override_font_sizes/font_size = 14
 text = "과녁 조준 감도 (Aim Sensitivity): 60%"
 
 [node name="SensitivitySlider" type="HSlider" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 min_value = 0.15
 max_value = 1.5
@@ -237,7 +237,7 @@ theme_override_font_sizes/font_size = 14
 text = "전체 음량 (Master Volume): 85%"
 
 [node name="MasterVolSlider" type="HSlider" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 min_value = 0.0
 max_value = 1.0
@@ -251,7 +251,7 @@ theme_override_font_sizes/font_size = 14
 text = "배경음악 음량 (BGM Volume): 70%"
 
 [node name="BGMVolSlider" type="HSlider" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 min_value = 0.0
 max_value = 1.0
@@ -265,41 +265,34 @@ theme_override_font_sizes/font_size = 14
 text = "효과음 음량 (SFX Volume): 85%"
 
 [node name="SFXVolSlider" type="HSlider" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 min_value = 0.0
 max_value = 1.0
 step = 0.05
 value = 0.85
 
-[node name="SensitivityDesc" type="Label" parent="SettingsDialog/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.75, 0.85, 0.9, 0.8)
-theme_override_font_sizes/font_size = 12
-text = "• 과녁 이동 속도를 조절합니다. (낮출수록 세밀하고 흔들림 없이 조준)"
-
 [node name="HSeparator2" type="HSeparator" parent="SettingsDialog/VBox"]
 layout_mode = 2
 
-[node name="FullscreenBtn" type="Button" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 40)
+[node name="FullscreenBtn" type="TextureButton" parent="SettingsDialog/VBox"]
+custom_minimum_size = Vector2(340, 46)
 layout_mode = 2
-text = "⛶ 전체화면 모드 전환 (FULLSCREEN)"
+size_flags_horizontal = 4
+texture_normal = ExtResource("15_ful_n")
+texture_pressed = ExtResource("16_ful_p")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="FullscreenDesc" type="Label" parent="SettingsDialog/VBox"]
+[node name="CloseSettingsBtn" type="TextureButton" parent="SettingsDialog/VBox"]
+custom_minimum_size = Vector2(340, 46)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.75, 0.85, 0.9, 0.8)
-theme_override_font_sizes/font_size = 12
-text = "• 상단 브라우저 주소창을 숨기고 게임 화면을 최대로 확장합니다."
-
-[node name="HSeparator3" type="HSeparator" parent="SettingsDialog/VBox"]
-layout_mode = 2
-
-[node name="CloseSettingsBtn" type="Button" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 42)
-layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 10
-text = "설정 적용 및 닫기 (Apply & Close)"
+texture_normal = ExtResource("17_cls_n")
+texture_pressed = ExtResource("18_cls_p")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="ArmoryShop" parent="." instance=ExtResource("12_shop")]
+[node name="ArmoryShop" parent="." instance=ExtResource("14_shop")]
 visible = false

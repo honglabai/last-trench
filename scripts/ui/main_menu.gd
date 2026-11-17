@@ -1,14 +1,14 @@
 class_name MainMenu
 extends Control
 
-@onready var start_button: TextureButton = $CenterContainer/VBoxContainer/StartButton
-@onready var shop_button: Button = $CenterContainer/VBoxContainer/ShopButton
-@onready var guide_button: TextureButton = $CenterContainer/VBoxContainer/GuideButton
-@onready var settings_button: TextureButton = $CenterContainer/VBoxContainer/SettingsButton
-@onready var exit_button: TextureButton = $CenterContainer/VBoxContainer/ExitButton
+@onready var start_button: BaseButton = $CenterContainer/VBoxContainer/StartButton
+@onready var shop_button: BaseButton = $CenterContainer/VBoxContainer/ShopButton
+@onready var guide_button: BaseButton = $CenterContainer/VBoxContainer/GuideButton
+@onready var settings_button: BaseButton = $CenterContainer/VBoxContainer/SettingsButton
+@onready var exit_button: BaseButton = $CenterContainer/VBoxContainer/ExitButton
 
 @onready var guide_dialog: Panel = $GuideDialog
-@onready var close_guide_btn: Button = $GuideDialog/VBox/CloseGuideBtn
+@onready var close_guide_btn: BaseButton = $GuideDialog/VBox/CloseButton
 
 @onready var settings_dialog: Panel = $SettingsDialog
 @onready var sensitivity_slider: HSlider = $SettingsDialog/VBox/SensitivitySlider
@@ -19,8 +19,8 @@ extends Control
 @onready var bgm_vol_title: Label = $SettingsDialog/VBox/BGMVolTitle
 @onready var sfx_vol_slider: HSlider = $SettingsDialog/VBox/SFXVolSlider
 @onready var sfx_vol_title: Label = $SettingsDialog/VBox/SFXVolTitle
-@onready var fullscreen_btn: Button = $SettingsDialog/VBox/FullscreenBtn
-@onready var close_settings_btn: Button = $SettingsDialog/VBox/CloseSettingsBtn
+@onready var fullscreen_btn: BaseButton = $SettingsDialog/VBox/FullscreenBtn
+@onready var close_settings_btn: BaseButton = $SettingsDialog/VBox/CloseSettingsBtn
 
 @onready var armory_shop: ArmoryShop = $ArmoryShop
 

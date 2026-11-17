@@ -1,27 +1,26 @@
 [gd_resource type="Theme" format=3]
 
-[ext_resource type="FontFile" path="res://assets/fonts/Pretendard-Bold.otf" id="1_8na23"]
-[ext_resource type="FontFile" path="res://assets/fonts/Pretendard-SemiBold.otf" id="1_byy10"]
+[ext_resource type="FontFile" path="res://assets/fonts/Pretendard-Black.otf" id="1_black"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hiobj"]
-bg_color = Color(0.05, 0.08, 0.1, 0.92)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.18, 0.5, 0.6, 0.9)
+bg_color = Color(0.04, 0.08, 0.12, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.65, 0.85, 0.9)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a5v7t"]
-bg_color = Color(0.06, 0.09, 0.1, 0.88)
+bg_color = Color(0.06, 0.1, 0.14, 0.9)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.2, 0.4, 0.45, 0.85)
+border_color = Color(0.2, 0.45, 0.55, 0.85)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -35,15 +34,15 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
 [resource]
-default_font = ExtResource("1_byy10")
+default_font = ExtResource("1_black")
 default_font_size = 14
-Button/fonts/font = ExtResource("1_8na23")
-Label/colors/font_color = Color(0.95, 0.97, 0.98, 1)
-Label/colors/font_shadow_color = Color(0, 0, 0, 0.85)
+Button/fonts/font = ExtResource("1_black")
+Label/colors/font_color = Color(0.96, 0.98, 1, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.9)
 Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
-Label/constants/shadow_outline_size = 1
-Label/fonts/font = ExtResource("1_byy10")
+Label/constants/shadow_outline_size = 2
+Label/fonts/font = ExtResource("1_black")
 Panel/styles/panel = SubResource("StyleBoxFlat_hiobj")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_a5v7t")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_silmg")

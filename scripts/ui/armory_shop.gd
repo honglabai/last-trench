@@ -10,8 +10,8 @@ var credits_label: Label:
 		if not _credits_label: _credits_label = get_node_or_null("Panel/VBox/Header/CreditsLabel")
 		return _credits_label
 
-var _close_btn: Button
-var close_btn: Button:
+var _close_btn: BaseButton
+var close_btn: BaseButton:
 	get:
 		if not _close_btn: _close_btn = get_node_or_null("Panel/VBox/Footer/CloseBtn")
 		return _close_btn
@@ -91,15 +91,15 @@ func _create_weapon_card(w_id: String, info: Dictionary) -> Control:
 	hbox.add_child(info_box)
 	
 	var name_lbl := Label.new()
-	var country_flag = "🇰🇷" if info.get("country", "") == "대한민국" else ("🇺🇸" if info.get("country", "") == "미국" else ("🇩🇪" if info.get("country", "") == "독일" else "🇧🇪"))
-	name_lbl.text = "%s %s" % [country_flag, info.get("name", w_id)]
+	var country_name = info.get("country", "")
+	name_lbl.text = "[%s] %s" % [country_name, info.get("name", w_id)]
 	name_lbl.add_theme_font_size_override("font_size", 18)
 	if is_equipped:
 		name_lbl.modulate = Color(0.2, 0.9, 1.0)
 	info_box.add_child(name_lbl)
 	
 	var type_lbl := Label.new()
-	type_lbl.text = "[%s] %s" % [info.get("country", ""), info.get("type", "화기")]
+	type_lbl.text = "구분: %s" % info.get("type", "화기")
 	type_lbl.add_theme_color_override("font_color", Color(0.7, 0.85, 0.95, 0.8))
 	type_lbl.add_theme_font_size_override("font_size", 13)
 	info_box.add_child(type_lbl)
@@ -159,11 +159,11 @@ func _create_weapon_card(w_id: String, info: Dictionary) -> Control:
 		var equip_btn := Button.new()
 		equip_btn.custom_minimum_size = Vector2(0, 36)
 		if is_equipped:
-			equip_btn.text = "✔ 장착 중 (EQUIPPED)"
+			equip_btn.text = "장착 완료 (EQUIPPED)"
 			equip_btn.disabled = true
 			equip_btn.modulate = Color(0.4, 1.0, 0.6)
 		else:
-			equip_btn.text = "장착하기 (EQUIP)"
+			equip_btn.text = "전투 장착 (EQUIP)"
 			equip_btn.pressed.connect(func():
 				AudioManager.play_sound("click")
 				GameSession.equip_weapon(w_id)
@@ -177,7 +177,7 @@ func _create_weapon_card(w_id: String, info: Dictionary) -> Control:
 			var up_cost: int = int(up_dict.get("cost_multiplier", 300)) * cur_lvl
 			var up_btn := Button.new()
 			up_btn.custom_minimum_size = Vector2(0, 32)
-			up_btn.text = "Lv.%d 강화 (%d P)" % [cur_lvl + 1, up_cost]
+			up_btn.text = "Lv.%d 성능 강화 (%d P)" % [cur_lvl + 1, up_cost]
 			up_btn.disabled = (GameSession.credits < up_cost)
 			up_btn.pressed.connect(func():
 				if GameSession.upgrade_weapon(w_id, up_cost):
@@ -188,7 +188,7 @@ func _create_weapon_card(w_id: String, info: Dictionary) -> Control:
 			action_box.add_child(up_btn)
 		else:
 			var max_lbl := Label.new()
-			max_lbl.text = "★ 최대 레벨 (MAX)"
+			max_lbl.text = "최고 레벨 도달 (MAX)"
 			max_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			max_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
 			action_box.add_child(max_lbl)

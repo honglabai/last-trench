@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cbattlehud92x"]
+[gd_scene load_steps=36 format=3 uid="uid://cbattlehud92x"]
 
 [ext_resource type="Script" path="res://scripts/ui/battle_hud.gd" id="1_hud"]
 [ext_resource type="Texture2D" uid="uid://bt6mojb2081aw" path="res://assets/ui/icon_hp_soldier.png" id="2_soldier_hp"]
@@ -27,6 +27,14 @@
 [ext_resource type="Texture2D" path="res://assets/ui/tex_bar_fill_defense.png" id="25_def_f"]
 [ext_resource type="Texture2D" path="res://assets/ui/tex_ammo_under.png" id="26_am_u"]
 [ext_resource type="Texture2D" path="res://assets/ui/tex_ammo_fill.png" id="27_am_f"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_hud_shop_normal.png" id="28_hsho_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_hud_shop_pressed.png" id="29_hsho_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_hud_settings_normal.png" id="30_hset_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_hud_settings_pressed.png" id="31_hset_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_fullscreen_normal.png" id="32_ful_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_fullscreen_pressed.png" id="33_ful_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_close_settings_normal.png" id="34_cls_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_close_settings_pressed.png" id="35_cls_p"]
 
 [node name="BattleHUD" type="CanvasLayer"]
 layer = 10
@@ -305,19 +313,21 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
 
-[node name="ShopBtn" type="Button" parent="TopRightTactical/VBox/ActionRow"]
-custom_minimum_size = Vector2(100, 26)
+[node name="ShopBtn" type="TextureButton" parent="TopRightTactical/VBox/ActionRow"]
+custom_minimum_size = Vector2(110, 32)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
-theme_override_font_sizes/font_size = 11
-text = "[무기 상점 🛒]"
+texture_normal = ExtResource("28_hsho_n")
+texture_pressed = ExtResource("29_hsho_p")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="SettingsBtn" type="Button" parent="TopRightTactical/VBox/ActionRow"]
-custom_minimum_size = Vector2(90, 26)
+[node name="SettingsBtn" type="TextureButton" parent="TopRightTactical/VBox/ActionRow"]
+custom_minimum_size = Vector2(110, 32)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 11
-text = "[전투 설정 ⚙]"
+texture_normal = ExtResource("30_hset_n")
+texture_pressed = ExtResource("31_hset_p")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="BottomRight" type="Control" parent="."]
 layout_mode = 3
@@ -650,7 +660,7 @@ theme_override_constants/separation = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.85, 1, 1)
 theme_override_font_sizes/font_size = 20
-text = "[⚙] 전장 작전 설정 (SETTINGS)"
+text = "전장 환경 설정"
 horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="SettingsLayer/SettingsDialog/VBox"]
@@ -707,15 +717,24 @@ value = 0.85
 [node name="HSeparator2" type="HSeparator" parent="SettingsLayer/SettingsDialog/VBox"]
 layout_mode = 2
 
-[node name="FullscreenBtn" type="Button" parent="SettingsLayer/SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 36)
+[node name="FullscreenBtn" type="TextureButton" parent="SettingsLayer/SettingsDialog/VBox"]
+custom_minimum_size = Vector2(340, 46)
 layout_mode = 2
-text = "전체화면 모드 전환 (Fullscreen)"
+size_flags_horizontal = 4
+texture_normal = ExtResource("32_ful_n")
+texture_pressed = ExtResource("33_ful_p")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="CloseSettingsBtn" type="Button" parent="SettingsLayer/SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 42)
+[node name="CloseSettingsBtn" type="TextureButton" parent="SettingsLayer/SettingsDialog/VBox"]
+custom_minimum_size = Vector2(340, 46)
 layout_mode = 2
-text = "설정 저장 및 전투 복귀 (Resume)"
+size_flags_horizontal = 4
+size_flags_vertical = 10
+texture_normal = ExtResource("34_cls_n")
+texture_pressed = ExtResource("35_cls_p")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="ArmoryShop" parent="." instance=ExtResource("15_shop")]
 visible = false
