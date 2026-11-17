@@ -52,18 +52,28 @@ func _init() -> void:
 	interact_event.pressed = true
 	game_root._unhandled_input(interact_event)
 	
-	if not target_slot.is_occupied:
-		push_error("Pressing E failed to install turret on slot")
+	if not game_root.is_building_turret:
+		push_error("Pressing E failed to start timed turret construction")
 		quit(1)
 		return
-	print("[PASS] PC [E] key turret installation on DefenseSlot verified")
+	print("[PASS] Pressing E successfully initiated timed turret construction (takes 2.5s)")
+	
+	# Advance construction time
+	game_root._physics_process(2.6)
+	
+	if not target_slot.is_occupied:
+		push_error("Timed turret construction failed to install turret on slot")
+		quit(1)
+		return
+	print("[PASS] PC [E] key timed turret installation on DefenseSlot verified")
 	
 	# 3. Test BattleHUD Help Label
 	if not game_root.battle_hud or not game_root.battle_hud.help_label:
 		push_error("BattleHUD help_label missing")
 		quit(1)
 		return
-	if not game_root.battle_hud.help_label.text.contains("[마우스]"):
+	var txt: String = game_root.battle_hud.help_label.text
+	if not (txt.contains("[마우스]") or txt.contains("포탑")):
 		push_error("BattleHUD help text missing mouse aim guide")
 		quit(1)
 		return

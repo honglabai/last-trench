@@ -48,6 +48,14 @@ var turret_scene: PackedScene = preload("res://scenes/defenses/mg_turret.tscn")
 var tracer_scene: PackedScene = preload("res://scenes/effects/bullet_tracer.tscn")
 var _is_initialized: bool = false
 
+# Timed Turret Construction System
+var is_building_turret: bool = false
+var building_slot: DefenseSlot = null
+var build_progress: float = 0.0
+const TURRET_BUILD_TIME: float = 2.5
+var build_tick_timer: float = 0.0
+
+
 func _ready() -> void:
 	if _is_initialized:
 		return
@@ -196,46 +204,87 @@ func _ready() -> void:
 	if wave_director:
 		wave_director.start_run(3)
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if trench_map and player:
 		var slots = trench_map.get_defense_slots()
 		for slot in slots:
-			slot.update_player_proximity(player.global_position)
+			var p_pos := player.global_position if player.is_inside_tree() else player.position
+			slot.update_player_proximity(p_pos)
 			
-		# Look-targeted slot selection for stationary bunker defense
-		var best_slot: DefenseSlot = null
-		var best_dot: float = 0.25 # Require facing toward the slot sector
-		var cam_forward := Vector3.FORWARD
-		if player.camera_rig:
-			cam_forward = player.camera_rig.get_camera_forward()
-			
-		for slot in slots:
-			if slot.is_player_nearby and (slot.can_install() or slot.can_repair()):
-				var to_slot = (slot.global_position - player.global_position).normalized()
-				var dot = cam_forward.dot(to_slot)
-				if dot > best_dot:
-					best_dot = dot
-					best_slot = slot
-					
-		if best_slot != active_slot_nearby:
-			active_slot_nearby = best_slot
-			if active_slot_nearby:
-				var slot_name = "좌측 포탑" if active_slot_nearby.slot_id.contains("left") else ("우측 포탑" if active_slot_nearby.slot_id.contains("right") else "포탑")
-				var action_str = "설치" if active_slot_nearby.can_install() else "수리"
-				var label_text = "%s %s [E]" % [slot_name, action_str]
-				if touch_controls:
-					touch_controls.set_interact_available(true, label_text)
+		# Timed Turret Construction Update
+		if is_building_turret:
+			if not building_slot or not is_instance_valid(building_slot) or building_slot.is_occupied:
+				_cancel_turret_build()
 			else:
-				if touch_controls:
-					touch_controls.set_interact_available(false)
+				var b_pos := building_slot.global_position if building_slot.is_inside_tree() else building_slot.position
+				var p_pos := player.global_position if player.is_inside_tree() else player.position
+				if player and (b_pos.distance_to(p_pos) > 8.0):
+					_cancel_turret_build()
+					if battle_hud:
+						battle_hud.show_toast("거리 이탈로 포탑 구축이 취소되었습니다")
+				else:
+					build_progress += delta / TURRET_BUILD_TIME
+					build_tick_timer += delta
+					if build_tick_timer >= 0.45:
+						build_tick_timer = 0.0
+						AudioManager.play_sound("click", 0.04, 2.5)
+					var pct := mini(99, int(build_progress * 100.0))
+					if touch_controls:
+						touch_controls.set_interact_available(true, "포탑 조립 중... %d%% [E]" % pct)
+					if build_progress >= 1.0:
+						_complete_turret_build()
+		else:
+			# Look-targeted slot selection for stationary bunker defense
+			var best_slot: DefenseSlot = null
+			var best_dot: float = 0.25 # Require facing toward the slot sector
+			var cam_forward := Vector3.FORWARD
+			if player.camera_rig:
+				cam_forward = player.camera_rig.get_camera_forward()
+				
+			for slot in slots:
+				if slot.is_player_nearby and (slot.can_install() or slot.can_repair()):
+					var to_slot = (slot.global_position - player.global_position).normalized()
+					var dot = cam_forward.dot(to_slot)
+					if dot > best_dot:
+						best_dot = dot
+						best_slot = slot
+						
+			if best_slot != active_slot_nearby:
+				active_slot_nearby = best_slot
+				if active_slot_nearby:
+					var slot_name = "좌측 포탑" if active_slot_nearby.slot_id.contains("left") else ("우측 포탑" if active_slot_nearby.slot_id.contains("right") else "포탑")
+					var action_str = "설치" if active_slot_nearby.can_install() else "수리"
+					var label_text = "%s %s [E]" % [slot_name, action_str]
+					if touch_controls:
+						touch_controls.set_interact_available(true, label_text)
+				else:
+					if touch_controls:
+						touch_controls.set_interact_available(false)
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Keyboard shortcut for DefenseSlot interaction
+	# 1. DefenseSlot interaction / Turret Build
 	if event.is_action_pressed("interact"):
 		_on_interact_requested()
-	elif event is InputEventKey and event.pressed and event.keycode == KEY_Q:
+	# 2. Cycle weapon
+	elif event.is_action_pressed("switch_weapon") or (event is InputEventKey and event.pressed and event.keycode == KEY_Q):
 		switch_to_next_weapon()
-	# Web/Desktop Mouse capture: click to lock, ESC to unlock
+	# 3. Open Armory Shop
+	elif event.is_action_pressed("open_shop") or (event is InputEventKey and event.pressed and event.keycode == KEY_B):
+		if battle_hud:
+			battle_hud.open_armory_shop()
+	# 4. Open Settings
+	elif event.is_action_pressed("open_settings") or (event is InputEventKey and event.pressed and event.keycode == KEY_O):
+		if battle_hud:
+			battle_hud.open_settings()
+	# 5. Reload
+	elif event.is_action_pressed("reload") or (event is InputEventKey and event.pressed and event.keycode == KEY_R):
+		if player and player.weapon:
+			player.weapon.start_reload()
+	# 6. Direct numeric weapon select (1 to 7)
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode >= KEY_1 and event.keycode <= KEY_7:
+		var slot_idx: int = event.keycode - KEY_1
+		_select_weapon_by_slot(slot_idx)
+	# 7. Web/Desktop Mouse capture: click to lock, ESC to unlock
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
@@ -243,6 +292,34 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventKey:
 		if event.pressed and event.keycode == KEY_ESCAPE:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func _select_weapon_by_slot(slot_idx: int) -> void:
+	var weapon_catalog: Array[String] = [
+		"k2c1_rifle",
+		"m4a1_carbine",
+		"hk416_elite",
+		"scar_h_battle",
+		"k14_sniper",
+		"rpg7_launcher",
+		"hyungung_atgm"
+	]
+	if slot_idx < 0 or slot_idx >= weapon_catalog.size():
+		return
+	var target_w_id := weapon_catalog[slot_idx]
+	if GameSession.owned_weapons.has(target_w_id):
+		GameSession.equip_weapon(target_w_id)
+		var lvl := GameSession.get_weapon_level(target_w_id)
+		if player and player.weapon:
+			player.weapon.load_weapon_data(target_w_id, lvl)
+		if battle_hud:
+			battle_hud._update_viewmodel_texture(target_w_id)
+			if player and player.weapon:
+				battle_hud.update_ammo(player.weapon.current_ammo, player.weapon.reserve_ammo)
+			battle_hud.show_weapon_toast(target_w_id)
+		AudioManager.play_sound("reload")
+	else:
+		if battle_hud:
+			battle_hud.show_toast("[미보유 무기] B키(무기 상점)에서 구매할 수 있습니다")
 
 func switch_to_next_weapon() -> void:
 	var next_id := GameSession.get_next_owned_weapon()
@@ -270,22 +347,42 @@ func _on_wave_state_changed(state: int) -> void:
 	elif state == WaveDirector.WaveState.COMBAT:
 		battle_hud.update_wave(wave_director.current_wave_number, wave_director.max_waves_in_run, "적 공세 방어 중!")
 
+func _start_turret_build(slot: DefenseSlot) -> void:
+	if is_building_turret and building_slot == slot:
+		return
+	is_building_turret = true
+	building_slot = slot
+	build_progress = 0.0
+	build_tick_timer = 0.0
+	AudioManager.play_sound("reload", 0.05)
+	if battle_hud:
+		var slot_name = "좌측" if slot.slot_id.contains("left") else ("우측" if slot.slot_id.contains("right") else "")
+		battle_hud.show_toast("%s 포탑 긴급 조립 공사 시작! (2.5초 소요)" % slot_name)
+	if touch_controls:
+		touch_controls.set_interact_available(true, "포탑 조립 중... 0% [E]")
+
+func _cancel_turret_build() -> void:
+	is_building_turret = false
+	building_slot = null
+	build_progress = 0.0
+	if touch_controls:
+		touch_controls.set_interact_available(active_slot_nearby != null)
+
+func _complete_turret_build() -> void:
+	if building_slot and is_instance_valid(building_slot) and building_slot.can_install():
+		var turret = turret_scene.instantiate() as TurretController
+		building_slot.install_turret(turret)
+		AudioManager.play_sound("turret_shot", 0.05, -1.0)
+		AudioManager.play_sound("click", 0.05, 3.0)
+		if battle_hud:
+			var slot_name = "좌측" if building_slot.slot_id.contains("left") else ("우측" if building_slot.slot_id.contains("right") else "")
+			battle_hud.show_toast("%s 방어 포탑 조립 완료! 자동 사격 개시" % slot_name)
+	_cancel_turret_build()
+
 func _on_interact_requested() -> void:
-	if active_slot_nearby:
-		if active_slot_nearby.can_install():
-			var turret = turret_scene.instantiate() as TurretController
-			active_slot_nearby.install_turret(turret)
-			AudioManager.play_sound("turret_shot", 0.05, -2.0)
-			return
-		elif active_slot_nearby.can_repair():
-			active_slot_nearby.repair_turret(50.0)
-			AudioManager.play_sound("reload", 0.05)
-			return
-			
-	# If player taps Turret button when not directly colliding with a slot, auto-target nearest slot
-	if trench_map:
+	var target_slot: DefenseSlot = active_slot_nearby
+	if not target_slot and trench_map:
 		var slots = [trench_map.defense_slot_left, trench_map.defense_slot_right]
-		var best_slot: DefenseSlot = null
 		var min_dist: float = 999.0
 		var p_pos: Vector3 = player.global_position if (player and player.is_inside_tree()) else Vector3.ZERO
 		for slot in slots:
@@ -294,15 +391,16 @@ func _on_interact_requested() -> void:
 				var d: float = (s_pos - p_pos).length()
 				if d < min_dist:
 					min_dist = d
-					best_slot = slot
-		if best_slot:
-			if best_slot.can_install():
-				var turret = turret_scene.instantiate() as TurretController
-				best_slot.install_turret(turret)
-				AudioManager.play_sound("turret_shot", 0.05, -2.0)
-			elif best_slot.can_repair():
-				best_slot.repair_turret(50.0)
-				AudioManager.play_sound("reload", 0.05)
+					target_slot = slot
+					
+	if not target_slot:
+		return
+		
+	if target_slot.can_install():
+		_start_turret_build(target_slot)
+	elif target_slot.can_repair():
+		target_slot.repair_turret(50.0)
+		AudioManager.play_sound("reload", 0.05)
 
 func _on_bullet_fired(start_pos: Vector3, target_pos: Vector3) -> void:
 	var muzzle_start := start_pos

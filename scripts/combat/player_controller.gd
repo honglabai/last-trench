@@ -81,7 +81,9 @@ func _physics_process(delta: float) -> void:
 		
 	if Input.is_action_pressed("aim"):
 		is_aiming = true
-	elif not manual_input_override:
+	elif manual_input_override:
+		is_aiming = (camera_rig and camera_rig.is_aiming)
+	else:
 		is_aiming = false
 		
 	if camera_rig:
@@ -131,7 +133,7 @@ func _physics_process(delta: float) -> void:
 	var wants_reload := Input.is_action_just_pressed("reload") or (manual_input_override and is_reload_requested)
 	var wants_fire := false
 	if manual_input_override:
-		wants_fire = is_firing_requested
+		wants_fire = is_firing_requested or Input.is_action_pressed("fire")
 	else:
 		wants_fire = Input.is_action_pressed("fire")
 	

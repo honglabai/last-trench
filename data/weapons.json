@@ -18,6 +18,7 @@
       "fire_rate": -0.005,
       "cost_multiplier": 250
     },
+    "thumbnail": "res://assets/ui/weapons/thumb_k2c1.png",
     "texture": "res://assets/textures/tex_fps_iron_sights.png"
   },
   "k2c1_rifle": {
@@ -39,6 +40,7 @@
       "fire_rate": -0.005,
       "cost_multiplier": 250
     },
+    "thumbnail": "res://assets/ui/weapons/thumb_k2c1.png",
     "texture": "res://assets/textures/tex_fps_iron_sights.png"
   },
   "m4a1_carbine": {
@@ -60,6 +62,7 @@
       "fire_rate": -0.006,
       "cost_multiplier": 350
     },
+    "thumbnail": "res://assets/ui/weapons/thumb_m4a1.png",
     "texture": "res://assets/textures/tex_fps_m4a1.png"
   },
   "hk416_elite": {
@@ -81,6 +84,7 @@
       "fire_rate": -0.005,
       "cost_multiplier": 500
     },
+    "thumbnail": "res://assets/ui/weapons/thumb_hk416.png",
     "texture": "res://assets/textures/tex_fps_hk416.png"
   },
   "scar_h_battle": {
@@ -102,6 +106,7 @@
       "fire_rate": -0.008,
       "cost_multiplier": 700
     },
+    "thumbnail": "res://assets/ui/weapons/thumb_scar_h.png",
     "texture": "res://assets/textures/tex_fps_scar_h.png"
   },
   "k14_sniper": {
@@ -123,6 +128,55 @@
       "fire_rate": -0.025,
       "cost_multiplier": 1000
     },
+    "thumbnail": "res://assets/ui/weapons/thumb_k14.png",
     "texture": "res://assets/textures/tex_fps_k14.png"
+  },
+  "rpg7_launcher": {
+    "name": "RPG-7 대전차 로켓",
+    "country": "연합 특수전",
+    "type": "대전차 로켓 발사관 (HEAT 성형작약)",
+    "description": "휴대용 대전차 로켓 발사기. 강력한 폭발 충격파로 밀집 보병 부대와 적 드론을 광범위하게 동시 격멸합니다.",
+    "price": 2800,
+    "damage": 220.0,
+    "fire_rate": 1.4,
+    "magazine_size": 1,
+    "max_reserve_ammo": 10,
+    "reload_time": 2.2,
+    "range": 130.0,
+    "is_explosive": true,
+    "splash_radius": 7.0,
+    "upgrade_per_level": {
+      "damage": 45.0,
+      "magazine_size": 0,
+      "reload_time": -0.18,
+      "fire_rate": -0.05,
+      "cost_multiplier": 800
+    },
+    "thumbnail": "res://assets/ui/weapons/thumb_rpg.png",
+    "texture": "res://assets/textures/tex_fps_rpg.png"
+  },
+  "hyungung_atgm": {
+    "name": "현궁 대전차 미사일",
+    "country": "대한민국",
+    "type": "3세대 보병용 대전차 유도화기 (ATGM)",
+    "description": "국방과학연구소(ADD) 개발 3세대 유도미사일. 디지털 열영상 추적 및 상부 장갑 관통 모드로 전차와 드론을 완전 분쇄합니다.",
+    "price": 4200,
+    "damage": 340.0,
+    "fire_rate": 1.8,
+    "magazine_size": 1,
+    "max_reserve_ammo": 8,
+    "reload_time": 2.7,
+    "range": 190.0,
+    "is_explosive": true,
+    "splash_radius": 8.5,
+    "upgrade_per_level": {
+      "damage": 60.0,
+      "magazine_size": 0,
+      "reload_time": -0.22,
+      "fire_rate": -0.05,
+      "cost_multiplier": 1100
+    },
+    "thumbnail": "res://assets/ui/weapons/thumb_atgm.png",
+    "texture": "res://assets/textures/tex_fps_atgm.png"
   }
 }

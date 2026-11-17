@@ -15,6 +15,8 @@ signal bullet_fired(origin: Vector3, target_point: Vector3)
 @export var max_reserve_ammo: int = 180
 @export var reload_time: float = 1.8
 @export var range_distance: float = 80.0
+@export var is_explosive: bool = false
+@export var splash_radius: float = 0.0
 
 var weapon_level: int = 1
 var current_ammo: int = 30
@@ -53,6 +55,8 @@ func load_weapon_data(target_id: String = "", level: int = 1) -> void:
 		var base_res: int = int(w.get("max_reserve_ammo", 180))
 		var base_rel: float = float(w.get("reload_time", 1.8))
 		var base_rng: float = float(w.get("range", 80.0))
+		is_explosive = bool(w.get("is_explosive", false))
+		splash_radius = float(w.get("splash_radius", 0.0))
 		
 		var up: Dictionary = w.get("upgrade_per_level", {})
 		var lvl_step: int = weapon_level - 1
@@ -93,7 +97,10 @@ func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpa
 		
 	time_since_last_shot = 0.0
 	current_ammo -= 1
-	AudioManager.play_sound("rifle_shot", 0.04, 0.0)
+	if is_explosive:
+		AudioManager.play_sound("drone_rocket", 0.05, 1.5)
+	else:
+		AudioManager.play_sound("rifle_shot", 0.04, 0.0)
 	fired.emit(current_ammo, magazine_size)
 	
 	if space_state:
@@ -112,14 +119,33 @@ func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpa
 			result = space_state.intersect_ray(env_query)
 		
 		var target_pos := end_pos
+		var hit_collider: Object = null
 		if not result.is_empty():
-			var collider: Object = result.collider
+			hit_collider = result.collider
 			var hit_point: Vector3 = result.position
 			var hit_normal: Vector3 = result.normal
 			target_pos = hit_point
 			
-			_apply_hit(collider, hit_point, hit_normal)
-			hit_target.emit(collider, hit_point, hit_normal, damage)
+			_apply_hit(hit_collider, hit_point, hit_normal)
+			hit_target.emit(hit_collider, hit_point, hit_normal, damage)
+			
+		if is_explosive:
+			AudioManager.play_sound("explosion", 0.05, 2.0)
+			# Radial splash damage to all enemies within splash_radius
+			if splash_radius > 0.0:
+				var sphere := SphereShape3D.new()
+				sphere.radius = splash_radius
+				var shape_q := PhysicsShapeQueryParameters3D.new()
+				shape_q.shape = sphere
+				shape_q.transform = Transform3D(Basis(), target_pos)
+				shape_q.collision_mask = 4 | 8
+				shape_q.collide_with_areas = true
+				shape_q.collide_with_bodies = true
+				var splash_hits := space_state.intersect_shape(shape_q, 16)
+				for h in splash_hits:
+					var col = h.get("collider")
+					if col and col != hit_collider:
+						_apply_hit(col, target_pos, Vector3.UP)
 			
 		bullet_fired.emit(origin, target_pos)
 	else:

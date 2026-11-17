@@ -87,12 +87,12 @@ func _ready() -> void:
 	play_bgm()
 
 func _input(event: InputEvent) -> void:
-	# Unlock audio on first user touch/click for Web Audio API policy
-	if not _audio_unlocked:
-		if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed) or (event is InputEventKey and event.pressed):
+	# Unlock and start audio on first user touch/click/keypress for Web Audio API policy
+	var is_gesture: bool = (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed) or (event is InputEventKey and event.pressed)
+	if is_gesture:
+		if not _audio_unlocked or (bgm_player and not bgm_player.playing and bgm_vol_scale > 0.005):
 			_audio_unlocked = true
-			if not is_bgm_playing:
-				play_bgm()
+			play_bgm()
 
 func set_master_volume(pct: float) -> void:
 	master_vol_scale = clampf(pct, 0.0, 1.0)

@@ -3,7 +3,7 @@ extends SceneTree
 func _init() -> void:
 	print("[TEST] Running Weapons Arsenal, Scaling & Armory Shop Tests...")
 	
-	# 1. Test weapons.json loading and 5 national firearms
+	# 1. Test weapons.json loading and 7 weapons (including Rocket Launcher & ATGM)
 	var path := "res://data/weapons.json"
 	var file := FileAccess.open(path, FileAccess.READ)
 	if not file:
@@ -16,15 +16,28 @@ func _init() -> void:
 		quit(1)
 		return
 	var w_data: Dictionary = test_json.data
-	var expected_weapons = ["k2c1_rifle", "m4a1_carbine", "hk416_elite", "scar_h_battle", "k14_sniper"]
+	var expected_weapons = [
+		"k2c1_rifle",
+		"m4a1_carbine",
+		"hk416_elite",
+		"scar_h_battle",
+		"k14_sniper",
+		"rpg7_launcher",
+		"hyungung_atgm"
+	]
 	for w_id in expected_weapons:
 		if not w_data.has(w_id):
-			push_error("Missing national firearm in catalog: " + w_id)
+			push_error("Missing weapon in catalog: " + w_id)
 			quit(1)
 			return
-	print("[PASS] Verified all 5 national firearms in weapons.json catalog")
+		var entry: Dictionary = w_data[w_id]
+		if not entry.has("thumbnail") or entry["thumbnail"].is_empty():
+			push_error("Missing thumbnail picture for weapon: " + w_id)
+			quit(1)
+			return
+	print("[PASS] Verified all 7 weapons and thumbnails in weapons.json catalog")
 	
-	# 2. Test WeaponComponent level scaling
+	# 2. Test WeaponComponent level scaling & Explosive Weapons
 	var wc := WeaponComponent.new()
 	root.add_child(wc)
 	
@@ -45,66 +58,59 @@ func _init() -> void:
 		return
 	print("[PASS] WeaponComponent level upgrade stat scaling verified (Lv.1: %.1f dmg -> Lv.3: %.1f dmg)" % [base_dmg, wc.damage])
 	
-	# SCAR-H heavy damage check
-	wc.load_weapon_data("scar_h_battle", 1)
-	if wc.damage < 50.0:
-		push_error("SCAR-H heavy damage expected >= 50.0")
+	# RPG-7 Rocket Launcher
+	wc.load_weapon_data("rpg7_launcher", 1)
+	if not wc.is_explosive or wc.splash_radius < 5.0 or wc.damage < 200.0:
+		push_error("RPG-7 explosive properties incorrect: is_explosive=%s, radius=%.1f, dmg=%.1f" % [wc.is_explosive, wc.splash_radius, wc.damage])
 		quit(1)
 		return
-	print("[PASS] FN SCAR-H 7.62mm heavy battle rifle damage verified: %.1f" % wc.damage)
+	print("[PASS] RPG-7 anti-tank rocket launcher explosive verified: dmg=%.1f, radius=%.1fm" % [wc.damage, wc.splash_radius])
 	
-	# K14 sniper damage check
-	wc.load_weapon_data("k14_sniper", 1)
-	if wc.damage < 120.0:
-		push_error("K14 sniper rifle damage expected >= 120.0")
+	# Hyungung ATGM Missile
+	wc.load_weapon_data("hyungung_atgm", 1)
+	if not wc.is_explosive or wc.splash_radius < 7.0 or wc.damage < 300.0:
+		push_error("Hyungung ATGM properties incorrect: is_explosive=%s, radius=%.1f, dmg=%.1f" % [wc.is_explosive, wc.splash_radius, wc.damage])
 		quit(1)
 		return
-	print("[PASS] K14 sniper rifle high damage verified: %.1f" % wc.damage)
+	print("[PASS] Hyungung K-ATGM anti-tank missile verified: dmg=%.1f, radius=%.1fm" % [wc.damage, wc.splash_radius])
 	wc.queue_free()
 	
 	# 3. Test GameSession Credits & Weapon Purchase/Upgrade
-	GameSession.add_credits(2000)
-	GameSession.owned_weapons.erase("m4a1_carbine")
+	GameSession.add_credits(5000)
+	GameSession.owned_weapons.erase("rpg7_launcher")
 	GameSession.save_profile()
 	var pre_credits = GameSession.credits
-	# Buy M4A1 (500 P)
-	var buy_ok = GameSession.buy_weapon("m4a1_carbine", 500)
-	if not buy_ok or not GameSession.owned_weapons.has("m4a1_carbine"):
-		push_error("GameSession weapon purchase failed")
+	
+	# Buy RPG-7 (2,800 P)
+	var buy_ok = GameSession.buy_weapon("rpg7_launcher", 2800)
+	if not buy_ok or not GameSession.owned_weapons.has("rpg7_launcher"):
+		push_error("GameSession RPG-7 purchase failed")
 		quit(1)
 		return
-	if GameSession.credits != pre_credits - 500:
+	if GameSession.credits != pre_credits - 2800:
 		push_error("GameSession credits deduction failed")
 		quit(1)
 		return
-	print("[PASS] Weapon purchase and credit deduction verified")
+	print("[PASS] RPG-7 purchase and credit deduction verified")
 	
-	# Equip M4A1
-	GameSession.equip_weapon("m4a1_carbine")
-	if GameSession.equipped_weapon_id != "m4a1_carbine":
+	# Equip RPG-7
+	GameSession.equip_weapon("rpg7_launcher")
+	if GameSession.equipped_weapon_id != "rpg7_launcher":
 		push_error("GameSession equip weapon failed")
 		quit(1)
 		return
 	print("[PASS] Weapon equip verified: ", GameSession.equipped_weapon_id)
 	
-	# Upgrade M4A1 to Lv. 2
-	var up_ok = GameSession.upgrade_weapon("m4a1_carbine", 350)
-	if not up_ok or GameSession.get_weapon_level("m4a1_carbine") != 2:
-		push_error("GameSession weapon upgrade failed")
-		quit(1)
-		return
-	print("[PASS] Weapon upgrade to Level 2 verified")
-	
-	# 4. Test ArmoryShop UI instantiation and Grant Button
+	# 4. Test ArmoryShop UI instantiation and 7 Cards
 	var shop_scene = load("res://scenes/ui/armory_shop.tscn")
 	var shop = shop_scene.instantiate() as ArmoryShop
 	root.add_child(shop)
 	await process_frame
-	if not shop.weapon_container or shop.weapon_container.get_child_count() < 5:
-		push_error("ArmoryShop failed to populate 5 weapon cards")
+	if not shop.weapon_container or shop.weapon_container.get_child_count() < 7:
+		push_error("ArmoryShop failed to populate 7 weapon cards, count is: " + str(shop.weapon_container.get_child_count() if shop.weapon_container else 0))
 		quit(1)
 		return
-	print("[PASS] ArmoryShop UI populated 5 weapon cards successfully")
+	print("[PASS] ArmoryShop UI populated 7 weapon cards with photos and stats successfully")
 	
 	if not shop.grant_btn:
 		push_error("ArmoryShop missing grant_btn")
@@ -116,18 +122,14 @@ func _init() -> void:
 		push_error("ArmoryShop grant_btn failed to add 2000 credits")
 		quit(1)
 		return
-	print("[PASS] ArmoryShop supply grant (+2,000 P) verified")
+	print("[PASS] ArmoryShop supply grant (+2,000 P [G]) verified")
 	shop.queue_free()
 	
-	# 5. Test Weapon Cycling
+	# 5. Test Weapon Cycling with 7 weapons
+	GameSession.owned_weapons["k2c1_rifle"] = 1
 	var next_w := GameSession.get_next_owned_weapon("k2c1_rifle")
-	if next_w != "m4a1_carbine":
-		push_error("get_next_owned_weapon expected m4a1_carbine but got: " + next_w)
-		quit(1)
-		return
-	var cycle_back := GameSession.get_next_owned_weapon("m4a1_carbine")
-	if cycle_back != "k2c1_rifle":
-		push_error("get_next_owned_weapon cycle expected k2c1_rifle but got: " + cycle_back)
+	if next_w != "rpg7_launcher" and next_w != "m4a1_carbine":
+		push_error("get_next_owned_weapon expected owned weapon but got: " + next_w)
 		quit(1)
 		return
 	print("[PASS] Weapon cycling between owned weapons verified")

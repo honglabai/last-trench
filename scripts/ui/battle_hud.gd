@@ -602,6 +602,23 @@ func set_crosshair_aim(is_aiming: bool) -> void:
 func open_armory_shop() -> void:
 	_on_shop_pressed()
 
+func open_settings() -> void:
+	_on_settings_pressed()
+
+func show_toast(msg: String, duration: float = 2.0) -> void:
+	if help_label:
+		help_label.visible = true
+		help_label.text = msg
+		help_label.modulate = Color(1.0, 0.9, 0.35, 1.0)
+		var t := create_tween()
+		t.tween_interval(duration)
+		t.tween_property(help_label, "modulate:a", 0.0, 0.5)
+		t.tween_callback(func():
+			if help_label:
+				help_label.text = "[마우스] 조준 | [좌클릭/스페이스] 사격 | [우클릭/C] 정밀조준 | [R] 재장전 | [E] 포탑설치 | [Q/1~7] 무기교체 | [B] 상점 | [O] 설정"
+				help_label.modulate = Color(0.85, 0.9, 0.95, 0.75)
+		)
+
 func show_weapon_toast(w_id: String) -> void:
 	var w_name := w_id
 	var path := "res://data/weapons.json"
@@ -612,13 +629,36 @@ func show_weapon_toast(w_id: String) -> void:
 			if test_json.parse(file.get_as_text()) == OK and test_json.data.has(w_id):
 				var d: Dictionary = test_json.data[w_id]
 				w_name = "[%s] %s" % [d.get("country", ""), d.get("name", w_id)]
-	if help_label:
-		help_label.visible = true
-		help_label.text = "무기 전환 완료: %s" % w_name
-		help_label.modulate = Color(0.2, 0.95, 1.0, 1.0)
-		var t := create_tween()
-		t.tween_interval(2.0)
-		t.tween_property(help_label, "modulate:a", 0.0, 0.6)
+	show_toast("무기 전환 완료: %s" % w_name, 2.0)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		var is_settings_open: bool = (settings_layer and settings_layer.visible) or (settings_dialog and settings_dialog.visible)
+		if is_settings_open:
+			if event.keycode == KEY_ESCAPE or event.keycode == KEY_O:
+				_on_settings_close_pressed()
+				get_viewport().set_input_as_handled()
+				return
+				
+		if victory_panel and victory_panel.visible:
+			if event.keycode == KEY_R or event.keycode == KEY_ENTER or event.keycode == KEY_SPACE:
+				_on_restart_clicked()
+				get_viewport().set_input_as_handled()
+				return
+			elif event.keycode == KEY_ESCAPE or event.keycode == KEY_M:
+				_on_menu_clicked()
+				get_viewport().set_input_as_handled()
+				return
+				
+		if defeat_panel and defeat_panel.visible:
+			if event.keycode == KEY_R or event.keycode == KEY_ENTER or event.keycode == KEY_SPACE:
+				_on_restart_clicked()
+				get_viewport().set_input_as_handled()
+				return
+			elif event.keycode == KEY_ESCAPE or event.keycode == KEY_M:
+				_on_menu_clicked()
+				get_viewport().set_input_as_handled()
+				return
 
 func show_victory() -> void:
 	if victory_panel:

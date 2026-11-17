@@ -112,7 +112,7 @@ static func equip_weapon(w_id: String) -> void:
 static func get_next_owned_weapon(current_id: String = "") -> String:
 	_ensure_profile_loaded()
 	var cur := current_id if current_id != "" else equipped_weapon_id
-	var weapon_order := ["k2c1_rifle", "m4a1_carbine", "hk416_elite", "scar_h_battle", "k14_sniper"]
+	var weapon_order := ["k2c1_rifle", "m4a1_carbine", "hk416_elite", "scar_h_battle", "k14_sniper", "rpg7_launcher", "hyungung_atgm"]
 	var owned: Array[String] = []
 	for w in weapon_order:
 		if owned_weapons.has(w):
