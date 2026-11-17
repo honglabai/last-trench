@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bbhjsipk7rdrg" path="res://assets/ui/buttons/btn_menu_normal.png" id="12_men_n"]
 [ext_resource type="Texture2D" uid="uid://byj55ya18uun0" path="res://assets/ui/buttons/btn_menu_pressed.png" id="13_men_p"]
 [ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="14_thm"]
+[ext_resource type="Texture2D" uid="uid://cp1sv24mr7ig" path="res://assets/ui/hud_tactical_overlay.png" id="15_hud_overlay"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_base_fill"]
 bg_color = Color(0.18, 0.65, 0.95, 0.95)
@@ -27,6 +28,18 @@ layer = 10
 script = ExtResource("1_hud")
 
 [node name="FPSViewModel" parent="." instance=ExtResource("9_vm")]
+
+[node name="TacticalHUDOverlay" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("15_hud_overlay")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="TopLeft" type="MarginContainer" parent="."]
 offset_left = 40.0
