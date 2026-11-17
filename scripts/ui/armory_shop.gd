@@ -10,6 +10,12 @@ var credits_label: Label:
 		if not _credits_label: _credits_label = get_node_or_null("Panel/VBox/Header/CreditsLabel")
 		return _credits_label
 
+var _grant_btn: Button
+var grant_btn: Button:
+	get:
+		if not _grant_btn: _grant_btn = get_node_or_null("Panel/VBox/Header/GrantBtn")
+		return _grant_btn
+
 var _close_btn: BaseButton
 var close_btn: BaseButton:
 	get:
@@ -29,6 +35,16 @@ func _ready() -> void:
 	_load_weapons_data()
 	if close_btn:
 		close_btn.pressed.connect(_on_close_pressed)
+	if grant_btn:
+		var do_grant = func():
+			AudioManager.play_sound("click")
+			GameSession.add_credits(2000)
+			refresh_shop_ui()
+		grant_btn.pressed.connect(do_grant)
+		grant_btn.gui_input.connect(func(ev: InputEvent):
+			if ev is InputEventScreenTouch and ev.pressed:
+				do_grant.call()
+		)
 	refresh_shop_ui()
 
 func open_shop() -> void:
@@ -136,7 +152,7 @@ func _create_weapon_card(w_id: String, info: Dictionary) -> Control:
 	
 	# 3. Action Buttons (Buy, Upgrade, Equip)
 	var action_box := VBoxContainer.new()
-	action_box.custom_minimum_size = Vector2(170, 0)
+	action_box.custom_minimum_size = Vector2(180, 0)
 	action_box.add_theme_constant_override("separation", 6)
 	hbox.add_child(action_box)
 	
@@ -144,31 +160,39 @@ func _create_weapon_card(w_id: String, info: Dictionary) -> Control:
 		var buy_btn := Button.new()
 		var price: int = int(info.get("price", 500))
 		buy_btn.text = "무기 구매 (%d P)" % price
-		buy_btn.custom_minimum_size = Vector2(0, 38)
+		buy_btn.custom_minimum_size = Vector2(0, 42)
 		buy_btn.disabled = (GameSession.credits < price)
-		buy_btn.pressed.connect(func():
-			if GameSession.buy_weapon(w_id, price):
+		var do_buy = func():
+			if not buy_btn.disabled and GameSession.buy_weapon(w_id, price):
 				AudioManager.play_sound("reload")
 				GameSession.equip_weapon(w_id)
 				weapon_equipped.emit(w_id)
 				refresh_shop_ui()
+		buy_btn.pressed.connect(do_buy)
+		buy_btn.gui_input.connect(func(ev: InputEvent):
+			if ev is InputEventScreenTouch and ev.pressed:
+				do_buy.call()
 		)
 		action_box.add_child(buy_btn)
 	else:
 		# Equip / Status button
 		var equip_btn := Button.new()
-		equip_btn.custom_minimum_size = Vector2(0, 36)
+		equip_btn.custom_minimum_size = Vector2(0, 40)
 		if is_equipped:
 			equip_btn.text = "장착 완료 (EQUIPPED)"
 			equip_btn.disabled = true
-			equip_btn.modulate = Color(0.4, 1.0, 0.6)
+			equip_btn.modulate = Color(0.3, 1.0, 0.6)
 		else:
 			equip_btn.text = "전투 장착 (EQUIP)"
-			equip_btn.pressed.connect(func():
+			var do_equip = func():
 				AudioManager.play_sound("click")
 				GameSession.equip_weapon(w_id)
 				weapon_equipped.emit(w_id)
 				refresh_shop_ui()
+			equip_btn.pressed.connect(do_equip)
+			equip_btn.gui_input.connect(func(ev: InputEvent):
+				if ev is InputEventScreenTouch and ev.pressed:
+					do_equip.call()
 			)
 		action_box.add_child(equip_btn)
 		
@@ -176,14 +200,18 @@ func _create_weapon_card(w_id: String, info: Dictionary) -> Control:
 		if cur_lvl < 5:
 			var up_cost: int = int(up_dict.get("cost_multiplier", 300)) * cur_lvl
 			var up_btn := Button.new()
-			up_btn.custom_minimum_size = Vector2(0, 32)
-			up_btn.text = "Lv.%d 성능 강화 (%d P)" % [cur_lvl + 1, up_cost]
+			up_btn.custom_minimum_size = Vector2(0, 34)
+			up_btn.text = "Lv.%d 강화 (%d P)" % [cur_lvl + 1, up_cost]
 			up_btn.disabled = (GameSession.credits < up_cost)
-			up_btn.pressed.connect(func():
-				if GameSession.upgrade_weapon(w_id, up_cost):
+			var do_up = func():
+				if not up_btn.disabled and GameSession.upgrade_weapon(w_id, up_cost):
 					AudioManager.play_sound("reload")
 					weapon_equipped.emit(w_id)
 					refresh_shop_ui()
+			up_btn.pressed.connect(do_up)
+			up_btn.gui_input.connect(func(ev: InputEvent):
+				if ev is InputEventScreenTouch and ev.pressed:
+					do_up.call()
 			)
 			action_box.add_child(up_btn)
 		else:

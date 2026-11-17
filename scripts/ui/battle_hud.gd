@@ -599,6 +599,27 @@ func set_crosshair_aim(is_aiming: bool) -> void:
 	if viewmodel:
 		viewmodel.set_aiming(is_aiming)
 
+func open_armory_shop() -> void:
+	_on_shop_pressed()
+
+func show_weapon_toast(w_id: String) -> void:
+	var w_name := w_id
+	var path := "res://data/weapons.json"
+	if FileAccess.file_exists(path):
+		var file := FileAccess.open(path, FileAccess.READ)
+		if file:
+			var test_json := JSON.new()
+			if test_json.parse(file.get_as_text()) == OK and test_json.data.has(w_id):
+				var d: Dictionary = test_json.data[w_id]
+				w_name = "[%s] %s" % [d.get("country", ""), d.get("name", w_id)]
+	if help_label:
+		help_label.visible = true
+		help_label.text = "무기 전환 완료: %s" % w_name
+		help_label.modulate = Color(0.2, 0.95, 1.0, 1.0)
+		var t := create_tween()
+		t.tween_interval(2.0)
+		t.tween_property(help_label, "modulate:a", 0.0, 0.6)
+
 func show_victory() -> void:
 	if victory_panel:
 		victory_panel.visible = true

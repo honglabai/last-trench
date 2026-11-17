@@ -130,15 +130,28 @@ func _on_fire_up() -> void:
 		_is_firing = false
 		fire_pressed.emit(false)
 
+var _last_action_times: Dictionary = {}
+
+func _debounce(action_name: String, window_sec: float = 0.18) -> bool:
+	var now := Time.get_ticks_msec() / 1000.0
+	var last: float = float(_last_action_times.get(action_name, -999.0))
+	if now - last < window_sec:
+		return false
+	_last_action_times[action_name] = now
+	return true
+
 func _on_reload_pressed() -> void:
+	if not _debounce("reload"): return
 	AudioManager.play_sound("click")
 	reload_requested.emit()
 
 func _on_interact_pressed() -> void:
+	if not _debounce("interact"): return
 	AudioManager.play_sound("click")
 	interact_requested.emit()
 
 func _on_switch_pressed() -> void:
+	if not _debounce("switch"): return
 	AudioManager.play_sound("click")
 	weapon_switch_requested.emit()
 
@@ -153,6 +166,7 @@ func set_interact_available(available: bool, label_text: String = "포탑 설치
 			interact_button.modulate = Color(1.0, 1.0, 1.0, 0.85) # High visibility tactical cyan
 
 func _on_aim_pressed() -> void:
+	if not _debounce("aim"): return
 	AudioManager.play_sound("click")
 	is_aim_active = not is_aim_active
 	aim_toggled.emit()
@@ -179,8 +193,16 @@ func _handle_touch(event: InputEventScreenTouch) -> void:
 			_on_fire_down()
 			return
 			
-		# 2. Check other action buttons (Aim, Reload, Interact)
+		# 2. Check other action buttons (Aim, Reload, Interact, Switch)
 		if _is_touch_on_other_buttons(event.position):
+			if aim_button and aim_button.is_visible_in_tree() and aim_button.get_global_rect().has_point(event.position):
+				_on_aim_pressed()
+			elif reload_button and reload_button.is_visible_in_tree() and reload_button.get_global_rect().has_point(event.position):
+				_on_reload_pressed()
+			elif interact_button and interact_button.is_visible_in_tree() and interact_button.get_global_rect().has_point(event.position):
+				_on_interact_pressed()
+			elif switch_button and switch_button.is_visible_in_tree() and switch_button.get_global_rect().has_point(event.position):
+				_on_switch_pressed()
 			return
 			
 		# 3. Left side: Joystick (STRICTLY FIXED POSITION, NEVER MOVES ITS BASE)

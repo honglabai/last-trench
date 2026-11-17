@@ -95,7 +95,7 @@ func _init() -> void:
 		return
 	print("[PASS] Weapon upgrade to Level 2 verified")
 	
-	# 4. Test ArmoryShop UI instantiation
+	# 4. Test ArmoryShop UI instantiation and Grant Button
 	var shop_scene = load("res://scenes/ui/armory_shop.tscn")
 	var shop = shop_scene.instantiate() as ArmoryShop
 	root.add_child(shop)
@@ -105,7 +105,32 @@ func _init() -> void:
 		quit(1)
 		return
 	print("[PASS] ArmoryShop UI populated 5 weapon cards successfully")
+	
+	if not shop.grant_btn:
+		push_error("ArmoryShop missing grant_btn")
+		quit(1)
+		return
+	var pre_grant := GameSession.credits
+	shop.grant_btn.pressed.emit()
+	if GameSession.credits != pre_grant + 2000:
+		push_error("ArmoryShop grant_btn failed to add 2000 credits")
+		quit(1)
+		return
+	print("[PASS] ArmoryShop supply grant (+2,000 P) verified")
 	shop.queue_free()
+	
+	# 5. Test Weapon Cycling
+	var next_w := GameSession.get_next_owned_weapon("k2c1_rifle")
+	if next_w != "m4a1_carbine":
+		push_error("get_next_owned_weapon expected m4a1_carbine but got: " + next_w)
+		quit(1)
+		return
+	var cycle_back := GameSession.get_next_owned_weapon("m4a1_carbine")
+	if cycle_back != "k2c1_rifle":
+		push_error("get_next_owned_weapon cycle expected k2c1_rifle but got: " + cycle_back)
+		quit(1)
+		return
+	print("[PASS] Weapon cycling between owned weapons verified")
 	
 	print("[TEST COMPLETE] Weapons Arsenal & Armory Shop tests passed with 0 errors!")
 	quit(0)

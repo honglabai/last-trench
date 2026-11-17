@@ -197,6 +197,10 @@ func _on_start_pressed() -> void:
 
 func _on_shop_pressed() -> void:
 	AudioManager.play_sound("click")
+	if guide_dialog:
+		guide_dialog.visible = false
+	if settings_dialog:
+		settings_dialog.visible = false
 	if armory_shop:
 		armory_shop.open_shop()
 
@@ -206,6 +210,8 @@ func _on_guide_pressed() -> void:
 		guide_dialog.visible = true
 	if settings_dialog:
 		settings_dialog.visible = false
+	if armory_shop:
+		armory_shop.close_shop()
 
 func _on_guide_close_pressed() -> void:
 	AudioManager.play_sound("click")
@@ -219,6 +225,8 @@ func _on_settings_pressed() -> void:
 		settings_dialog.visible = true
 	if guide_dialog:
 		guide_dialog.visible = false
+	if armory_shop:
+		armory_shop.close_shop()
 
 func _on_settings_close_pressed() -> void:
 	AudioManager.play_sound("click")

@@ -112,8 +112,7 @@ func _ready() -> void:
 		)
 		touch_controls.interact_requested.connect(_on_interact_requested)
 		touch_controls.weapon_switch_requested.connect(func():
-			if battle_hud:
-				battle_hud.open_armory_shop()
+			switch_to_next_weapon()
 		)
 		
 	# 5. Wire DefenseSlots proximity
@@ -234,6 +233,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Keyboard shortcut for DefenseSlot interaction
 	if event.is_action_pressed("interact"):
 		_on_interact_requested()
+	elif event is InputEventKey and event.pressed and event.keycode == KEY_Q:
+		switch_to_next_weapon()
 	# Web/Desktop Mouse capture: click to lock, ESC to unlock
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -242,6 +243,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventKey:
 		if event.pressed and event.keycode == KEY_ESCAPE:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func switch_to_next_weapon() -> void:
+	var next_id := GameSession.get_next_owned_weapon()
+	if next_id == GameSession.equipped_weapon_id and GameSession.owned_weapons.size() <= 1:
+		if battle_hud:
+			battle_hud.open_armory_shop()
+		return
+		
+	GameSession.equip_weapon(next_id)
+	var lvl := GameSession.get_weapon_level(next_id)
+	if player and player.weapon:
+		player.weapon.load_weapon_data(next_id, lvl)
+	if battle_hud:
+		battle_hud._update_viewmodel_texture(next_id)
+		if player and player.weapon:
+			battle_hud.update_ammo(player.weapon.current_ammo, player.weapon.reserve_ammo)
+		battle_hud.show_weapon_toast(next_id)
+	AudioManager.play_sound("reload")
 
 func _on_wave_state_changed(state: int) -> void:
 	if not battle_hud or not wave_director:
