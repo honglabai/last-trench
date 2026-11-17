@@ -20,6 +20,10 @@
 [ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_close_settings_pressed.png" id="18_cls_p"]
 [ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_close_guide_normal.png" id="19_clg_n"]
 [ext_resource type="Texture2D" path="res://assets/ui/buttons/btn_close_guide_pressed.png" id="20_clg_p"]
+[ext_resource type="Texture2D" uid="uid://gkf7p4usynoj" path="res://assets/ui/buttons/btn_dec_normal.png" id="21_dec_n"]
+[ext_resource type="Texture2D" uid="uid://t74wijb8xces" path="res://assets/ui/buttons/btn_dec_pressed.png" id="22_dec_p"]
+[ext_resource type="Texture2D" uid="uid://exyh2yd4rnt3" path="res://assets/ui/buttons/btn_inc_normal.png" id="23_inc_n"]
+[ext_resource type="Texture2D" uid="uid://h8a0iv86r2eo" path="res://assets/ui/buttons/btn_inc_pressed.png" id="24_inc_p"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -186,9 +190,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -280.0
+offset_left = -310.0
 offset_top = -280.0
-offset_right = 280.0
+offset_right = 310.0
 offset_bottom = 280.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -204,7 +208,7 @@ offset_right = -24.0
 offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="SettingsDialog/VBox"]
 layout_mode = 2
@@ -222,13 +226,35 @@ theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
 theme_override_font_sizes/font_size = 14
 text = "과녁 조준 감도 (Aim Sensitivity): 60%"
 
-[node name="SensitivitySlider" type="HSlider" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 28)
+[node name="SensitivityRow" type="HBoxContainer" parent="SettingsDialog/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SensitivityDecBtn" type="TextureButton" parent="SettingsDialog/VBox/SensitivityRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+texture_normal = ExtResource("21_dec_n")
+texture_pressed = ExtResource("22_dec_p")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="SensitivitySlider" type="HSlider" parent="SettingsDialog/VBox/SensitivityRow"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 min_value = 0.15
 max_value = 1.5
 step = 0.05
 value = 0.6
+
+[node name="SensitivityIncBtn" type="TextureButton" parent="SettingsDialog/VBox/SensitivityRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+texture_normal = ExtResource("23_inc_n")
+texture_pressed = ExtResource("24_inc_p")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="MasterVolTitle" type="Label" parent="SettingsDialog/VBox"]
 layout_mode = 2
@@ -236,13 +262,35 @@ theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
 theme_override_font_sizes/font_size = 14
 text = "전체 음량 (Master Volume): 85%"
 
-[node name="MasterVolSlider" type="HSlider" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 28)
+[node name="MasterVolRow" type="HBoxContainer" parent="SettingsDialog/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MasterVolDecBtn" type="TextureButton" parent="SettingsDialog/VBox/MasterVolRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+texture_normal = ExtResource("21_dec_n")
+texture_pressed = ExtResource("22_dec_p")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MasterVolSlider" type="HSlider" parent="SettingsDialog/VBox/MasterVolRow"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 min_value = 0.0
 max_value = 1.0
 step = 0.05
 value = 0.85
+
+[node name="MasterVolIncBtn" type="TextureButton" parent="SettingsDialog/VBox/MasterVolRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+texture_normal = ExtResource("23_inc_n")
+texture_pressed = ExtResource("24_inc_p")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="BGMVolTitle" type="Label" parent="SettingsDialog/VBox"]
 layout_mode = 2
@@ -250,13 +298,35 @@ theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
 theme_override_font_sizes/font_size = 14
 text = "배경음악 음량 (BGM Volume): 70%"
 
-[node name="BGMVolSlider" type="HSlider" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 28)
+[node name="BGMVolRow" type="HBoxContainer" parent="SettingsDialog/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BGMVolDecBtn" type="TextureButton" parent="SettingsDialog/VBox/BGMVolRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+texture_normal = ExtResource("21_dec_n")
+texture_pressed = ExtResource("22_dec_p")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BGMVolSlider" type="HSlider" parent="SettingsDialog/VBox/BGMVolRow"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 min_value = 0.0
 max_value = 1.0
 step = 0.05
 value = 0.7
+
+[node name="BGMVolIncBtn" type="TextureButton" parent="SettingsDialog/VBox/BGMVolRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+texture_normal = ExtResource("23_inc_n")
+texture_pressed = ExtResource("24_inc_p")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="SFXVolTitle" type="Label" parent="SettingsDialog/VBox"]
 layout_mode = 2
@@ -264,19 +334,41 @@ theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
 theme_override_font_sizes/font_size = 14
 text = "효과음 음량 (SFX Volume): 85%"
 
-[node name="SFXVolSlider" type="HSlider" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(0, 28)
+[node name="SFXVolRow" type="HBoxContainer" parent="SettingsDialog/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SFXVolDecBtn" type="TextureButton" parent="SettingsDialog/VBox/SFXVolRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+texture_normal = ExtResource("21_dec_n")
+texture_pressed = ExtResource("22_dec_p")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="SFXVolSlider" type="HSlider" parent="SettingsDialog/VBox/SFXVolRow"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 min_value = 0.0
 max_value = 1.0
 step = 0.05
 value = 0.85
 
+[node name="SFXVolIncBtn" type="TextureButton" parent="SettingsDialog/VBox/SFXVolRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+texture_normal = ExtResource("23_inc_n")
+texture_pressed = ExtResource("24_inc_p")
+ignore_texture_size = true
+stretch_mode = 5
+
 [node name="HSeparator2" type="HSeparator" parent="SettingsDialog/VBox"]
 layout_mode = 2
 
 [node name="FullscreenBtn" type="TextureButton" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(340, 46)
+custom_minimum_size = Vector2(340, 44)
 layout_mode = 2
 size_flags_horizontal = 4
 texture_normal = ExtResource("15_ful_n")
@@ -285,7 +377,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="CloseSettingsBtn" type="TextureButton" parent="SettingsDialog/VBox"]
-custom_minimum_size = Vector2(340, 46)
+custom_minimum_size = Vector2(340, 44)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10

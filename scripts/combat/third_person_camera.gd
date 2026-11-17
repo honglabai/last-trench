@@ -9,7 +9,7 @@ extends Node3D
 @export var normal_offset: Vector3 = Vector3.ZERO
 @export var aim_offset: Vector3 = Vector3.ZERO
 @export var transition_speed: float = 12.0
-@export var mouse_sensitivity: float = 0.003
+@export var mouse_sensitivity: float = 0.0035
 @export var min_pitch: float = -65.0
 @export var max_pitch: float = 65.0
 
@@ -62,10 +62,10 @@ func _process(delta: float) -> void:
 
 func handle_look_input(relative: Vector2) -> void:
 	# Clamp per-frame relative delta to prevent single-frame teleport flips
-	var clamped_rel := Vector2(clampf(relative.x, -50.0, 50.0), clampf(relative.y, -50.0, 50.0))
+	var clamped_rel := Vector2(clampf(relative.x, -80.0, 80.0), clampf(relative.y, -80.0, 80.0))
 	var sens := mouse_sensitivity * GameSettings.get_aim_sensitivity()
 	if is_aiming:
-		sens *= 0.65 # Slower, steadier precision control when aiming down iron sights
+		sens *= 0.60 # Precision aim down iron sights
 	yaw -= clamped_rel.x * sens
 	pitch = clampf(pitch - clamped_rel.y * sens, deg_to_rad(min_pitch), deg_to_rad(max_pitch))
 	

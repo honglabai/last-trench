@@ -1,6 +1,8 @@
 [gd_resource type="Theme" format=3]
 
 [ext_resource type="FontFile" path="res://assets/fonts/Pretendard-Black.otf" id="1_black"]
+[ext_resource type="Texture2D" uid="uid://cfxg2kh5of63n" path="res://assets/ui/slider_grabber_normal.png" id="2_grab_n"]
+[ext_resource type="Texture2D" uid="uid://crq41ekq8qv3r" path="res://assets/ui/slider_grabber_highlight.png" id="3_grab_h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hiobj"]
 bg_color = Color(0.04, 0.08, 0.12, 0.94)
@@ -33,10 +35,39 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_bg"]
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.04, 0.1, 0.16, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.15, 0.5, 0.7, 0.85)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_fill"]
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.0, 0.75, 0.95, 0.95)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font = ExtResource("1_black")
 default_font_size = 14
 Button/fonts/font = ExtResource("1_black")
+HSlider/icons/grabber = ExtResource("2_grab_n")
+HSlider/icons/grabber_disabled = ExtResource("2_grab_n")
+HSlider/icons/grabber_highlight = ExtResource("3_grab_h")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_slider_fill")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_slider_fill")
+HSlider/styles/slider = SubResource("StyleBoxFlat_slider_bg")
 Label/colors/font_color = Color(0.96, 0.98, 1, 1)
 Label/colors/font_shadow_color = Color(0, 0, 0, 0.9)
 Label/constants/shadow_offset_x = 1

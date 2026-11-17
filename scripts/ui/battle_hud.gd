@@ -189,7 +189,8 @@ var _sensitivity_slider: Slider
 var sensitivity_slider: Slider:
 	get:
 		if not _sensitivity_slider:
-			_sensitivity_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SensitivitySlider")
+			_sensitivity_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SensitivityRow/SensitivitySlider")
+			if not _sensitivity_slider: _sensitivity_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SensitivitySlider")
 			if not _sensitivity_slider: _sensitivity_slider = get_node_or_null("Overlay/SettingsDialog/VBox/SensitivitySlider")
 		return _sensitivity_slider
 
@@ -201,10 +202,24 @@ var sensitivity_title: Label:
 			if not _sensitivity_title: _sensitivity_title = get_node_or_null("Overlay/SettingsDialog/VBox/SensitivityTitle")
 		return _sensitivity_title
 
+var _sensitivity_dec_btn: BaseButton
+var sensitivity_dec_btn: BaseButton:
+	get:
+		if not _sensitivity_dec_btn: _sensitivity_dec_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SensitivityRow/SensitivityDecBtn")
+		return _sensitivity_dec_btn
+
+var _sensitivity_inc_btn: BaseButton
+var sensitivity_inc_btn: BaseButton:
+	get:
+		if not _sensitivity_inc_btn: _sensitivity_inc_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SensitivityRow/SensitivityIncBtn")
+		return _sensitivity_inc_btn
+
 var _master_vol_slider: Slider
 var master_vol_slider: Slider:
 	get:
-		if not _master_vol_slider: _master_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/MasterVolSlider")
+		if not _master_vol_slider:
+			_master_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/MasterVolRow/MasterVolSlider")
+			if not _master_vol_slider: _master_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/MasterVolSlider")
 		return _master_vol_slider
 
 var _master_vol_title: Label
@@ -213,10 +228,24 @@ var master_vol_title: Label:
 		if not _master_vol_title: _master_vol_title = get_node_or_null("SettingsLayer/SettingsDialog/VBox/MasterVolTitle")
 		return _master_vol_title
 
+var _master_vol_dec_btn: BaseButton
+var master_vol_dec_btn: BaseButton:
+	get:
+		if not _master_vol_dec_btn: _master_vol_dec_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/MasterVolRow/MasterVolDecBtn")
+		return _master_vol_dec_btn
+
+var _master_vol_inc_btn: BaseButton
+var master_vol_inc_btn: BaseButton:
+	get:
+		if not _master_vol_inc_btn: _master_vol_inc_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/MasterVolRow/MasterVolIncBtn")
+		return _master_vol_inc_btn
+
 var _bgm_vol_slider: Slider
 var bgm_vol_slider: Slider:
 	get:
-		if not _bgm_vol_slider: _bgm_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/BGMVolSlider")
+		if not _bgm_vol_slider:
+			_bgm_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/BGMVolRow/BGMVolSlider")
+			if not _bgm_vol_slider: _bgm_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/BGMVolSlider")
 		return _bgm_vol_slider
 
 var _bgm_vol_title: Label
@@ -225,10 +254,24 @@ var bgm_vol_title: Label:
 		if not _bgm_vol_title: _bgm_vol_title = get_node_or_null("SettingsLayer/SettingsDialog/VBox/BGMVolTitle")
 		return _bgm_vol_title
 
+var _bgm_vol_dec_btn: BaseButton
+var bgm_vol_dec_btn: BaseButton:
+	get:
+		if not _bgm_vol_dec_btn: _bgm_vol_dec_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/BGMVolRow/BGMVolDecBtn")
+		return _bgm_vol_dec_btn
+
+var _bgm_vol_inc_btn: BaseButton
+var bgm_vol_inc_btn: BaseButton:
+	get:
+		if not _bgm_vol_inc_btn: _bgm_vol_inc_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/BGMVolRow/BGMVolIncBtn")
+		return _bgm_vol_inc_btn
+
 var _sfx_vol_slider: Slider
 var sfx_vol_slider: Slider:
 	get:
-		if not _sfx_vol_slider: _sfx_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SFXVolSlider")
+		if not _sfx_vol_slider:
+			_sfx_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SFXVolRow/SFXVolSlider")
+			if not _sfx_vol_slider: _sfx_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SFXVolSlider")
 		return _sfx_vol_slider
 
 var _sfx_vol_title: Label
@@ -236,6 +279,18 @@ var sfx_vol_title: Label:
 	get:
 		if not _sfx_vol_title: _sfx_vol_title = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SFXVolTitle")
 		return _sfx_vol_title
+
+var _sfx_vol_dec_btn: BaseButton
+var sfx_vol_dec_btn: BaseButton:
+	get:
+		if not _sfx_vol_dec_btn: _sfx_vol_dec_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SFXVolRow/SFXVolDecBtn")
+		return _sfx_vol_dec_btn
+
+var _sfx_vol_inc_btn: BaseButton
+var sfx_vol_inc_btn: BaseButton:
+	get:
+		if not _sfx_vol_inc_btn: _sfx_vol_inc_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SFXVolRow/SFXVolIncBtn")
+		return _sfx_vol_inc_btn
 
 var _fullscreen_btn: BaseButton
 var fullscreen_btn: BaseButton:
@@ -272,43 +327,133 @@ func _ready() -> void:
 	if OS.has_feature("mobile") and help_label:
 		help_label.visible = false
 	
-	if victory_restart_btn: victory_restart_btn.pressed.connect(func(): AudioManager.play_sound("click"); restart_requested.emit())
-	if victory_menu_btn: victory_menu_btn.pressed.connect(func(): AudioManager.play_sound("click"); menu_requested.emit())
-	if defeat_restart_btn: defeat_restart_btn.pressed.connect(func(): AudioManager.play_sound("click"); restart_requested.emit())
-	if defeat_menu_btn: defeat_menu_btn.pressed.connect(func(): AudioManager.play_sound("click"); menu_requested.emit())
+	if victory_restart_btn and not victory_restart_btn.pressed.is_connected(_on_restart_clicked):
+		victory_restart_btn.pressed.connect(_on_restart_clicked)
+	if victory_menu_btn and not victory_menu_btn.pressed.is_connected(_on_menu_clicked):
+		victory_menu_btn.pressed.connect(_on_menu_clicked)
+	if defeat_restart_btn and not defeat_restart_btn.pressed.is_connected(_on_restart_clicked):
+		defeat_restart_btn.pressed.connect(_on_restart_clicked)
+	if defeat_menu_btn and not defeat_menu_btn.pressed.is_connected(_on_menu_clicked):
+		defeat_menu_btn.pressed.connect(_on_menu_clicked)
 	
-	if shop_btn: shop_btn.pressed.connect(_on_shop_pressed)
-	if settings_btn: settings_btn.pressed.connect(_on_settings_pressed)
-	if close_settings_btn: close_settings_btn.pressed.connect(_on_settings_close_pressed)
-	if fullscreen_btn: fullscreen_btn.pressed.connect(func(): AudioManager.play_sound("click"); GameSettings.toggle_fullscreen())
+	if shop_btn and not shop_btn.pressed.is_connected(_on_shop_pressed):
+		shop_btn.pressed.connect(_on_shop_pressed)
+	if settings_btn and not settings_btn.pressed.is_connected(_on_settings_pressed):
+		settings_btn.pressed.connect(_on_settings_pressed)
+	if close_settings_btn and not close_settings_btn.pressed.is_connected(_on_settings_close_pressed):
+		close_settings_btn.pressed.connect(_on_settings_close_pressed)
+	if fullscreen_btn and not fullscreen_btn.pressed.is_connected(_on_fullscreen_pressed):
+		fullscreen_btn.pressed.connect(_on_fullscreen_pressed)
 	
 	if armory_shop:
-		armory_shop.weapon_equipped.connect(_on_weapon_equipped_from_shop)
-		armory_shop.closed.connect(_on_modal_closed)
+		if not armory_shop.weapon_equipped.is_connected(_on_weapon_equipped_from_shop):
+			armory_shop.weapon_equipped.connect(_on_weapon_equipped_from_shop)
+		if not armory_shop.closed.is_connected(_on_modal_closed):
+			armory_shop.closed.connect(_on_modal_closed)
 	
 	_init_settings_ui()
 	update_credits(GameSession.credits)
 
-func _init_settings_ui() -> void:
+func _on_restart_clicked() -> void:
+	AudioManager.play_sound("click")
+	restart_requested.emit()
+
+func _on_menu_clicked() -> void:
+	AudioManager.play_sound("click")
+	menu_requested.emit()
+
+func _on_fullscreen_pressed() -> void:
+	AudioManager.play_sound("click")
+	GameSettings.toggle_fullscreen()
+
+func _sync_settings_from_game_settings() -> void:
 	if sensitivity_slider:
 		sensitivity_slider.value = GameSettings.get_aim_sensitivity()
-		sensitivity_slider.value_changed.connect(_on_sensitivity_changed)
 		_update_sensitivity_label(sensitivity_slider.value)
-		
 	if master_vol_slider:
 		master_vol_slider.value = GameSettings.get_master_volume()
-		master_vol_slider.value_changed.connect(_on_master_vol_changed)
 		_update_master_vol_label(master_vol_slider.value)
-		
 	if bgm_vol_slider:
 		bgm_vol_slider.value = GameSettings.get_bgm_volume()
-		bgm_vol_slider.value_changed.connect(_on_bgm_vol_changed)
 		_update_bgm_vol_label(bgm_vol_slider.value)
-		
 	if sfx_vol_slider:
 		sfx_vol_slider.value = GameSettings.get_sfx_volume()
-		sfx_vol_slider.value_changed.connect(_on_sfx_vol_changed)
 		_update_sfx_vol_label(sfx_vol_slider.value)
+
+func _step_sensitivity(step: float) -> void:
+	if sensitivity_slider:
+		var new_val := clampf(sensitivity_slider.value + step, sensitivity_slider.min_value, sensitivity_slider.max_value)
+		sensitivity_slider.value = new_val
+		GameSettings.set_aim_sensitivity(new_val)
+		_update_sensitivity_label(new_val)
+		AudioManager.play_sound("click")
+
+func _step_master_vol(step: float) -> void:
+	if master_vol_slider:
+		var new_val := clampf(master_vol_slider.value + step, master_vol_slider.min_value, master_vol_slider.max_value)
+		master_vol_slider.value = new_val
+		GameSettings.set_master_volume(new_val)
+		_update_master_vol_label(new_val)
+		AudioManager.play_sound("click")
+
+func _step_bgm_vol(step: float) -> void:
+	if bgm_vol_slider:
+		var new_val := clampf(bgm_vol_slider.value + step, bgm_vol_slider.min_value, bgm_vol_slider.max_value)
+		bgm_vol_slider.value = new_val
+		GameSettings.set_bgm_volume(new_val)
+		_update_bgm_vol_label(new_val)
+		AudioManager.play_sound("click")
+
+func _step_sfx_vol(step: float) -> void:
+	if sfx_vol_slider:
+		var new_val := clampf(sfx_vol_slider.value + step, sfx_vol_slider.min_value, sfx_vol_slider.max_value)
+		sfx_vol_slider.value = new_val
+		GameSettings.set_sfx_volume(new_val)
+		_update_sfx_vol_label(new_val)
+		AudioManager.play_sound("click")
+
+func _on_sens_dec_pressed() -> void: _step_sensitivity(-0.05)
+func _on_sens_inc_pressed() -> void: _step_sensitivity(0.05)
+
+func _on_master_dec_pressed() -> void: _step_master_vol(-0.05)
+func _on_master_inc_pressed() -> void: _step_master_vol(0.05)
+
+func _on_bgm_dec_pressed() -> void: _step_bgm_vol(-0.05)
+func _on_bgm_inc_pressed() -> void: _step_bgm_vol(0.05)
+
+func _on_sfx_dec_pressed() -> void: _step_sfx_vol(-0.05)
+func _on_sfx_inc_pressed() -> void: _step_sfx_vol(0.05)
+
+func _init_settings_ui() -> void:
+	_sync_settings_from_game_settings()
+	
+	if sensitivity_slider and not sensitivity_slider.value_changed.is_connected(_on_sensitivity_changed):
+		sensitivity_slider.value_changed.connect(_on_sensitivity_changed)
+	if sensitivity_dec_btn and not sensitivity_dec_btn.pressed.is_connected(_on_sens_dec_pressed):
+		sensitivity_dec_btn.pressed.connect(_on_sens_dec_pressed)
+	if sensitivity_inc_btn and not sensitivity_inc_btn.pressed.is_connected(_on_sens_inc_pressed):
+		sensitivity_inc_btn.pressed.connect(_on_sens_inc_pressed)
+		
+	if master_vol_slider and not master_vol_slider.value_changed.is_connected(_on_master_vol_changed):
+		master_vol_slider.value_changed.connect(_on_master_vol_changed)
+	if master_vol_dec_btn and not master_vol_dec_btn.pressed.is_connected(_on_master_dec_pressed):
+		master_vol_dec_btn.pressed.connect(_on_master_dec_pressed)
+	if master_vol_inc_btn and not master_vol_inc_btn.pressed.is_connected(_on_master_inc_pressed):
+		master_vol_inc_btn.pressed.connect(_on_master_inc_pressed)
+		
+	if bgm_vol_slider and not bgm_vol_slider.value_changed.is_connected(_on_bgm_vol_changed):
+		bgm_vol_slider.value_changed.connect(_on_bgm_vol_changed)
+	if bgm_vol_dec_btn and not bgm_vol_dec_btn.pressed.is_connected(_on_bgm_dec_pressed):
+		bgm_vol_dec_btn.pressed.connect(_on_bgm_dec_pressed)
+	if bgm_vol_inc_btn and not bgm_vol_inc_btn.pressed.is_connected(_on_bgm_inc_pressed):
+		bgm_vol_inc_btn.pressed.connect(_on_bgm_inc_pressed)
+		
+	if sfx_vol_slider and not sfx_vol_slider.value_changed.is_connected(_on_sfx_vol_changed):
+		sfx_vol_slider.value_changed.connect(_on_sfx_vol_changed)
+	if sfx_vol_dec_btn and not sfx_vol_dec_btn.pressed.is_connected(_on_sfx_dec_pressed):
+		sfx_vol_dec_btn.pressed.connect(_on_sfx_dec_pressed)
+	if sfx_vol_inc_btn and not sfx_vol_inc_btn.pressed.is_connected(_on_sfx_inc_pressed):
+		sfx_vol_inc_btn.pressed.connect(_on_sfx_inc_pressed)
 
 func _on_shop_pressed() -> void:
 	AudioManager.play_sound("click")
@@ -318,6 +463,7 @@ func _on_shop_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	AudioManager.play_sound("click")
+	_sync_settings_from_game_settings()
 	if settings_layer:
 		settings_layer.visible = true
 	elif settings_dialog:
@@ -386,6 +532,7 @@ func _update_bgm_vol_label(val: float) -> void:
 func _on_sfx_vol_changed(val: float) -> void:
 	GameSettings.set_sfx_volume(val)
 	_update_sfx_vol_label(val)
+	AudioManager.play_sound("click")
 
 func _update_sfx_vol_label(val: float) -> void:
 	if sfx_vol_title:

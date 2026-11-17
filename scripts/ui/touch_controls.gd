@@ -11,8 +11,8 @@ signal weapon_switch_requested()
 signal touch_detected()
 
 @export var joystick_radius: float = 70.0
-@export var look_sensitivity: float = 1.0
-@export var joystick_look_speed: float = 240.0
+@export var look_sensitivity: float = 1.5
+@export var joystick_look_speed: float = 850.0
 
 var joystick_touch_id: int = -1
 var look_touch_id: int = -1
@@ -117,8 +117,7 @@ func _process(delta: float) -> void:
 		return
 	# Left joystick controls direction: held deflection continuously pans the view/aim direction
 	if current_move_vector.length_squared() > 0.01:
-		var sens := look_sensitivity * GameSettings.get_aim_sensitivity()
-		var look_delta := current_move_vector * joystick_look_speed * sens * delta
+		var look_delta := current_move_vector * joystick_look_speed * delta
 		look_delta_produced.emit(look_delta)
 
 func _on_fire_down() -> void:
@@ -209,12 +208,11 @@ func _handle_drag(event: InputEventScreenDrag) -> void:
 	elif event.index == joystick_touch_id:
 		_update_joystick(event.position)
 	elif event.index == look_touch_id:
-		var sens := look_sensitivity * GameSettings.get_aim_sensitivity()
-		var rel := event.relative
+		var rel := event.relative * look_sensitivity
 		# Clamp drag relative to prevent sudden touch jumps
-		rel.x = clampf(rel.x, -50.0, 50.0)
-		rel.y = clampf(rel.y, -50.0, 50.0)
-		look_delta_produced.emit(rel * sens)
+		rel.x = clampf(rel.x, -80.0, 80.0)
+		rel.y = clampf(rel.y, -80.0, 80.0)
+		look_delta_produced.emit(rel)
 
 func _is_touch_on_buttons(pos: Vector2) -> bool:
 	var buttons = [fire_button, aim_button, reload_button, interact_button, switch_button]

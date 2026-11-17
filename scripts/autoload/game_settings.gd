@@ -29,8 +29,9 @@ static func get_master_volume() -> float:
 
 static func set_master_volume(val: float) -> void:
 	master_volume = clampf(val, 0.0, 1.0)
-	if AudioManager.instance and is_instance_valid(AudioManager.instance):
-		AudioManager.instance.set_master_volume(master_volume)
+	var am := AudioManager.ensure_instance()
+	if am and is_instance_valid(am):
+		am.set_master_volume(master_volume)
 	save_settings()
 
 static func get_bgm_volume() -> float:
@@ -39,8 +40,9 @@ static func get_bgm_volume() -> float:
 
 static func set_bgm_volume(val: float) -> void:
 	bgm_volume = clampf(val, 0.0, 1.0)
-	if AudioManager.instance and is_instance_valid(AudioManager.instance):
-		AudioManager.instance.set_bgm_volume(bgm_volume)
+	var am := AudioManager.ensure_instance()
+	if am and is_instance_valid(am):
+		am.set_bgm_volume(bgm_volume)
 	save_settings()
 
 static func get_sfx_volume() -> float:
@@ -49,8 +51,9 @@ static func get_sfx_volume() -> float:
 
 static func set_sfx_volume(val: float) -> void:
 	sfx_volume = clampf(val, 0.0, 1.0)
-	if AudioManager.instance and is_instance_valid(AudioManager.instance):
-		AudioManager.instance.set_sfx_volume(sfx_volume)
+	var am := AudioManager.ensure_instance()
+	if am and is_instance_valid(am):
+		am.set_sfx_volume(sfx_volume)
 	save_settings()
 
 static func _ensure_loaded() -> void:

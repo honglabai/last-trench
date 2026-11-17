@@ -35,8 +35,12 @@ static func ensure_instance(parent: Node = null) -> AudioManager:
 		return instance
 	var am := AudioManager.new()
 	am.name = "AudioManager"
-	if parent and is_instance_valid(parent):
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree and tree.root:
+		tree.root.call_deferred("add_child", am)
+	elif parent and is_instance_valid(parent):
 		parent.add_child(am)
+	instance = am
 	return am
 
 func _enter_tree() -> void:
@@ -50,6 +54,9 @@ func _ready() -> void:
 	master_vol_scale = GameSettings.get_master_volume()
 	bgm_vol_scale = GameSettings.get_bgm_volume()
 	sfx_vol_scale = GameSettings.get_sfx_volume()
+	
+	# Apply Master volume to AudioServer
+	_apply_master_volume()
 	
 	# 1. Setup BGM player
 	bgm_player = AudioStreamPlayer.new()
@@ -89,6 +96,14 @@ func _input(event: InputEvent) -> void:
 
 func set_master_volume(pct: float) -> void:
 	master_vol_scale = clampf(pct, 0.0, 1.0)
+	_apply_master_volume()
+
+func _apply_master_volume() -> void:
+	if master_vol_scale <= 0.005:
+		AudioServer.set_bus_mute(0, true)
+	else:
+		AudioServer.set_bus_mute(0, false)
+		AudioServer.set_bus_volume_db(0, linear_to_db(master_vol_scale))
 	_apply_bgm_volume()
 
 func set_bgm_volume(pct: float) -> void:
@@ -101,11 +116,10 @@ func set_sfx_volume(pct: float) -> void:
 func _apply_bgm_volume() -> void:
 	if not bgm_player:
 		return
-	var total_pct := master_vol_scale * bgm_vol_scale
-	if total_pct <= 0.005:
+	if bgm_vol_scale <= 0.005:
 		bgm_player.volume_db = -80.0
 	else:
-		bgm_player.volume_db = linear_to_db(total_pct) - 3.0
+		bgm_player.volume_db = linear_to_db(bgm_vol_scale) - 3.0
 
 func play_bgm() -> void:
 	if not streams.has("bgm") or not bgm_player:
@@ -124,8 +138,7 @@ func stop_bgm() -> void:
 func play_sfx(sound_name: String, pitch_range: float = 0.05, volume_db: float = 0.0) -> void:
 	if not streams.has(sound_name) or sfx_players.is_empty():
 		return
-	var total_pct := master_vol_scale * sfx_vol_scale
-	if total_pct <= 0.005:
+	if sfx_vol_scale <= 0.005:
 		return # Muted
 		
 	var stream: AudioStream = streams[sound_name]
@@ -133,7 +146,7 @@ func play_sfx(sound_name: String, pitch_range: float = 0.05, volume_db: float = 
 	current_sfx_index = (current_sfx_index + 1) % max_sfx_voices
 	
 	player.stream = stream
-	player.volume_db = volume_db + linear_to_db(total_pct)
+	player.volume_db = volume_db + linear_to_db(sfx_vol_scale)
 	if pitch_range > 0.0:
 		player.pitch_scale = randf_range(1.0 - pitch_range, 1.0 + pitch_range)
 	else:
@@ -152,9 +165,11 @@ func play_sfx_at(sound_name: String, world_pos: Vector3, listener_pos: Vector3, 
 
 # Static convenient helpers for anywhere in the codebase
 static func play_sound(sound_name: String, pitch_range: float = 0.05, volume_db: float = 0.0) -> void:
-	if instance and is_instance_valid(instance):
-		instance.play_sfx(sound_name, pitch_range, volume_db)
+	var am := ensure_instance()
+	if am and is_instance_valid(am):
+		am.play_sfx(sound_name, pitch_range, volume_db)
 
 static func play_sound_at(sound_name: String, world_pos: Vector3, listener_pos: Vector3, max_dist: float = 45.0) -> void:
-	if instance and is_instance_valid(instance):
-		instance.play_sfx_at(sound_name, world_pos, listener_pos, max_dist)
+	var am := ensure_instance()
+	if am and is_instance_valid(am):
+		am.play_sfx_at(sound_name, world_pos, listener_pos, max_dist)
