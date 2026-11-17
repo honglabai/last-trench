@@ -18,7 +18,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 500.0
 grow_vertical = 2
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="JoystickBase" type="TextureRect" parent="LeftZone"]
 layout_mode = 1
@@ -62,7 +62,7 @@ anchor_bottom = 1.0
 offset_left = -650.0
 grow_horizontal = 0
 grow_vertical = 2
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="ActionButtons" type="Control" parent="RightZone"]
 layout_mode = 1
@@ -71,7 +71,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="FireButton" type="Button" parent="RightZone/ActionButtons"]
 layout_mode = 1

@@ -161,15 +161,32 @@ func _ready() -> void:
 		game_session.session_defeat.connect(func(reason):
 			battle_hud.show_defeat(reason)
 		)
+		game_session.credits_changed.connect(func(credits):
+			battle_hud.update_credits(credits)
+		)
 		battle_hud.update_revives(game_session.revives_remaining)
+		battle_hud.update_credits(GameSession.credits)
 		
-	# 8. HUD Buttons
+	# 8. HUD Buttons & Modals
 	if battle_hud:
 		battle_hud.restart_requested.connect(func():
 			get_tree().reload_current_scene()
 		)
 		battle_hud.menu_requested.connect(func():
 			get_tree().change_scene_to_file("res://scenes/app/main_menu.tscn")
+		)
+		battle_hud.modal_visibility_changed.connect(func(is_open):
+			if touch_controls:
+				touch_controls.set_input_locked(is_open)
+			if is_open:
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			elif not OS.has_feature("mobile"):
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		)
+		battle_hud.weapon_changed.connect(func(w_id):
+			if player and player.weapon:
+				player.weapon.load_weapon_data(w_id, GameSession.get_weapon_level(w_id))
+				battle_hud.update_ammo(player.weapon.current_ammo, player.weapon.reserve_ammo)
 		)
 		
 	# 9. Start the run
@@ -265,7 +282,13 @@ func _on_interact_requested() -> void:
 				AudioManager.play_sound("reload", 0.05)
 
 func _on_bullet_fired(start_pos: Vector3, target_pos: Vector3) -> void:
-	_spawn_tracer(start_pos, target_pos, 220.0, Color(1.0, 0.88, 0.25))
+	var muzzle_start := start_pos
+	if player and player.camera_rig and player.camera_rig.camera:
+		var cam: Camera3D = player.camera_rig.camera
+		var basis_cam := cam.global_transform.basis
+		# Originating from authentic gun barrel point below eye level directly toward aim target
+		muzzle_start = cam.global_position - basis_cam.y * 0.12 - basis_cam.z * 0.25
+	_spawn_tracer(muzzle_start, target_pos, 220.0, Color(1.0, 0.88, 0.25))
 
 func _spawn_tracer(start_pos: Vector3, target_pos: Vector3, speed: float, color: Color, custom_radius: float = 0.035, custom_len: float = 0.9) -> void:
 	if not tracer_scene:

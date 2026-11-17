@@ -13,7 +13,9 @@ var muzzle_flash: Control:
 		if not _muzzle_flash: _muzzle_flash = get_node_or_null("RifleRect/MuzzleFlash")
 		return _muzzle_flash
 
-var rest_position: Vector2 = Vector2.ZERO
+# Center coordinate of the front sight post in the rifle texture (1280x720)
+const SIGHT_POST_TEX_COORD := Vector2(640.0, 322.0)
+
 var target_offset: Vector2 = Vector2.ZERO
 var current_offset: Vector2 = Vector2.ZERO
 var recoil_offset: Vector2 = Vector2.ZERO
@@ -24,16 +26,14 @@ var is_reloading: bool = false
 var flash_timer: float = 0.0
 
 func _ready() -> void:
-	if rifle_rect:
-		rest_position = rifle_rect.position
 	if muzzle_flash:
 		muzzle_flash.visible = false
 
 func _process(delta: float) -> void:
 	# 1. Subtle idle breathing sway
 	sway_time += delta * 2.0
-	var sway_x := sin(sway_time) * (0.8 if not is_aiming else 0.25)
-	var sway_y := cos(sway_time * 2.0) * (1.2 if not is_aiming else 0.35)
+	var sway_x := sin(sway_time) * (0.6 if not is_aiming else 0.15)
+	var sway_y := cos(sway_time * 2.0) * (0.8 if not is_aiming else 0.20)
 	
 	# 2. Recoil decay
 	recoil_offset = recoil_offset.lerp(Vector2.ZERO, 18.0 * delta)
@@ -41,18 +41,22 @@ func _process(delta: float) -> void:
 	# 3. Target offset (Iron Sights ADS or Ready or Reload)
 	var desired := Vector2.ZERO
 	if is_reloading:
-		desired = Vector2(0.0, 180.0) # Lower rifle out of sight during reload
+		desired = Vector2(0.0, 200.0) # Lower rifle out of sight during reload
 	elif is_aiming:
-		desired = Vector2(0.0, 0.0) # Full iron sight picture: 가늠좌/가늠쇠 aligned with crosshair
+		desired = Vector2(0.0, 0.0) # Full iron sight picture: front sight post perfectly on crosshair
 	else:
-		desired = Vector2(0.0, 32.0) # Lower slightly in ready stance for broad field awareness
+		desired = Vector2(0.0, 28.0) # Lower slightly in ready stance for broad situational awareness
 		
 	current_offset = current_offset.lerp(desired, 14.0 * delta)
 	
+	# 4. Dynamically anchor front sight post to screen center on all aspect ratios
 	if rifle_rect:
-		rifle_rect.position = rest_position + current_offset + recoil_offset + Vector2(sway_x, sway_y)
+		var vp_center: Vector2 = get_viewport_rect().size * 0.5
+		# When current_offset is (0, 0), sight post (640, 322) lands exactly on vp_center!
+		var base_pos: Vector2 = vp_center - SIGHT_POST_TEX_COORD
+		rifle_rect.global_position = base_pos + current_offset + recoil_offset + Vector2(sway_x, sway_y)
 		
-	# 4. Muzzle flash timer
+	# 5. Muzzle flash timer
 	if flash_timer > 0.0:
 		flash_timer -= delta
 		if flash_timer <= 0.0 and muzzle_flash:
@@ -61,7 +65,7 @@ func _process(delta: float) -> void:
 func on_fire() -> void:
 	# Recoil impulse
 	recoil_offset.y += 18.0 # Recoil kick
-	recoil_offset.x += randf_range(-1.5, 1.5)
+	recoil_offset.x += randf_range(-1.2, 1.2)
 	flash_timer = 0.05
 	if muzzle_flash:
 		muzzle_flash.visible = true
@@ -71,3 +75,7 @@ func set_aiming(aiming: bool) -> void:
 
 func set_reloading(reloading: bool) -> void:
 	is_reloading = reloading
+
+func set_weapon_texture(tex: Texture2D) -> void:
+	if rifle_rect and tex:
+		rifle_rect.texture = tex

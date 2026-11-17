@@ -22,6 +22,16 @@ var current_move_vector: Vector2 = Vector2.ZERO
 var is_aim_active: bool = false
 var can_interact: bool = false
 var _is_firing: bool = false
+var is_input_locked: bool = false
+
+func set_input_locked(locked: bool) -> void:
+	is_input_locked = locked
+	if locked:
+		_on_fire_up()
+		_reset_joystick()
+		fire_touch_id = -1
+		joystick_touch_id = -1
+		look_touch_id = -1
 
 var _joystick_base: Control
 var joystick_base: Control:
@@ -91,6 +101,8 @@ func _ready() -> void:
 		set_interact_available(false)
 
 func _process(delta: float) -> void:
+	if is_input_locked:
+		return
 	# Left joystick controls direction: held deflection continuously pans the view/aim direction
 	if current_move_vector.length_squared() > 0.01:
 		var sens := look_sensitivity * GameSettings.get_aim_sensitivity()
@@ -133,6 +145,8 @@ func _on_aim_pressed() -> void:
 		aim_button.modulate = Color(1.0, 0.8, 0.2) if is_aim_active else Color(1.0, 1.0, 1.0)
 
 func _input(event: InputEvent) -> void:
+	if is_input_locked:
+		return
 	if event is InputEventScreenTouch:
 		_handle_touch(event)
 	elif event is InputEventScreenDrag:

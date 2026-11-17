@@ -3,6 +3,8 @@ extends CanvasLayer
 
 signal restart_requested()
 signal menu_requested()
+signal modal_visibility_changed(is_open: bool)
+signal weapon_changed(weapon_id: String)
 
 var _player_hp_bar: ProgressBar
 var player_hp_bar: ProgressBar:
@@ -37,20 +39,42 @@ var base_hp_label: Label:
 var _wave_title_label: Label
 var wave_title_label: Label:
 	get:
-		if not _wave_title_label: _wave_title_label = get_node_or_null("TopCenter/VBox/WaveTitleLabel")
+		if not _wave_title_label:
+			_wave_title_label = get_node_or_null("TopRightTactical/VBox/WaveTitleLabel")
+			if not _wave_title_label: _wave_title_label = get_node_or_null("TopCenter/VBox/WaveTitleLabel")
 		return _wave_title_label
 
 var _wave_info_label: Label
 var wave_info_label: Label:
 	get:
-		if not _wave_info_label: _wave_info_label = get_node_or_null("TopCenter/VBox/WaveInfoLabel")
+		if not _wave_info_label:
+			_wave_info_label = get_node_or_null("TopRightTactical/VBox/WaveInfoLabel")
+			if not _wave_info_label: _wave_info_label = get_node_or_null("TopCenter/VBox/WaveInfoLabel")
 		return _wave_info_label
+
+var _credits_label: Label
+var credits_label: Label:
+	get:
+		if not _credits_label: _credits_label = get_node_or_null("TopRightTactical/VBox/CreditsLabel")
+		return _credits_label
+
+var _level_title_label: Label
+var level_title_label: Label:
+	get:
+		if not _level_title_label: _level_title_label = get_node_or_null("TopRightTactical/VBox/LevelTitle")
+		return _level_title_label
 
 var _ammo_label: Label
 var ammo_label: Label:
 	get:
 		if not _ammo_label: _ammo_label = get_node_or_null("BottomRight/VBox/AmmoLabel")
 		return _ammo_label
+
+var _ammo_bar: ProgressBar
+var ammo_bar: ProgressBar:
+	get:
+		if not _ammo_bar: _ammo_bar = get_node_or_null("BottomRight/VBox/AmmoBar")
+		return _ammo_bar
 
 var _reload_label: Label
 var reload_label: Label:
@@ -91,67 +115,133 @@ var defeat_panel: Control:
 var _defeat_reason_label: Label
 var defeat_reason_label: Label:
 	get:
-		if not _defeat_reason_label: _defeat_reason_label = get_node_or_null("Overlay/DefeatPanel/VBox/ReasonLabel")
+		if not _defeat_reason_label: _defeat_reason_label = get_node_or_null("Overlay/DefeatPanel/VBox/Reason")
 		return _defeat_reason_label
 
 var _victory_restart_btn: BaseButton
 var victory_restart_btn: BaseButton:
 	get:
-		if not _victory_restart_btn: _victory_restart_btn = get_node_or_null("Overlay/VictoryPanel/VBox/RestartBtn")
+		if not _victory_restart_btn: _victory_restart_btn = get_node_or_null("Overlay/VictoryPanel/VBox/HBox/RestartBtn")
 		return _victory_restart_btn
 
 var _victory_menu_btn: BaseButton
 var victory_menu_btn: BaseButton:
 	get:
-		if not _victory_menu_btn: _victory_menu_btn = get_node_or_null("Overlay/VictoryPanel/VBox/MenuBtn")
+		if not _victory_menu_btn: _victory_menu_btn = get_node_or_null("Overlay/VictoryPanel/VBox/HBox/MenuBtn")
 		return _victory_menu_btn
 
 var _defeat_restart_btn: BaseButton
 var defeat_restart_btn: BaseButton:
 	get:
-		if not _defeat_restart_btn: _defeat_restart_btn = get_node_or_null("Overlay/DefeatPanel/VBox/RestartBtn")
+		if not _defeat_restart_btn: _defeat_restart_btn = get_node_or_null("Overlay/DefeatPanel/VBox/HBox/RestartBtn")
 		return _defeat_restart_btn
 
 var _defeat_menu_btn: BaseButton
 var defeat_menu_btn: BaseButton:
 	get:
-		if not _defeat_menu_btn: _defeat_menu_btn = get_node_or_null("Overlay/DefeatPanel/VBox/MenuBtn")
+		if not _defeat_menu_btn: _defeat_menu_btn = get_node_or_null("Overlay/DefeatPanel/VBox/HBox/MenuBtn")
 		return _defeat_menu_btn
+
+var _shop_btn: BaseButton
+var shop_btn: BaseButton:
+	get:
+		if not _shop_btn: _shop_btn = get_node_or_null("TopButtons/ShopBtn")
+		return _shop_btn
 
 var _settings_btn: BaseButton
 var settings_btn: BaseButton:
 	get:
-		if not _settings_btn: _settings_btn = get_node_or_null("SettingsBtn")
+		if not _settings_btn:
+			_settings_btn = get_node_or_null("TopButtons/SettingsBtn")
+			if not _settings_btn: _settings_btn = get_node_or_null("SettingsBtn")
 		return _settings_btn
+
+var _settings_layer: CanvasLayer
+var settings_layer: CanvasLayer:
+	get:
+		if not _settings_layer: _settings_layer = get_node_or_null("SettingsLayer")
+		return _settings_layer
 
 var _settings_dialog: Control
 var settings_dialog: Control:
 	get:
-		if not _settings_dialog: _settings_dialog = get_node_or_null("Overlay/SettingsDialog")
+		if not _settings_dialog:
+			_settings_dialog = get_node_or_null("SettingsLayer/SettingsDialog")
+			if not _settings_dialog: _settings_dialog = get_node_or_null("Overlay/SettingsDialog")
 		return _settings_dialog
+
+var _armory_shop: ArmoryShop
+var armory_shop: ArmoryShop:
+	get:
+		if not _armory_shop: _armory_shop = get_node_or_null("ArmoryShop")
+		return _armory_shop
 
 var _sensitivity_slider: Slider
 var sensitivity_slider: Slider:
 	get:
-		if not _sensitivity_slider: _sensitivity_slider = get_node_or_null("Overlay/SettingsDialog/VBox/SensitivitySlider")
+		if not _sensitivity_slider:
+			_sensitivity_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SensitivitySlider")
+			if not _sensitivity_slider: _sensitivity_slider = get_node_or_null("Overlay/SettingsDialog/VBox/SensitivitySlider")
 		return _sensitivity_slider
 
 var _sensitivity_title: Label
 var sensitivity_title: Label:
 	get:
-		if not _sensitivity_title: _sensitivity_title = get_node_or_null("Overlay/SettingsDialog/VBox/SensitivityTitle")
+		if not _sensitivity_title:
+			_sensitivity_title = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SensitivityTitle")
+			if not _sensitivity_title: _sensitivity_title = get_node_or_null("Overlay/SettingsDialog/VBox/SensitivityTitle")
 		return _sensitivity_title
+
+var _master_vol_slider: Slider
+var master_vol_slider: Slider:
+	get:
+		if not _master_vol_slider: _master_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/MasterVolSlider")
+		return _master_vol_slider
+
+var _master_vol_title: Label
+var master_vol_title: Label:
+	get:
+		if not _master_vol_title: _master_vol_title = get_node_or_null("SettingsLayer/SettingsDialog/VBox/MasterVolTitle")
+		return _master_vol_title
+
+var _bgm_vol_slider: Slider
+var bgm_vol_slider: Slider:
+	get:
+		if not _bgm_vol_slider: _bgm_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/BGMVolSlider")
+		return _bgm_vol_slider
+
+var _bgm_vol_title: Label
+var bgm_vol_title: Label:
+	get:
+		if not _bgm_vol_title: _bgm_vol_title = get_node_or_null("SettingsLayer/SettingsDialog/VBox/BGMVolTitle")
+		return _bgm_vol_title
+
+var _sfx_vol_slider: Slider
+var sfx_vol_slider: Slider:
+	get:
+		if not _sfx_vol_slider: _sfx_vol_slider = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SFXVolSlider")
+		return _sfx_vol_slider
+
+var _sfx_vol_title: Label
+var sfx_vol_title: Label:
+	get:
+		if not _sfx_vol_title: _sfx_vol_title = get_node_or_null("SettingsLayer/SettingsDialog/VBox/SFXVolTitle")
+		return _sfx_vol_title
 
 var _fullscreen_btn: BaseButton
 var fullscreen_btn: BaseButton:
 	get:
-		if not _fullscreen_btn: _fullscreen_btn = get_node_or_null("Overlay/SettingsDialog/VBox/FullscreenBtn")
+		if not _fullscreen_btn:
+			_fullscreen_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/FullscreenBtn")
+			if not _fullscreen_btn: _fullscreen_btn = get_node_or_null("Overlay/SettingsDialog/VBox/FullscreenBtn")
 		return _fullscreen_btn
 
 var _close_settings_btn: BaseButton
 var close_settings_btn: BaseButton:
 	get:
-		if not _close_settings_btn: _close_settings_btn = get_node_or_null("Overlay/SettingsDialog/VBox/CloseSettingsBtn")
+		if not _close_settings_btn:
+			_close_settings_btn = get_node_or_null("SettingsLayer/SettingsDialog/VBox/CloseSettingsBtn")
+			if not _close_settings_btn: _close_settings_btn = get_node_or_null("Overlay/SettingsDialog/VBox/CloseSettingsBtn")
 		return _close_settings_btn
 
 var _viewmodel: FPSViewModel
@@ -164,8 +254,12 @@ func _ready() -> void:
 	if victory_panel: victory_panel.visible = false
 	if defeat_panel: defeat_panel.visible = false
 	if reload_label: reload_label.visible = false
-	if settings_dialog: settings_dialog.visible = false
-	if viewmodel: viewmodel.visible = true
+	if settings_layer: settings_layer.visible = false
+	if armory_shop: armory_shop.visible = false
+	if viewmodel:
+		viewmodel.visible = true
+		_update_viewmodel_texture(GameSession.equipped_weapon_id)
+		
 	if OS.has_feature("mobile") and help_label:
 		help_label.visible = false
 	
@@ -173,26 +267,86 @@ func _ready() -> void:
 	if victory_menu_btn: victory_menu_btn.pressed.connect(func(): AudioManager.play_sound("click"); menu_requested.emit())
 	if defeat_restart_btn: defeat_restart_btn.pressed.connect(func(): AudioManager.play_sound("click"); restart_requested.emit())
 	if defeat_menu_btn: defeat_menu_btn.pressed.connect(func(): AudioManager.play_sound("click"); menu_requested.emit())
+	
+	if shop_btn: shop_btn.pressed.connect(_on_shop_pressed)
 	if settings_btn: settings_btn.pressed.connect(_on_settings_pressed)
 	if close_settings_btn: close_settings_btn.pressed.connect(_on_settings_close_pressed)
 	if fullscreen_btn: fullscreen_btn.pressed.connect(func(): AudioManager.play_sound("click"); GameSettings.toggle_fullscreen())
+	
+	if armory_shop:
+		armory_shop.weapon_equipped.connect(_on_weapon_equipped_from_shop)
+		armory_shop.closed.connect(_on_modal_closed)
+	
+	_init_settings_ui()
+	update_credits(GameSession.credits)
+
+func _init_settings_ui() -> void:
 	if sensitivity_slider:
 		sensitivity_slider.value = GameSettings.get_aim_sensitivity()
 		sensitivity_slider.value_changed.connect(_on_sensitivity_changed)
 		_update_sensitivity_label(sensitivity_slider.value)
+		
+	if master_vol_slider:
+		master_vol_slider.value = GameSettings.get_master_volume()
+		master_vol_slider.value_changed.connect(_on_master_vol_changed)
+		_update_master_vol_label(master_vol_slider.value)
+		
+	if bgm_vol_slider:
+		bgm_vol_slider.value = GameSettings.get_bgm_volume()
+		bgm_vol_slider.value_changed.connect(_on_bgm_vol_changed)
+		_update_bgm_vol_label(bgm_vol_slider.value)
+		
+	if sfx_vol_slider:
+		sfx_vol_slider.value = GameSettings.get_sfx_volume()
+		sfx_vol_slider.value_changed.connect(_on_sfx_vol_changed)
+		_update_sfx_vol_label(sfx_vol_slider.value)
+
+func _on_shop_pressed() -> void:
+	AudioManager.play_sound("click")
+	if armory_shop:
+		armory_shop.open_shop()
+		modal_visibility_changed.emit(true)
 
 func _on_settings_pressed() -> void:
 	AudioManager.play_sound("click")
-	if settings_dialog:
-		if sensitivity_slider:
-			sensitivity_slider.value = GameSettings.get_aim_sensitivity()
-			_update_sensitivity_label(sensitivity_slider.value)
+	if settings_layer:
+		settings_layer.visible = true
+	elif settings_dialog:
 		settings_dialog.visible = true
+	modal_visibility_changed.emit(true)
 
 func _on_settings_close_pressed() -> void:
 	AudioManager.play_sound("click")
-	if settings_dialog:
+	if settings_layer:
+		settings_layer.visible = false
+	elif settings_dialog:
 		settings_dialog.visible = false
+	_on_modal_closed()
+
+func _on_modal_closed() -> void:
+	modal_visibility_changed.emit(false)
+
+func _on_weapon_equipped_from_shop(w_id: String) -> void:
+	_update_viewmodel_texture(w_id)
+	weapon_changed.emit(w_id)
+
+func _update_viewmodel_texture(w_id: String) -> void:
+	if not viewmodel:
+		return
+	var path := "res://data/weapons.json"
+	if not FileAccess.file_exists(path):
+		return
+	var file := FileAccess.open(path, FileAccess.READ)
+	if not file:
+		return
+	var test_json := JSON.new()
+	if test_json.parse(file.get_as_text()) == OK:
+		var data: Dictionary = test_json.data
+		if data.has(w_id):
+			var tex_path: String = data[w_id].get("texture", "res://assets/textures/tex_fps_iron_sights.png")
+			if ResourceLoader.exists(tex_path):
+				var tex = load(tex_path)
+				viewmodel.set_weapon_texture(tex)
 
 func _on_sensitivity_changed(val: float) -> void:
 	GameSettings.set_aim_sensitivity(val)
@@ -201,8 +355,32 @@ func _on_sensitivity_changed(val: float) -> void:
 func _update_sensitivity_label(val: float) -> void:
 	if sensitivity_title:
 		var pct := int(val * 100.0)
-		var desc := "매우 안정적 (권장)" if pct <= 65 else ("표준 속도" if pct <= 100 else "고속 회전")
+		var desc := "안정적 (권장)" if pct <= 65 else ("표준 감도" if pct <= 100 else "고속 회전")
 		sensitivity_title.text = "과녁 조준 감도 (Aim Sensitivity): %d%% [%s]" % [pct, desc]
+
+func _on_master_vol_changed(val: float) -> void:
+	GameSettings.set_master_volume(val)
+	_update_master_vol_label(val)
+
+func _update_master_vol_label(val: float) -> void:
+	if master_vol_title:
+		master_vol_title.text = "전체 음량 (Master Volume): %d%%" % int(val * 100.0)
+
+func _on_bgm_vol_changed(val: float) -> void:
+	GameSettings.set_bgm_volume(val)
+	_update_bgm_vol_label(val)
+
+func _update_bgm_vol_label(val: float) -> void:
+	if bgm_vol_title:
+		bgm_vol_title.text = "배경음악 음량 (BGM Volume): %d%%" % int(val * 100.0)
+
+func _on_sfx_vol_changed(val: float) -> void:
+	GameSettings.set_sfx_volume(val)
+	_update_sfx_vol_label(val)
+
+func _update_sfx_vol_label(val: float) -> void:
+	if sfx_vol_title:
+		sfx_vol_title.text = "효과음 음량 (SFX Volume): %d%%" % int(val * 100.0)
 
 func update_player_health(current: float, max_val: float) -> void:
 	if player_hp_bar:
@@ -211,10 +389,6 @@ func update_player_health(current: float, max_val: float) -> void:
 	if player_hp_label:
 		player_hp_label.text = "병사 HP: %d / %d" % [int(current), int(max_val)]
 
-func update_revives(left: int, max_revives: int = 1) -> void:
-	if revives_label:
-		revives_label.text = "즉시 부활: %d / %d" % [left, max_revives]
-
 func update_base_health(current: float, max_val: float) -> void:
 	if base_hp_bar:
 		base_hp_bar.max_value = max_val
@@ -222,19 +396,16 @@ func update_base_health(current: float, max_val: float) -> void:
 	if base_hp_label:
 		base_hp_label.text = "참호 거점: %d / %d" % [int(current), int(max_val)]
 
-func update_wave(wave_num: int, total_waves: int, info_str: String = "") -> void:
-	if wave_title_label:
-		wave_title_label.text = "WAVE %d / %d" % [wave_num, total_waves]
-	if wave_info_label:
-		wave_info_label.text = info_str
+func update_revives(revives_left: int) -> void:
+	if revives_label:
+		revives_label.text = "즉시 부활: %d / 1" % revives_left
 
 func update_ammo(current: int, reserve: int) -> void:
 	if ammo_label:
 		ammo_label.text = "%d / %d" % [current, reserve]
-
-func trigger_weapon_fire() -> void:
-	if viewmodel:
-		viewmodel.on_fire()
+	if ammo_bar:
+		ammo_bar.max_value = 30 # standard scale
+		ammo_bar.value = current
 
 func set_reload_indicator(is_reloading: bool) -> void:
 	if reload_label:
@@ -242,32 +413,46 @@ func set_reload_indicator(is_reloading: bool) -> void:
 	if viewmodel:
 		viewmodel.set_reloading(is_reloading)
 
+func trigger_weapon_fire() -> void:
+	if viewmodel:
+		viewmodel.on_fire()
+
+func update_wave(current_wave: int, max_waves: int, info_text: String = "") -> void:
+	if wave_title_label:
+		wave_title_label.text = "WAVE %02d / %02d" % [current_wave, max_waves]
+	if wave_info_label:
+		wave_info_label.text = info_text
+	if level_title_label:
+		level_title_label.text = "LEVEL %02d" % current_wave
+
+func update_credits(amount: int) -> void:
+	if credits_label:
+		credits_label.text = "전공 점수: %d P" % amount
+
 func set_crosshair_aim(is_aiming: bool) -> void:
 	if crosshair_ring:
-		if is_aiming:
-			crosshair_ring.scale = Vector2(0.5, 0.5)
-			crosshair_ring.modulate = Color(0.2, 1.0, 0.4)
-		else:
-			crosshair_ring.scale = Vector2(1.0, 1.0)
-			crosshair_ring.modulate = Color(1.0, 1.0, 1.0)
+		var target_scale := Vector2(0.55, 0.55) if is_aiming else Vector2(1.0, 1.0)
+		var target_mod := Color(0.2, 0.95, 1.0, 0.95) if is_aiming else Color(1.0, 1.0, 1.0, 0.8)
+		crosshair_ring.scale = target_scale
+		crosshair_ring.modulate = target_mod
+	if crosshair_dot:
+		crosshair_dot.color = Color(1.0, 0.25, 0.25) if is_aiming else Color(1.0, 1.0, 1.0)
 	if viewmodel:
 		viewmodel.set_aiming(is_aiming)
 
 func show_victory() -> void:
-	if viewmodel:
-		viewmodel.visible = false
 	if victory_panel:
 		victory_panel.visible = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func show_defeat(reason: String) -> void:
-	if viewmodel:
-		viewmodel.visible = false
 	if defeat_panel:
 		defeat_panel.visible = true
-	if defeat_reason_label:
-		if reason == "BASE_DESTROYED":
-			defeat_reason_label.text = "참호 거점이 파괴되었습니다!"
-		elif reason == "PLAYER_DEAD":
-			defeat_reason_label.text = "병사가 전사하였습니다!"
-		else:
-			defeat_reason_label.text = "작전 실패: " + reason
+		if defeat_reason_label:
+			if reason == "BASE_DESTROYED":
+				defeat_reason_label.text = "참호 방어선이 완전히 함락되었습니다."
+			elif reason == "PLAYER_DEAD":
+				defeat_reason_label.text = "아군 병사가 전사하였습니다."
+			else:
+				defeat_reason_label.text = "작전 실패: %s" % reason
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

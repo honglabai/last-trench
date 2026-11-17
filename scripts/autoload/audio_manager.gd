@@ -12,6 +12,10 @@ var streams: Dictionary = {}
 var is_bgm_playing: bool = false
 var _audio_unlocked: bool = false
 
+var master_vol_scale: float = 0.85
+var bgm_vol_scale: float = 0.70
+var sfx_vol_scale: float = 0.85
+
 const AUDIO_DIR := "res://assets/audio/"
 const SOUND_FILES := {
 	"bgm": "bgm_battlefield.wav",
@@ -42,11 +46,17 @@ func _ready() -> void:
 	instance = self
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
+	# Load volume values from GameSettings
+	master_vol_scale = GameSettings.get_master_volume()
+	bgm_vol_scale = GameSettings.get_bgm_volume()
+	sfx_vol_scale = GameSettings.get_sfx_volume()
+	
 	# 1. Setup BGM player
 	bgm_player = AudioStreamPlayer.new()
 	bgm_player.name = "BGMPlayer"
 	bgm_player.bus = "Master"
 	add_child(bgm_player)
+	_apply_bgm_volume()
 	
 	# 2. Setup SFX polyphonic voice pool
 	for i in range(max_sfx_voices):
@@ -77,12 +87,32 @@ func _input(event: InputEvent) -> void:
 			if not is_bgm_playing:
 				play_bgm()
 
-func play_bgm(volume_db: float = -4.0) -> void:
+func set_master_volume(pct: float) -> void:
+	master_vol_scale = clampf(pct, 0.0, 1.0)
+	_apply_bgm_volume()
+
+func set_bgm_volume(pct: float) -> void:
+	bgm_vol_scale = clampf(pct, 0.0, 1.0)
+	_apply_bgm_volume()
+
+func set_sfx_volume(pct: float) -> void:
+	sfx_vol_scale = clampf(pct, 0.0, 1.0)
+
+func _apply_bgm_volume() -> void:
+	if not bgm_player:
+		return
+	var total_pct := master_vol_scale * bgm_vol_scale
+	if total_pct <= 0.005:
+		bgm_player.volume_db = -80.0
+	else:
+		bgm_player.volume_db = linear_to_db(total_pct) - 3.0
+
+func play_bgm() -> void:
 	if not streams.has("bgm") or not bgm_player:
 		return
 	if not bgm_player.playing:
 		bgm_player.stream = streams["bgm"]
-		bgm_player.volume_db = volume_db
+		_apply_bgm_volume()
 		bgm_player.play()
 		is_bgm_playing = true
 
@@ -94,13 +124,16 @@ func stop_bgm() -> void:
 func play_sfx(sound_name: String, pitch_range: float = 0.05, volume_db: float = 0.0) -> void:
 	if not streams.has(sound_name) or sfx_players.is_empty():
 		return
+	var total_pct := master_vol_scale * sfx_vol_scale
+	if total_pct <= 0.005:
+		return # Muted
 		
 	var stream: AudioStream = streams[sound_name]
 	var player := sfx_players[current_sfx_index]
 	current_sfx_index = (current_sfx_index + 1) % max_sfx_voices
 	
 	player.stream = stream
-	player.volume_db = volume_db
+	player.volume_db = volume_db + linear_to_db(total_pct)
 	if pitch_range > 0.0:
 		player.pitch_scale = randf_range(1.0 - pitch_range, 1.0 + pitch_range)
 	else:

@@ -1,13 +1,128 @@
 {
   "rifle_basic": {
-    "name": "Standard Assault Rifle",
+    "name": "K2C1 돌격소총",
+    "country": "대한민국",
+    "type": "돌격소총 (Assault Rifle)",
+    "description": "대한민국 국군 제식 소총. 피카티니 레일과 균형 잡힌 연사력으로 전천후 교전에 최적화되었습니다.",
+    "price": 0,
     "damage": 25.0,
     "fire_rate": 0.12,
     "magazine_size": 30,
     "max_reserve_ammo": 180,
     "reload_time": 1.8,
-    "range": 80.0,
-    "spread_normal": 0.02,
-    "spread_aim": 0.005
+    "range": 90.0,
+    "upgrade_per_level": {
+      "damage": 5.0,
+      "magazine_size": 5,
+      "reload_time": -0.15,
+      "fire_rate": -0.005,
+      "cost_multiplier": 250
+    },
+    "texture": "res://assets/textures/tex_fps_iron_sights.png"
+  },
+  "k2c1_rifle": {
+    "name": "K2C1 돌격소총",
+    "country": "대한민국",
+    "type": "제식 돌격소총 (5.56mm)",
+    "description": "대한민국 육군 주력 제식 소총. 높은 신뢰성과 균형 잡힌 사격 안정성을 제공합니다.",
+    "price": 0,
+    "damage": 25.0,
+    "fire_rate": 0.12,
+    "magazine_size": 30,
+    "max_reserve_ammo": 180,
+    "reload_time": 1.8,
+    "range": 90.0,
+    "upgrade_per_level": {
+      "damage": 5.0,
+      "magazine_size": 5,
+      "reload_time": -0.15,
+      "fire_rate": -0.005,
+      "cost_multiplier": 250
+    },
+    "texture": "res://assets/textures/tex_fps_iron_sights.png"
+  },
+  "m4a1_carbine": {
+    "name": "M4A1 카빈",
+    "country": "미국",
+    "type": "특수작전 카빈 (5.56mm)",
+    "description": "미 특수작전사령부(SOCOM) 및 전군 표준 카빈. 민첩한 기동성과 빠른 연사력, 신속 재장전을 제공합니다.",
+    "price": 500,
+    "damage": 28.0,
+    "fire_rate": 0.10,
+    "magazine_size": 30,
+    "max_reserve_ammo": 180,
+    "reload_time": 1.5,
+    "range": 85.0,
+    "upgrade_per_level": {
+      "damage": 6.0,
+      "magazine_size": 6,
+      "reload_time": -0.12,
+      "fire_rate": -0.006,
+      "cost_multiplier": 350
+    },
+    "texture": "res://assets/textures/tex_fps_m4a1.png"
+  },
+  "hk416_elite": {
+    "name": "HK416 정예 돌격소총",
+    "country": "독일",
+    "type": "프리미엄 소총 (5.56mm)",
+    "description": "독일 H&K사 제작. 가스 피스톤 시스템으로 진흙과 먼지 속에서도 극상의 집탄율과 신뢰성을 자랑합니다.",
+    "price": 1200,
+    "damage": 36.0,
+    "fire_rate": 0.095,
+    "magazine_size": 35,
+    "max_reserve_ammo": 210,
+    "reload_time": 1.7,
+    "range": 100.0,
+    "upgrade_per_level": {
+      "damage": 8.0,
+      "magazine_size": 5,
+      "reload_time": -0.12,
+      "fire_rate": -0.005,
+      "cost_multiplier": 500
+    },
+    "texture": "res://assets/textures/tex_fps_hk416.png"
+  },
+  "scar_h_battle": {
+    "name": "FN SCAR-H",
+    "country": "벨기에",
+    "type": "중(重)전투소총 (7.62mm)",
+    "description": "7.62x51mm 대구경 탄약 운용. 강력한 탄도 파괴력으로 방탄 장갑 보병과 적 드론을 분쇄합니다.",
+    "price": 2200,
+    "damage": 55.0,
+    "fire_rate": 0.15,
+    "magazine_size": 20,
+    "max_reserve_ammo": 120,
+    "reload_time": 2.1,
+    "range": 110.0,
+    "upgrade_per_level": {
+      "damage": 12.0,
+      "magazine_size": 4,
+      "reload_time": -0.15,
+      "fire_rate": -0.008,
+      "cost_multiplier": 700
+    },
+    "texture": "res://assets/textures/tex_fps_scar_h.png"
+  },
+  "k14_sniper": {
+    "name": "K14 정밀 저격총",
+    "country": "대한민국",
+    "type": "대인/대물 저격소총 (.308 Win)",
+    "description": "대한민국 특수부대용 초정밀 볼트액션 저격총. 초원거리 적을 일격필살로 제압하는 최고 수준의 관통 파괴력.",
+    "price": 3500,
+    "damage": 135.0,
+    "fire_rate": 0.55,
+    "magazine_size": 10,
+    "max_reserve_ammo": 60,
+    "reload_time": 2.4,
+    "range": 150.0,
+    "upgrade_per_level": {
+      "damage": 30.0,
+      "magazine_size": 2,
+      "reload_time": -0.20,
+      "fire_rate": -0.025,
+      "cost_multiplier": 1000
+    },
+    "texture": "res://assets/textures/tex_fps_k14.png"
   }
 }

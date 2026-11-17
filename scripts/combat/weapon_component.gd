@@ -16,18 +16,23 @@ signal bullet_fired(origin: Vector3, target_point: Vector3)
 @export var reload_time: float = 1.8
 @export var range_distance: float = 80.0
 
+var weapon_level: int = 1
 var current_ammo: int = 30
 var reserve_ammo: int = 120
 var is_reloading: bool = false
 var time_since_last_shot: float = 999.0
 var reload_timer: float = 0.0
 
-@onready var muzzle: Marker3D = $Muzzle
+@onready var muzzle: Marker3D = get_node_or_null("Muzzle")
 
 func _ready() -> void:
 	load_weapon_data()
 
-func load_weapon_data() -> void:
+func load_weapon_data(target_id: String = "", level: int = 1) -> void:
+	if not target_id.is_empty():
+		weapon_id = target_id
+	weapon_level = maxi(1, level)
+	
 	var path := "res://data/weapons.json"
 	if not FileAccess.file_exists(path):
 		return
@@ -42,12 +47,23 @@ func load_weapon_data() -> void:
 	var data: Dictionary = test_json.data
 	if data.has(weapon_id):
 		var w: Dictionary = data[weapon_id]
-		damage = float(w.get("damage", damage))
-		fire_rate = float(w.get("fire_rate", fire_rate))
-		magazine_size = int(w.get("magazine_size", magazine_size))
-		max_reserve_ammo = int(w.get("max_reserve_ammo", max_reserve_ammo))
-		reload_time = float(w.get("reload_time", reload_time))
-		range_distance = float(w.get("range", range_distance))
+		var base_dmg: float = float(w.get("damage", 25.0))
+		var base_fr: float = float(w.get("fire_rate", 0.12))
+		var base_mag: int = int(w.get("magazine_size", 30))
+		var base_res: int = int(w.get("max_reserve_ammo", 180))
+		var base_rel: float = float(w.get("reload_time", 1.8))
+		var base_rng: float = float(w.get("range", 80.0))
+		
+		var up: Dictionary = w.get("upgrade_per_level", {})
+		var lvl_step: int = weapon_level - 1
+		
+		damage = base_dmg + float(up.get("damage", 5.0)) * lvl_step
+		fire_rate = maxf(0.05, base_fr + float(up.get("fire_rate", -0.005)) * lvl_step)
+		magazine_size = base_mag + int(up.get("magazine_size", 5)) * lvl_step
+		max_reserve_ammo = base_res + int(up.get("magazine_size", 5)) * lvl_step * 3
+		reload_time = maxf(0.8, base_rel + float(up.get("reload_time", -0.12)) * lvl_step)
+		range_distance = base_rng
+		
 		current_ammo = magazine_size
 		reserve_ammo = max_reserve_ammo
 
@@ -108,26 +124,20 @@ func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpa
 		bullet_fired.emit(origin, target_pos)
 	else:
 		bullet_fired.emit(origin, origin + direction.normalized() * range_distance)
-			
+		
 	if current_ammo == 0:
 		ammo_depleted.emit()
 		
 	return true
 
-func _apply_hit(collider: Object, point: Vector3, normal: Vector3) -> void:
-	if not collider:
-		return
-	AudioManager.play_sound("hit_enemy", 0.03, -1.0)
-	if collider.has_method("apply_damage"):
-		collider.apply_damage(damage)
-	elif collider is Node:
-		var dmg_comp := (collider as Node).get_node_or_null("DamageableComponent") as DamageableComponent
-		if dmg_comp:
-			dmg_comp.apply_damage(damage)
-
 func start_reload() -> bool:
-	if is_reloading or current_ammo >= magazine_size or reserve_ammo <= 0:
+	if is_reloading:
 		return false
+	if current_ammo == magazine_size:
+		return false
+	if reserve_ammo <= 0:
+		return false
+		
 	is_reloading = true
 	reload_timer = 0.0
 	AudioManager.play_sound("reload", 0.02, 0.0)
@@ -135,10 +145,23 @@ func start_reload() -> bool:
 	return true
 
 func finish_reload() -> void:
-	var needed := magazine_size - current_ammo
-	var reload_amount := mini(needed, reserve_ammo)
+	is_reloading = false
+	var needed: int = magazine_size - current_ammo
+	var reload_amount: int = mini(needed, reserve_ammo)
 	current_ammo += reload_amount
 	reserve_ammo -= reload_amount
-	is_reloading = false
-	reload_timer = 0.0
 	reload_completed.emit(current_ammo, reserve_ammo)
+
+func _apply_hit(collider: Object, _hit_point: Vector3, _hit_normal: Vector3) -> void:
+	if not collider:
+		return
+		
+	AudioManager.play_sound("hit_enemy", 0.03, -1.0)
+	if collider.has_method("apply_damage"):
+		collider.apply_damage(damage)
+	elif collider.has_method("take_damage"):
+		collider.take_damage(damage)
+	elif collider is Node:
+		var dmg_comp := (collider as Node).get_node_or_null("DamageableComponent") as DamageableComponent
+		if dmg_comp:
+			dmg_comp.apply_damage(damage)
