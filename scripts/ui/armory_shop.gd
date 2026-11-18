@@ -74,7 +74,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			refresh_shop_ui()
 			get_viewport().set_input_as_handled()
 			return
-		elif event.keycode >= KEY_1 and event.keycode <= KEY_7:
+		elif event.keycode >= KEY_1 and event.keycode <= KEY_9:
 			var slot_idx: int = event.keycode - KEY_1
 			if slot_idx >= 0 and slot_idx < WEAPON_IDS.size():
 				var target_w_id: String = WEAPON_IDS[slot_idx]
