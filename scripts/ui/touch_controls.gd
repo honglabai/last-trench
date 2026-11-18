@@ -191,6 +191,7 @@ func _handle_touch(event: InputEventScreenTouch) -> void:
 		if fire_button and fire_button.is_visible_in_tree() and fire_button.get_global_rect().has_point(event.position):
 			fire_touch_id = event.index
 			_on_fire_down()
+			get_viewport().set_input_as_handled()
 			return
 			
 		# 2. Check other action buttons (Aim, Reload, Interact, Switch)
@@ -203,6 +204,7 @@ func _handle_touch(event: InputEventScreenTouch) -> void:
 				_on_interact_pressed()
 			elif switch_button and switch_button.is_visible_in_tree() and switch_button.get_global_rect().has_point(event.position):
 				_on_switch_pressed()
+			get_viewport().set_input_as_handled()
 			return
 			
 		# 3. Left side: Joystick (STRICTLY FIXED POSITION, NEVER MOVES ITS BASE)
@@ -210,31 +212,39 @@ func _handle_touch(event: InputEventScreenTouch) -> void:
 			joystick_touch_id = event.index
 			# Calculate deflection relative to the permanent, fixed joystick base position
 			_update_joystick(event.position)
+			get_viewport().set_input_as_handled()
 		# 4. Right side: Look drag zone (swiping for fine aim - only when NOT touching buttons)
 		elif event.position.x >= half_width and look_touch_id == -1:
 			if not _is_touch_on_buttons(event.position):
 				look_touch_id = event.index
+				get_viewport().set_input_as_handled()
 	else:
 		if event.index == fire_touch_id:
 			fire_touch_id = -1
 			_on_fire_up()
+			get_viewport().set_input_as_handled()
 		elif event.index == joystick_touch_id:
 			joystick_touch_id = -1
 			_reset_joystick()
+			get_viewport().set_input_as_handled()
 		elif event.index == look_touch_id:
 			look_touch_id = -1
+			get_viewport().set_input_as_handled()
 
 func _handle_drag(event: InputEventScreenDrag) -> void:
 	if event.index == fire_touch_id:
+		get_viewport().set_input_as_handled()
 		return
 	elif event.index == joystick_touch_id:
 		_update_joystick(event.position)
+		get_viewport().set_input_as_handled()
 	elif event.index == look_touch_id:
 		var rel := event.relative * look_sensitivity
 		# Clamp drag relative to prevent sudden touch jumps
 		rel.x = clampf(rel.x, -80.0, 80.0)
 		rel.y = clampf(rel.y, -80.0, 80.0)
 		look_delta_produced.emit(rel)
+		get_viewport().set_input_as_handled()
 
 func _is_touch_on_buttons(pos: Vector2) -> bool:
 	var buttons = [fire_button, aim_button, reload_button, interact_button, switch_button]

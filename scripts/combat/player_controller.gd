@@ -133,9 +133,11 @@ func _physics_process(delta: float) -> void:
 	var wants_reload := Input.is_action_just_pressed("reload") or (manual_input_override and is_reload_requested)
 	var wants_fire := false
 	if manual_input_override:
-		wants_fire = is_firing_requested or Input.is_action_pressed("fire")
+		# In mobile / touch mode, firing triggers ONLY when FIRE button is held or Spacebar is pressed
+		# Never check Input.is_action_pressed("fire") here because touch-to-mouse emulation synthesizes left clicks on all screen touches!
+		wants_fire = is_firing_requested or Input.is_physical_key_pressed(KEY_SPACE)
 	else:
-		wants_fire = Input.is_action_pressed("fire")
+		wants_fire = is_firing_requested or Input.is_action_pressed("fire")
 	
 	if wants_reload and weapon:
 		weapon.start_reload()
@@ -148,16 +150,29 @@ func _physics_process(delta: float) -> void:
 		if camera_rig:
 			fire_dir = camera_rig.get_camera_forward()
 		var space := get_world_3d().direct_space_state if is_inside_tree() and get_world_3d() else null
-		weapon.try_fire(origin, fire_dir, space, [get_rid()])
+		var did_fire: bool = weapon.try_fire(origin, fire_dir, space, [get_rid()])
+		if did_fire:
+			trigger_haptic(25) # Weak vibration on bullet fire
 
 func apply_damage(amount: float) -> void:
 	if is_dead or is_invulnerable:
 		return
 	current_health = maxf(0.0, current_health - amount)
+	trigger_haptic(120) # Stronger vibration when hit by enemy bullets
 	player_damaged.emit(current_health, max_health)
 	if current_health <= 0.0:
 		is_dead = true
 		player_died.emit()
+
+static func trigger_haptic(duration_ms: int) -> void:
+	# 1. Native Mobile (Android / iOS)
+	if Input.has_method("vibrate_handheld"):
+		Input.vibrate_handheld(duration_ms)
+	# 2. Web Mobile (HTML5 Navigator Vibration API)
+	if Engine.has_singleton("JavaScriptBridge"):
+		var js = Engine.get_singleton("JavaScriptBridge")
+		if js:
+			js.eval("if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) { try { window.navigator.vibrate(%d); } catch(e) {} }" % duration_ms)
 
 func revive(restore_hp: float) -> void:
 	is_dead = false
