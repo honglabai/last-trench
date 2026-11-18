@@ -14,7 +14,7 @@ const SAVE_FILE := "user://player_profile.cfg"
 
 # Persistent across runs
 static var credits: int = 5000
-static var owned_weapons: Dictionary = { "k2c1_rifle": 1 }
+static var owned_weapons: Dictionary = { "k2c1_rifle": 1, "k5_pistol": 1, "k413_grenade": 1 }
 static var equipped_weapon_id: String = "k2c1_rifle"
 static var is_profile_loaded: bool = false
 static var current_instance: GameSession = null
@@ -42,15 +42,22 @@ static func _ensure_profile_loaded() -> void:
 		credits = cfg.get_value("armory", "credits", 5000)
 		if credits < 2000:
 			credits = 5000
-		var saved_owned = cfg.get_value("armory", "owned_weapons", { "k2c1_rifle": 1 })
+		var saved_owned = cfg.get_value("armory", "owned_weapons", { "k2c1_rifle": 1, "k5_pistol": 1, "k413_grenade": 1 })
 		if saved_owned is Dictionary and not saved_owned.is_empty():
 			owned_weapons = saved_owned
 		else:
-			owned_weapons = { "k2c1_rifle": 1 }
+			owned_weapons = { "k2c1_rifle": 1, "k5_pistol": 1, "k413_grenade": 1 }
+		# Ensure the basic trio (Rifle, Pistol, Grenade) is always available
+		if not owned_weapons.has("k2c1_rifle"):
+			owned_weapons["k2c1_rifle"] = 1
+		if not owned_weapons.has("k5_pistol"):
+			owned_weapons["k5_pistol"] = 1
+		if not owned_weapons.has("k413_grenade"):
+			owned_weapons["k413_grenade"] = 1
 		equipped_weapon_id = cfg.get_value("armory", "equipped_weapon_id", "k2c1_rifle")
 	else:
 		credits = 5000
-		owned_weapons = { "k2c1_rifle": 1 }
+		owned_weapons = { "k2c1_rifle": 1, "k5_pistol": 1, "k413_grenade": 1 }
 		equipped_weapon_id = "k2c1_rifle"
 		save_profile()
 
@@ -112,7 +119,17 @@ static func equip_weapon(w_id: String) -> void:
 static func get_next_owned_weapon(current_id: String = "") -> String:
 	_ensure_profile_loaded()
 	var cur := current_id if current_id != "" else equipped_weapon_id
-	var weapon_order := ["k2c1_rifle", "m4a1_carbine", "hk416_elite", "scar_h_battle", "k14_sniper", "rpg7_launcher", "hyungung_atgm"]
+	var weapon_order := [
+		"k2c1_rifle",
+		"k5_pistol",
+		"k413_grenade",
+		"m4a1_carbine",
+		"hk416_elite",
+		"scar_h_battle",
+		"k14_sniper",
+		"rpg7_launcher",
+		"hyungung_atgm"
+	]
 	var owned: Array[String] = []
 	for w in weapon_order:
 		if owned_weapons.has(w):

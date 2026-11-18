@@ -43,6 +43,52 @@
     "thumbnail": "res://assets/ui/weapons/thumb_k2c1.png",
     "texture": "res://assets/textures/tex_fps_iron_sights.png"
   },
+  "k5_pistol": {
+    "name": "K5 제식 권총",
+    "country": "대한민국",
+    "type": "제식 반자동 권총 (9mm)",
+    "description": "대한민국 육군 주력 제식 권총. 패스트 드로우와 신속한 속사로 긴급 대처 및 근접 방어에 탁월합니다.",
+    "price": 0,
+    "damage": 22.0,
+    "fire_rate": 0.16,
+    "magazine_size": 15,
+    "max_reserve_ammo": 90,
+    "reload_time": 1.2,
+    "range": 55.0,
+    "upgrade_per_level": {
+      "damage": 4.0,
+      "magazine_size": 3,
+      "reload_time": -0.10,
+      "fire_rate": -0.008,
+      "cost_multiplier": 150
+    },
+    "thumbnail": "res://assets/ui/weapons/thumb_k5_pistol.png",
+    "texture": "res://assets/textures/tex_fps_pistol.png"
+  },
+  "k413_grenade": {
+    "name": "K413 세열 수류탄",
+    "country": "대한민국",
+    "type": "투척형 세열 수류탄 (Frag Grenade)",
+    "description": "광범위한 살상 파편을 비산시키는 고폭 세열 수류탄. 밀집된 보병 및 엄폐물 뒤 적을 일거에 분쇄합니다.",
+    "price": 0,
+    "damage": 250.0,
+    "fire_rate": 1.6,
+    "magazine_size": 1,
+    "max_reserve_ammo": 4,
+    "reload_time": 1.6,
+    "range": 50.0,
+    "is_explosive": true,
+    "splash_radius": 6.5,
+    "upgrade_per_level": {
+      "damage": 50.0,
+      "magazine_size": 0,
+      "reload_time": -0.15,
+      "fire_rate": -0.05,
+      "cost_multiplier": 500
+    },
+    "thumbnail": "res://assets/ui/weapons/thumb_k413_grenade.png",
+    "texture": "res://assets/textures/tex_fps_grenade.png"
+  },
   "m4a1_carbine": {
     "name": "M4A1 카빈",
     "country": "미국",

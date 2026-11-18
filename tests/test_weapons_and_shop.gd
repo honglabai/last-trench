@@ -18,6 +18,8 @@ func _init() -> void:
 	var w_data: Dictionary = test_json.data
 	var expected_weapons = [
 		"k2c1_rifle",
+		"k5_pistol",
+		"k413_grenade",
 		"m4a1_carbine",
 		"hk416_elite",
 		"scar_h_battle",
@@ -35,7 +37,7 @@ func _init() -> void:
 			push_error("Missing thumbnail picture for weapon: " + w_id)
 			quit(1)
 			return
-	print("[PASS] Verified all 7 weapons and thumbnails in weapons.json catalog")
+	print("[PASS] Verified all 9 weapons and thumbnails in weapons.json catalog")
 	
 	# 2. Test WeaponComponent level scaling & Explosive Weapons
 	var wc := WeaponComponent.new()
@@ -101,16 +103,16 @@ func _init() -> void:
 		return
 	print("[PASS] Weapon equip verified: ", GameSession.equipped_weapon_id)
 	
-	# 4. Test ArmoryShop UI instantiation and 7 Cards
+	# 4. Test ArmoryShop UI instantiation and 9 Cards
 	var shop_scene = load("res://scenes/ui/armory_shop.tscn")
 	var shop = shop_scene.instantiate() as ArmoryShop
 	root.add_child(shop)
 	await process_frame
-	if not shop.weapon_container or shop.weapon_container.get_child_count() < 7:
-		push_error("ArmoryShop failed to populate 7 weapon cards, count is: " + str(shop.weapon_container.get_child_count() if shop.weapon_container else 0))
+	if not shop.weapon_container or shop.weapon_container.get_child_count() < 9:
+		push_error("ArmoryShop failed to populate 9 weapon cards, count is: " + str(shop.weapon_container.get_child_count() if shop.weapon_container else 0))
 		quit(1)
 		return
-	print("[PASS] ArmoryShop UI populated 7 weapon cards with photos and stats successfully")
+	print("[PASS] ArmoryShop UI populated 9 weapon cards with photos and stats successfully")
 	
 	if not shop.grant_btn:
 		push_error("ArmoryShop missing grant_btn")
@@ -125,14 +127,13 @@ func _init() -> void:
 	print("[PASS] ArmoryShop supply grant (+2,000 P [G]) verified")
 	shop.queue_free()
 	
-	# 5. Test Weapon Cycling with 7 weapons
-	GameSession.owned_weapons["k2c1_rifle"] = 1
+	# 5. Test Weapon Cycling with basic trio (Rifle -> Pistol -> Grenade)
 	var next_w := GameSession.get_next_owned_weapon("k2c1_rifle")
-	if next_w != "rpg7_launcher" and next_w != "m4a1_carbine":
-		push_error("get_next_owned_weapon expected owned weapon but got: " + next_w)
+	if next_w != "k5_pistol" and next_w != "rpg7_launcher":
+		push_error("get_next_owned_weapon expected k5_pistol or rpg7_launcher but got: " + next_w)
 		quit(1)
 		return
-	print("[PASS] Weapon cycling between owned weapons verified")
+	print("[PASS] Weapon cycling between owned weapons verified (Next is %s)" % next_w)
 	
 	print("[TEST COMPLETE] Weapons Arsenal & Armory Shop tests passed with 0 errors!")
 	quit(0)

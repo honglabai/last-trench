@@ -8,6 +8,7 @@ signal aim_toggled()
 signal reload_requested()
 signal interact_requested()
 signal weapon_switch_requested()
+signal grenade_requested()
 signal touch_detected()
 
 @export var joystick_radius: float = 70.0
@@ -83,6 +84,13 @@ var switch_button: Button:
 			_switch_button = get_node_or_null("RightZone/ActionButtons/SwitchButton")
 		return _switch_button
 
+var _grenade_button: Button
+var grenade_button: Button:
+	get:
+		if not _grenade_button:
+			_grenade_button = get_node_or_null("RightZone/ActionButtons/GrenadeButton")
+		return _grenade_button
+
 func _ready() -> void:
 	if joystick_base:
 		joystick_center = joystick_base.size / 2.0
@@ -111,6 +119,10 @@ func _ready() -> void:
 	if switch_button:
 		if not switch_button.pressed.is_connected(_on_switch_pressed):
 			switch_button.pressed.connect(_on_switch_pressed)
+
+	if grenade_button:
+		if not grenade_button.pressed.is_connected(_on_grenade_pressed):
+			grenade_button.pressed.connect(_on_grenade_pressed)
 
 func _process(delta: float) -> void:
 	if is_input_locked:
@@ -155,6 +167,11 @@ func _on_switch_pressed() -> void:
 	AudioManager.play_sound("click")
 	weapon_switch_requested.emit()
 
+func _on_grenade_pressed() -> void:
+	if not _debounce("grenade", 0.4): return
+	AudioManager.play_sound("click")
+	grenade_requested.emit()
+
 func set_interact_available(available: bool, label_text: String = "포탑 설치") -> void:
 	can_interact = available
 	if interact_button:
@@ -194,7 +211,7 @@ func _handle_touch(event: InputEventScreenTouch) -> void:
 			get_viewport().set_input_as_handled()
 			return
 			
-		# 2. Check other action buttons (Aim, Reload, Interact, Switch)
+		# 2. Check other action buttons (Aim, Reload, Interact, Switch, Grenade)
 		if _is_touch_on_other_buttons(event.position):
 			if aim_button and aim_button.is_visible_in_tree() and aim_button.get_global_rect().has_point(event.position):
 				_on_aim_pressed()
@@ -204,6 +221,8 @@ func _handle_touch(event: InputEventScreenTouch) -> void:
 				_on_interact_pressed()
 			elif switch_button and switch_button.is_visible_in_tree() and switch_button.get_global_rect().has_point(event.position):
 				_on_switch_pressed()
+			elif grenade_button and grenade_button.is_visible_in_tree() and grenade_button.get_global_rect().has_point(event.position):
+				_on_grenade_pressed()
 			get_viewport().set_input_as_handled()
 			return
 			
@@ -247,7 +266,7 @@ func _handle_drag(event: InputEventScreenDrag) -> void:
 		get_viewport().set_input_as_handled()
 
 func _is_touch_on_buttons(pos: Vector2) -> bool:
-	var buttons = [fire_button, aim_button, reload_button, interact_button, switch_button]
+	var buttons = [fire_button, aim_button, reload_button, interact_button, switch_button, grenade_button]
 	for btn in buttons:
 		if btn and btn.is_visible_in_tree():
 			if btn.get_global_rect().has_point(pos):
@@ -255,7 +274,7 @@ func _is_touch_on_buttons(pos: Vector2) -> bool:
 	return false
 
 func _is_touch_on_other_buttons(pos: Vector2) -> bool:
-	var buttons = [aim_button, reload_button, interact_button, switch_button]
+	var buttons = [aim_button, reload_button, interact_button, switch_button, grenade_button]
 	for btn in buttons:
 		if btn and btn.is_visible_in_tree():
 			if btn.get_global_rect().has_point(pos):

@@ -126,27 +126,10 @@ func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpa
 			var hit_normal: Vector3 = result.normal
 			target_pos = hit_point
 			
-			_apply_hit(hit_collider, hit_point, hit_normal)
-			hit_target.emit(hit_collider, hit_point, hit_normal, damage)
-			
-		if is_explosive:
-			AudioManager.play_sound("explosion", 0.05, 2.0)
-			# Radial splash damage to all enemies within splash_radius
-			if splash_radius > 0.0:
-				var sphere := SphereShape3D.new()
-				sphere.radius = splash_radius
-				var shape_q := PhysicsShapeQueryParameters3D.new()
-				shape_q.shape = sphere
-				shape_q.transform = Transform3D(Basis(), target_pos)
-				shape_q.collision_mask = 4 | 8
-				shape_q.collide_with_areas = true
-				shape_q.collide_with_bodies = true
-				var splash_hits := space_state.intersect_shape(shape_q, 16)
-				for h in splash_hits:
-					var col = h.get("collider")
-					if col and col != hit_collider:
-						_apply_hit(col, target_pos, Vector3.UP)
-			
+			if not is_explosive:
+				_apply_hit(hit_collider, hit_point, hit_normal)
+				hit_target.emit(hit_collider, hit_point, hit_normal, damage)
+		
 		bullet_fired.emit(origin, target_pos)
 	else:
 		bullet_fired.emit(origin, origin + direction.normalized() * range_distance)

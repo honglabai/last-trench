@@ -46,6 +46,8 @@ var enemy_container: Node3D:
 var active_slot_nearby: DefenseSlot = null
 var turret_scene: PackedScene = preload("res://scenes/defenses/mg_turret.tscn")
 var tracer_scene: PackedScene = preload("res://scenes/effects/bullet_tracer.tscn")
+var rocket_scene: PackedScene = preload("res://scenes/effects/rocket_projectile.tscn")
+var grenade_scene: PackedScene = preload("res://scenes/effects/grenade_projectile.tscn")
 var _is_initialized: bool = false
 
 # Timed Turret Construction System
@@ -122,6 +124,7 @@ func _ready() -> void:
 		touch_controls.weapon_switch_requested.connect(func():
 			switch_to_next_weapon()
 		)
+		touch_controls.grenade_requested.connect(_on_quick_grenade_requested)
 		
 	# 5. Wire DefenseSlots proximity
 	if trench_map:
@@ -280,11 +283,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("reload") or (event is InputEventKey and event.pressed and event.keycode == KEY_R):
 		if player and player.weapon:
 			player.weapon.start_reload()
-	# 6. Direct numeric weapon select (1 to 7)
-	elif event is InputEventKey and event.pressed and not event.echo and event.keycode >= KEY_1 and event.keycode <= KEY_7:
+	# 6. Quick Grenade throw ('G')
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_G:
+		if not battle_hud or not battle_hud.armory_shop or not battle_hud.armory_shop.visible:
+			_on_quick_grenade_requested()
+	# 7. Direct numeric weapon select (1 to 9)
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode >= KEY_1 and event.keycode <= KEY_9:
 		var slot_idx: int = event.keycode - KEY_1
 		_select_weapon_by_slot(slot_idx)
-	# 7. Web/Desktop Mouse capture: click to lock, ESC to unlock
+	# 8. Web/Desktop Mouse capture: click to lock, ESC to unlock
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
@@ -296,6 +303,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func _select_weapon_by_slot(slot_idx: int) -> void:
 	var weapon_catalog: Array[String] = [
 		"k2c1_rifle",
+		"k5_pistol",
+		"k413_grenade",
 		"m4a1_carbine",
 		"hk416_elite",
 		"scar_h_battle",
@@ -409,7 +418,39 @@ func _on_bullet_fired(start_pos: Vector3, target_pos: Vector3) -> void:
 		var basis_cam := cam.global_transform.basis
 		# Originating from authentic gun barrel point below eye level directly toward aim target
 		muzzle_start = cam.global_position - basis_cam.y * 0.12 - basis_cam.z * 0.25
+		
+	if player and player.weapon:
+		if player.weapon.current_weapon_id == "k413_grenade":
+			var grn = grenade_scene.instantiate()
+			add_child(grn)
+			var throw_dir := (target_pos - muzzle_start).normalized()
+			if grn.has_method("setup"):
+				grn.setup(muzzle_start, throw_dir, 30.0, player.weapon.splash_radius, player.weapon.damage)
+			return
+		elif player.weapon.is_explosive:
+			var rkt = rocket_scene.instantiate()
+			add_child(rkt)
+			if rkt.has_method("setup"):
+				rkt.setup(muzzle_start, target_pos, 68.0, player.weapon.splash_radius, player.weapon.damage)
+			return
+			
 	_spawn_tracer(muzzle_start, target_pos, 220.0, Color(1.0, 0.88, 0.25))
+
+func _on_quick_grenade_requested() -> void:
+	if not player or player.is_dead:
+		return
+	var origin := player.global_position + Vector3(0.0, 1.5, 0.0)
+	var throw_dir := Vector3.FORWARD
+	if player.camera_rig and player.camera_rig.camera:
+		origin = player.camera_rig.camera.global_position
+		throw_dir = player.camera_rig.get_camera_forward()
+	var grn = grenade_scene.instantiate()
+	add_child(grn)
+	if grn.has_method("setup"):
+		grn.setup(origin, throw_dir, 30.0, 6.5, 250.0)
+	AudioManager.play_sound("click", 0.05, 0.8)
+	if battle_hud:
+		battle_hud.show_weapon_toast("k413_grenade")
 
 func _spawn_tracer(start_pos: Vector3, target_pos: Vector3, speed: float, color: Color, custom_radius: float = 0.035, custom_len: float = 0.9) -> void:
 	if not tracer_scene:

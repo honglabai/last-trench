@@ -31,6 +31,8 @@ var weapon_container: VBoxContainer:
 var weapons_data: Dictionary = {}
 const WEAPON_IDS: Array[String] = [
 	"k2c1_rifle",
+	"k5_pistol",
+	"k413_grenade",
 	"m4a1_carbine",
 	"hk416_elite",
 	"scar_h_battle",
