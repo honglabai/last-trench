@@ -135,5 +135,29 @@ func _init() -> void:
 		return
 	print("[PASS] Weapon cycling between owned weapons verified (Next is %s)" % next_w)
 	
+	# 6. Test Ammo Persistence Across Weapon Switching
+	var wc_persist = WeaponComponent.new()
+	root.add_child(wc_persist)
+	wc_persist.reset_all_ammo_states()
+	wc_persist.load_weapon_data("k2c1_rifle", 1)
+	assert(wc_persist.current_ammo == 30, "K2C1 initial ammo should be 30")
+	# Fire 5 rounds
+	wc_persist.current_ammo = 25
+	wc_persist.weapon_ammo_states["k2c1_rifle"]["current_ammo"] = 25
+	# Switch to K5 pistol
+	wc_persist.load_weapon_data("k5_pistol", 1)
+	assert(wc_persist.current_ammo == 15, "K5 initial ammo should be 15")
+	# Fire 2 rounds with pistol
+	wc_persist.current_ammo = 13
+	wc_persist.weapon_ammo_states["k5_pistol"]["current_ammo"] = 13
+	# Switch back to K2C1 rifle
+	wc_persist.load_weapon_data("k2c1_rifle", 1)
+	assert(wc_persist.current_ammo == 25, "K2C1 ammo must persist at 25 and NOT reset to 30! Got: " + str(wc_persist.current_ammo))
+	# Switch back to K5 pistol
+	wc_persist.load_weapon_data("k5_pistol", 1)
+	assert(wc_persist.current_ammo == 13, "K5 ammo must persist at 13 and NOT reset to 15! Got: " + str(wc_persist.current_ammo))
+	print("[PASS] Weapon ammo state persistence across weapon switching verified (no ammo reset on switch)")
+	wc_persist.queue_free()
+	
 	print("[TEST COMPLETE] Weapons Arsenal & Armory Shop tests passed with 0 errors!")
 	quit(0)

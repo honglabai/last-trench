@@ -211,18 +211,62 @@ body {
 	margin: 10px auto;
 	box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
 }
+
+/* PWA INSTALL & FULLSCREEN HINT */
+.btn-pwa-install {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	margin: 8px auto 6px auto;
+	padding: 7px 16px;
+	background: rgba(0, 180, 216, 0.2);
+	border: 1px solid #00e5ff;
+	border-radius: 18px;
+	color: #e0f7fa;
+	font-size: 12px;
+	font-weight: 600;
+	cursor: pointer;
+	backdrop-filter: blur(8px);
+	box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+	transition: all 0.2s ease;
+}
+.btn-pwa-install:active {
+	transform: scale(0.96);
+	background: rgba(0, 180, 216, 0.45);
+}
+
+.landing-tip {
+	font-size: 11px;
+	color: rgba(255, 255, 255, 0.55);
+	margin-top: 6px;
+	letter-spacing: 0.3px;
+	text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
 		</style>
 		<script>
-// PWA Service Worker Registration
+// PWA Service Worker Registration & Install Prompt Handling
+let deferredInstallPrompt = null;
+const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches ||
+                         window.matchMedia('(display-mode: fullscreen)').matches ||
+                         navigator.standalone === true;
+
 if ('serviceWorker' in navigator) {
-	window.addEventListener('load', function() {
-		navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function(reg) {
-			console.log('[PWA] Service Worker registered with scope:', reg.scope);
-		}).catch(function(err) {
-			console.warn('[PWA] Service Worker registration failed:', err);
-		});
+	navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function(reg) {
+		console.log('[PWA] Service Worker registered with scope:', reg.scope);
+	}).catch(function(err) {
+		console.warn('[PWA] Service Worker registration failed:', err);
 	});
 }
+
+window.addEventListener('beforeinstallprompt', function(e) {
+	e.preventDefault();
+	deferredInstallPrompt = e;
+	var btnPwa = document.getElementById('btn-pwa-install');
+	if (btnPwa && !isStandaloneMode) {
+		btnPwa.style.display = 'inline-flex';
+	}
+});
 
 function enterFullscreen() {
 	var doc = window.document;
@@ -280,16 +324,20 @@ function enterFullscreen() {
 						<div id="landing-progress-bar" class="landing-progress-bar"></div>
 					</div>
 					<div id="landing-error-box"></div>
+					<button id="btn-pwa-install" class="btn-pwa-install" type="button">
+						<span>📲 전체화면 정식 앱 설치</span>
+					</button>
 					<button id="btn-enter" class="btn-deploy-start" type="button" disabled>
 						<span id="btn-enter-text">전투 출격</span>
 					</button>
+					<div class="landing-tip">💡 화면 어디든 터치 시 전체화면으로 자동 전환됩니다</div>
 				</div>
 			</div>
 		</div>
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":15823660,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":15802780,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -328,6 +376,21 @@ const engine = new Engine(GODOT_CONFIG);
 			overlay.remove();
 			canvas.focus();
 		}, 550);
+	}
+
+	// PWA Install Button
+	var btnPwa = document.getElementById('btn-pwa-install');
+	if (btnPwa) {
+		btnPwa.addEventListener('click', async function (e) {
+			e.stopPropagation();
+			if (deferredInstallPrompt) {
+				deferredInstallPrompt.prompt();
+				var choice = await deferredInstallPrompt.userChoice;
+				console.log('[PWA] User choice outcome:', choice.outcome);
+				deferredInstallPrompt = null;
+				btnPwa.style.display = 'none';
+			}
+		});
 	}
 
 	// Button Action

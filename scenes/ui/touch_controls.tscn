@@ -106,21 +106,21 @@ flat = true
 icon = ExtResource("4_fire")
 expand_icon = true
 
-[node name="InteractButton" type="Button" parent="RightZone/ActionButtons"]
+[node name="GrenadeButton" type="Button" parent="RightZone/ActionButtons"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -269.0
+offset_left = -268.0
 offset_top = -143.0
-offset_right = -195.0
+offset_right = -194.0
 offset_bottom = -69.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
-icon = ExtResource("7_interact")
+icon = ExtResource("9_grenade")
 expand_icon = true
 
 [node name="ReloadButton" type="Button" parent="RightZone/ActionButtons"]
@@ -130,10 +130,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -232.0
-offset_top = -232.0
-offset_right = -158.0
-offset_bottom = -158.0
+offset_left = -231.0
+offset_top = -231.0
+offset_right = -157.0
+offset_bottom = -157.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
@@ -148,28 +148,44 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -143.0
-offset_top = -269.0
+offset_top = -268.0
 offset_right = -69.0
-offset_bottom = -195.0
+offset_bottom = -194.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
 icon = ExtResource("8_switch")
 expand_icon = true
 
-[node name="GrenadeButton" type="Button" parent="RightZone/ActionButtons"]
+[node name="InteractButton" type="Button" parent="RightZone/ActionButtons"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -82.0
-offset_top = -250.0
-offset_right = -8.0
-offset_bottom = -176.0
+offset_left = -379.0
+offset_top = -143.0
+offset_right = -305.0
+offset_bottom = -69.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
-icon = ExtResource("9_grenade")
+icon = ExtResource("7_interact")
 expand_icon = true
+
+[node name="StatusLabel" type="Label" parent="RightZone/ActionButtons/InteractButton"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.0
+offset_top = -24.0
+offset_right = 60.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "포탑 설치"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.2, 0.95, 0.6, 1)
+theme_override_font_sizes/font_size = 11

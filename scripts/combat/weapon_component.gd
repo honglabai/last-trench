@@ -25,12 +25,25 @@ var is_reloading: bool = false
 var time_since_last_shot: float = 999.0
 var reload_timer: float = 0.0
 
+# Per-weapon ammo state persistence dictionary: weapon_id -> { "current_ammo": int, "reserve_ammo": int }
+var weapon_ammo_states: Dictionary = {}
+
+func reset_all_ammo_states() -> void:
+	weapon_ammo_states.clear()
+
 @onready var muzzle: Marker3D = get_node_or_null("Muzzle")
 
 func _ready() -> void:
 	load_weapon_data()
 
 func load_weapon_data(target_id: String = "", level: int = 1) -> void:
+	# 1. Save outgoing weapon's current ammo state before switching
+	if not weapon_id.is_empty() and not target_id.is_empty() and weapon_id != target_id:
+		weapon_ammo_states[weapon_id] = {
+			"current_ammo": current_ammo,
+			"reserve_ammo": reserve_ammo
+		}
+		
 	if not target_id.is_empty():
 		weapon_id = target_id
 	weapon_level = maxi(1, level)
@@ -68,8 +81,18 @@ func load_weapon_data(target_id: String = "", level: int = 1) -> void:
 		reload_time = maxf(0.8, base_rel + float(up.get("reload_time", -0.12)) * lvl_step)
 		range_distance = base_rng
 		
-		current_ammo = magazine_size
-		reserve_ammo = max_reserve_ammo
+		# 2. Restore previously used ammo or initialize full loadout for the first issue
+		if weapon_ammo_states.has(weapon_id):
+			var saved: Dictionary = weapon_ammo_states[weapon_id]
+			current_ammo = clampi(int(saved.get("current_ammo", magazine_size)), 0, magazine_size)
+			reserve_ammo = clampi(int(saved.get("reserve_ammo", max_reserve_ammo)), 0, max_reserve_ammo)
+		else:
+			current_ammo = magazine_size
+			reserve_ammo = max_reserve_ammo
+			weapon_ammo_states[weapon_id] = {
+				"current_ammo": current_ammo,
+				"reserve_ammo": reserve_ammo
+			}
 
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
@@ -97,6 +120,10 @@ func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpa
 		
 	time_since_last_shot = 0.0
 	current_ammo -= 1
+	weapon_ammo_states[weapon_id] = {
+		"current_ammo": current_ammo,
+		"reserve_ammo": reserve_ammo
+	}
 	if is_explosive:
 		AudioManager.play_sound("drone_rocket", 0.05, 1.5)
 	else:
@@ -159,6 +186,10 @@ func finish_reload() -> void:
 	var reload_amount: int = mini(needed, reserve_ammo)
 	current_ammo += reload_amount
 	reserve_ammo -= reload_amount
+	weapon_ammo_states[weapon_id] = {
+		"current_ammo": current_ammo,
+		"reserve_ammo": reserve_ammo
+	}
 	reload_completed.emit(current_ammo, reserve_ammo)
 
 func _apply_hit(collider: Object, _hit_point: Vector3, _hit_normal: Vector3) -> void:

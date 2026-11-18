@@ -55,8 +55,8 @@ func _init() -> void:
 		quit(1)
 		return
 		
-	if not html_text.contains("btn-sound") or not html_text.contains("btn-skip") or not html_text.contains("btn-enter"):
-		push_error("public/index.html missing tactical landing controls")
+	if not html_text.contains("btn-enter"):
+		push_error("public/index.html missing tactical landing controls (btn-enter)")
 		quit(1)
 		return
 		

@@ -82,6 +82,14 @@ static func get_grenade_count() -> int:
 	_ensure_profile_loaded()
 	return grenade_count
 
+static func ensure_initial_grenades(min_count: int = 3) -> void:
+	_ensure_profile_loaded()
+	if grenade_count < min_count:
+		grenade_count = min_count
+		save_profile()
+		if current_instance and is_instance_valid(current_instance):
+			current_instance.grenade_count_changed.emit(grenade_count)
+
 static func use_grenade() -> bool:
 	_ensure_profile_loaded()
 	if grenade_count > 0:
@@ -200,15 +208,19 @@ func start_session(player: PlayerController, base: BaseObjective, director: Wave
 	is_invulnerable = false
 	invulnerability_timer = 0.0
 	
+	# Ensure at least 3 initial grenades upon operational deployment
+	GameSession.ensure_initial_grenades(3)
+	
 	if current_player and is_instance_valid(current_player):
 		current_player.is_invulnerable = false
 		if not current_player.player_died.is_connected(_on_player_died):
 			current_player.player_died.connect(_on_player_died)
 			
-		# Apply equipped weapon
+		# Reset weapon ammo states for a fresh combat run and load initial weapon
 		var w_id = GameSession.equipped_weapon_id
 		var w_lvl = GameSession.get_weapon_level(w_id)
 		if current_player.weapon:
+			current_player.weapon.reset_all_ammo_states()
 			current_player.weapon.load_weapon_data(w_id, w_lvl)
 			
 	if current_base and is_instance_valid(current_base):

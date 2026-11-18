@@ -165,7 +165,9 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	# Tactical card border
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.06, 0.09, 0.13, 0.92)
-	if is_equipped:
+	if w_id == "k413_grenade":
+		style.border_color = Color(0.2, 0.75, 0.95, 0.85) # High-tech cyan for consumable ordnance
+	elif is_equipped:
 		style.border_color = Color(0.2, 0.95, 0.6, 0.9) # Glowing green for equipped
 	elif is_owned:
 		style.border_color = Color(0.2, 0.75, 0.95, 0.6) # Cyan for owned
@@ -234,7 +236,9 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	var country_name = info.get("country", "")
 	name_lbl.text = "[%s] %s" % [country_name, info.get("name", w_id)]
 	name_lbl.add_theme_font_size_override("font_size", 16)
-	if is_equipped:
+	if w_id == "k413_grenade":
+		name_lbl.modulate = Color(0.3, 0.85, 1.0)
+	elif is_equipped:
 		name_lbl.modulate = Color(0.2, 0.95, 0.6)
 	elif is_owned:
 		name_lbl.modulate = Color(0.3, 0.85, 1.0)
@@ -247,7 +251,10 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	info_box.add_child(type_lbl)
 	
 	var lvl_lbl := Label.new()
-	if is_owned:
+	if w_id == "k413_grenade":
+		lvl_lbl.text = "보유 수량: %d발 / 최대 %d발 (기본 3발 지급)" % [GameSession.get_grenade_count(), GameSession.max_grenades]
+		lvl_lbl.add_theme_color_override("font_color", Color(0.2, 0.95, 0.6))
+	elif is_owned:
 		lvl_lbl.text = "숙련도: Lv. %d / 5" % cur_lvl
 		lvl_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))
 	else:
@@ -271,7 +278,10 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	var cur_rng: float = float(info.get("range", 80.0))
 	
 	var stats_lbl1 := Label.new()
-	if is_explosive:
+	if w_id == "k413_grenade":
+		var splash: float = float(info.get("splash_radius", 6.5))
+		stats_lbl1.text = "화력: %.0f (광역 파편 폭발 피해) | 폭발 반경: %.1fm | 사거리: 50m" % [cur_dmg, splash]
+	elif is_explosive:
 		var splash: float = float(info.get("splash_radius", 7.0))
 		stats_lbl1.text = "화력: %.0f (광역 폭발 피해) | 폭발 반경: %.1fm | 사거리: %.0fm" % [cur_dmg, splash, cur_rng]
 	else:
@@ -282,7 +292,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	
 	var stats_lbl2 := Label.new()
 	if w_id == "k413_grenade":
-		stats_lbl2.text = "현재 보유: %d / %d발 | 투척 쿨타임: %.1fs" % [GameSession.grenade_count, GameSession.max_grenades, cur_fr]
+		stats_lbl2.text = "작전 투입 기본: 3발 지급 | 투척 쿨타임: %.1fs | 상점 추가 보급 가능" % cur_fr
 	else:
 		stats_lbl2.text = "장탄수: %d발 | 연사속도: %.2fs | 재장전: %.1fs" % [cur_mag, cur_fr, cur_rel]
 	stats_lbl2.add_theme_font_size_override("font_size", 12)
