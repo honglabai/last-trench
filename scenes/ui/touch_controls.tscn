@@ -55,6 +55,20 @@ texture = ExtResource("3_jknob")
 expand_mode = 1
 stretch_mode = 5
 
+[node name="AimButton" type="Button" parent="LeftZone"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 113.0
+offset_top = -329.0
+offset_right = 187.0
+offset_bottom = -255.0
+grow_vertical = 0
+flat = true
+icon = ExtResource("5_aim")
+expand_icon = true
+
 [node name="RightZone" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 11
@@ -99,48 +113,14 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -285.0
+offset_left = -269.0
 offset_top = -143.0
-offset_right = -211.0
+offset_right = -195.0
 offset_bottom = -69.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
 icon = ExtResource("7_interact")
-expand_icon = true
-
-[node name="GrenadeButton" type="Button" parent="RightZone/ActionButtons"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -266.0
-offset_top = -214.0
-offset_right = -192.0
-offset_bottom = -140.0
-grow_horizontal = 0
-grow_vertical = 0
-flat = true
-icon = ExtResource("9_grenade")
-expand_icon = true
-
-[node name="AimButton" type="Button" parent="RightZone/ActionButtons"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -214.0
-offset_top = -266.0
-offset_right = -140.0
-offset_bottom = -192.0
-grow_horizontal = 0
-grow_vertical = 0
-flat = true
-icon = ExtResource("5_aim")
 expand_icon = true
 
 [node name="ReloadButton" type="Button" parent="RightZone/ActionButtons"]
@@ -150,10 +130,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -143.0
-offset_top = -285.0
-offset_right = -69.0
-offset_bottom = -211.0
+offset_left = -232.0
+offset_top = -232.0
+offset_right = -158.0
+offset_bottom = -158.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
@@ -167,12 +147,29 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -76.0
-offset_top = -266.0
-offset_right = -2.0
-offset_bottom = -192.0
+offset_left = -143.0
+offset_top = -269.0
+offset_right = -69.0
+offset_bottom = -195.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
 icon = ExtResource("8_switch")
+expand_icon = true
+
+[node name="GrenadeButton" type="Button" parent="RightZone/ActionButtons"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -82.0
+offset_top = -250.0
+offset_right = -8.0
+offset_bottom = -176.0
+grow_horizontal = 0
+grow_vertical = 0
+flat = true
+icon = ExtResource("9_grenade")
 expand_icon = true

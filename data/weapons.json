@@ -66,11 +66,11 @@
     "texture": "res://assets/textures/tex_fps_pistol.png"
   },
   "k413_grenade": {
-    "name": "K413 세열 수류탄",
+    "name": "K413 세열 수류탄 (+3발 보급)",
     "country": "대한민국",
     "type": "투척형 세열 수류탄 (Frag Grenade)",
-    "description": "광범위한 살상 파편을 비산시키는 고폭 세열 수류탄. 밀집된 보병 및 엄폐물 뒤 적을 일거에 분쇄합니다.",
-    "price": 0,
+    "description": "광범위한 살상 파편을 비산시키는 고폭 세열 수류탄 3발을 추가 보급합니다.",
+    "price": 250,
     "damage": 250.0,
     "fire_rate": 1.6,
     "magazine_size": 1,

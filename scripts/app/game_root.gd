@@ -113,7 +113,9 @@ func _ready() -> void:
 		)
 		touch_controls.aim_toggled.connect(func():
 			player.manual_input_override = true
-			player.is_aiming = touch_controls.is_aim_active
+			player.set_aiming(touch_controls.is_aim_active)
+			if battle_hud:
+				battle_hud.set_aiming(touch_controls.is_aim_active)
 		)
 		touch_controls.reload_requested.connect(func():
 			player.manual_input_override = true
@@ -125,6 +127,14 @@ func _ready() -> void:
 			switch_to_next_weapon()
 		)
 		touch_controls.grenade_requested.connect(_on_quick_grenade_requested)
+		touch_controls.update_grenade_count(GameSession.get_grenade_count())
+		if is_inside_tree():
+			var gs_node = get_node_or_null("/root/GameSession")
+			if gs_node and gs_node.has_signal("grenade_count_changed"):
+				gs_node.grenade_count_changed.connect(func(cnt: int):
+					if touch_controls:
+						touch_controls.update_grenade_count(cnt)
+				)
 		
 	# 5. Wire DefenseSlots proximity
 	if trench_map:
@@ -325,6 +335,8 @@ func _select_weapon_by_slot(slot_idx: int) -> void:
 			if player and player.weapon:
 				battle_hud.update_ammo(player.weapon.current_ammo, player.weapon.reserve_ammo)
 			battle_hud.show_weapon_toast(target_w_id)
+		if player and player.camera_rig:
+			player.camera_rig.set_sniper_mode(target_w_id == "k14_sniper")
 		AudioManager.play_sound("reload")
 	else:
 		if battle_hud:
@@ -346,6 +358,8 @@ func switch_to_next_weapon() -> void:
 		if player and player.weapon:
 			battle_hud.update_ammo(player.weapon.current_ammo, player.weapon.reserve_ammo)
 		battle_hud.show_weapon_toast(next_id)
+	if player and player.camera_rig:
+		player.camera_rig.set_sniper_mode(next_id == "k14_sniper")
 	AudioManager.play_sound("reload")
 
 func _on_wave_state_changed(state: int) -> void:
@@ -439,6 +453,12 @@ func _on_bullet_fired(start_pos: Vector3, target_pos: Vector3) -> void:
 func _on_quick_grenade_requested() -> void:
 	if not player or player.is_dead:
 		return
+	if not GameSession.use_grenade():
+		AudioManager.play_sound("click", 0.04, 0.5)
+		if battle_hud:
+			battle_hud.show_toast("[수류탄 소진] B키(상점)에서 추가 구매할 수 있습니다")
+		return
+		
 	var origin := player.global_position + Vector3(0.0, 1.5, 0.0)
 	var throw_dir := Vector3.FORWARD
 	if player.camera_rig and player.camera_rig.camera:
@@ -450,7 +470,7 @@ func _on_quick_grenade_requested() -> void:
 		grn.setup(origin, throw_dir, 30.0, 6.5, 250.0)
 	AudioManager.play_sound("click", 0.05, 0.8)
 	if battle_hud:
-		battle_hud.show_weapon_toast("k413_grenade")
+		battle_hud.show_toast("수류탄 투척! (잔여: %d발)" % GameSession.grenade_count)
 
 func _spawn_tracer(start_pos: Vector3, target_pos: Vector3, speed: float, color: Color, custom_radius: float = 0.035, custom_len: float = 0.9) -> void:
 	if not tracer_scene:

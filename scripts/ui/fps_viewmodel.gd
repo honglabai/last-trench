@@ -43,9 +43,9 @@ func _process(delta: float) -> void:
 	if is_reloading:
 		desired = Vector2(0.0, 200.0) # Lower rifle out of sight during reload
 	elif is_aiming:
-		desired = Vector2(0.0, 0.0) # Full iron sight picture: front sight post perfectly on crosshair
+		desired = Vector2(0.0, 0.0) # Full iron sight picture: front sight post pulled directly onto crosshair
 	else:
-		desired = Vector2(0.0, 28.0) # Lower slightly in ready stance for broad situational awareness
+		desired = Vector2(0.0, 42.0) # Lower in ready stance for broad battlefield view
 		
 	current_offset = current_offset.lerp(desired, 14.0 * delta)
 	

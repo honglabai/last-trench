@@ -67,6 +67,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		if camera_rig:
 			camera_rig.handle_look_input(event.relative)
 
+func set_aiming(aiming: bool) -> void:
+	is_aiming = aiming
+	if camera_rig:
+		camera_rig.set_aiming(aiming)
+	aiming_changed.emit(aiming)
+
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
@@ -79,10 +85,11 @@ func _physics_process(delta: float) -> void:
 	elif manual_input_override:
 		move_vec = input_move_vector
 		
-	if Input.is_action_pressed("aim"):
+	if manual_input_override:
+		# is_aiming is maintained as set by set_aiming() / touch controls
+		pass
+	elif Input.is_action_pressed("aim"):
 		is_aiming = true
-	elif manual_input_override:
-		is_aiming = (camera_rig and camera_rig.is_aiming)
 	else:
 		is_aiming = false
 		

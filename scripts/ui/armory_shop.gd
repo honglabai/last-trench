@@ -85,6 +85,15 @@ func _unhandled_input(event: InputEvent) -> void:
 func _handle_quick_key_action(w_id: String) -> void:
 	if not weapons_data.has(w_id):
 		return
+	if w_id == "k413_grenade":
+		var grn_price: int = 250
+		if GameSession.grenade_count < GameSession.max_grenades and GameSession.spend_credits(grn_price):
+			GameSession.add_grenades(3)
+			AudioManager.play_sound("reload")
+			refresh_shop_ui()
+		else:
+			AudioManager.play_sound("click", 0.05, -3.0)
+		return
 	var info: Dictionary = weapons_data[w_id]
 	var is_owned: bool = GameSession.owned_weapons.has(w_id)
 	if not is_owned:
@@ -272,7 +281,10 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	stats_box.add_child(stats_lbl1)
 	
 	var stats_lbl2 := Label.new()
-	stats_lbl2.text = "장탄수: %d발 | 연사속도: %.2fs | 재장전: %.1fs" % [cur_mag, cur_fr, cur_rel]
+	if w_id == "k413_grenade":
+		stats_lbl2.text = "현재 보유: %d / %d발 | 투척 쿨타임: %.1fs" % [GameSession.grenade_count, GameSession.max_grenades, cur_fr]
+	else:
+		stats_lbl2.text = "장탄수: %d발 | 연사속도: %.2fs | 재장전: %.1fs" % [cur_mag, cur_fr, cur_rel]
 	stats_lbl2.add_theme_font_size_override("font_size", 12)
 	stats_lbl2.add_theme_color_override("font_color", Color(0.75, 0.85, 0.95, 0.85))
 	stats_box.add_child(stats_lbl2)
@@ -291,6 +303,32 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	action_box.add_theme_constant_override("separation", 6)
 	hbox.add_child(action_box)
 	
+	if w_id == "k413_grenade":
+		var grn_price: int = int(info.get("price", 250))
+		var grn_btn := Button.new()
+		grn_btn.custom_minimum_size = Vector2(0, 48)
+		var is_max := (GameSession.grenade_count >= GameSession.max_grenades)
+		if is_max:
+			grn_btn.text = "보급 완료\n(최대 %d발)" % GameSession.max_grenades
+			grn_btn.disabled = true
+			grn_btn.modulate = Color(0.6, 0.6, 0.6)
+		else:
+			grn_btn.text = "수류탄 보급 (+3발) [%d]\n(%d P)" % [key_num, grn_price]
+			grn_btn.disabled = (GameSession.credits < grn_price)
+			grn_btn.modulate = Color(0.4, 0.9, 1.0)
+			var do_buy_grn = func():
+				if not grn_btn.disabled and GameSession.spend_credits(grn_price):
+					GameSession.add_grenades(3)
+					AudioManager.play_sound("reload")
+					refresh_shop_ui()
+			grn_btn.pressed.connect(do_buy_grn)
+			grn_btn.gui_input.connect(func(ev: InputEvent):
+				if ev is InputEventScreenTouch and ev.pressed:
+					do_buy_grn.call()
+			)
+		action_box.add_child(grn_btn)
+		return panel
+
 	if not is_owned:
 		var buy_btn := Button.new()
 		var price: int = int(info.get("price", 500))

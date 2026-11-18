@@ -7,6 +7,7 @@ signal session_defeat(reason: String)
 signal session_victory()
 signal credits_changed(new_credits: int)
 signal weapon_equipped(weapon_id: String, level: int)
+signal grenade_count_changed(count: int)
 
 enum Result { NONE, VICTORY, DEFEAT }
 
@@ -14,7 +15,9 @@ const SAVE_FILE := "user://player_profile.cfg"
 
 # Persistent across runs
 static var credits: int = 5000
-static var owned_weapons: Dictionary = { "k2c1_rifle": 1, "k5_pistol": 1, "k413_grenade": 1 }
+static var owned_weapons: Dictionary = { "k2c1_rifle": 1, "k5_pistol": 1 }
+static var grenade_count: int = 3
+static var max_grenades: int = 10
 static var equipped_weapon_id: String = "k2c1_rifle"
 static var is_profile_loaded: bool = false
 static var current_instance: GameSession = null
@@ -42,22 +45,28 @@ static func _ensure_profile_loaded() -> void:
 		credits = cfg.get_value("armory", "credits", 5000)
 		if credits < 2000:
 			credits = 5000
-		var saved_owned = cfg.get_value("armory", "owned_weapons", { "k2c1_rifle": 1, "k5_pistol": 1, "k413_grenade": 1 })
+		var saved_owned = cfg.get_value("armory", "owned_weapons", { "k2c1_rifle": 1, "k5_pistol": 1 })
 		if saved_owned is Dictionary and not saved_owned.is_empty():
 			owned_weapons = saved_owned
 		else:
-			owned_weapons = { "k2c1_rifle": 1, "k5_pistol": 1, "k413_grenade": 1 }
-		# Ensure the basic trio (Rifle, Pistol, Grenade) is always available
+			owned_weapons = { "k2c1_rifle": 1, "k5_pistol": 1 }
+		# Ensure the basic pair (Rifle, Pistol) is always available
 		if not owned_weapons.has("k2c1_rifle"):
 			owned_weapons["k2c1_rifle"] = 1
 		if not owned_weapons.has("k5_pistol"):
 			owned_weapons["k5_pistol"] = 1
-		if not owned_weapons.has("k413_grenade"):
-			owned_weapons["k413_grenade"] = 1
+		if owned_weapons.has("k413_grenade"):
+			owned_weapons.erase("k413_grenade")
+		grenade_count = cfg.get_value("armory", "grenade_count", 3)
+		if grenade_count <= 0:
+			grenade_count = 3
 		equipped_weapon_id = cfg.get_value("armory", "equipped_weapon_id", "k2c1_rifle")
+		if equipped_weapon_id == "k413_grenade":
+			equipped_weapon_id = "k2c1_rifle"
 	else:
 		credits = 5000
-		owned_weapons = { "k2c1_rifle": 1, "k5_pistol": 1, "k413_grenade": 1 }
+		owned_weapons = { "k2c1_rifle": 1, "k5_pistol": 1 }
+		grenade_count = 3
 		equipped_weapon_id = "k2c1_rifle"
 		save_profile()
 
@@ -65,8 +74,30 @@ static func save_profile() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("armory", "credits", credits)
 	cfg.set_value("armory", "owned_weapons", owned_weapons)
+	cfg.set_value("armory", "grenade_count", grenade_count)
 	cfg.set_value("armory", "equipped_weapon_id", equipped_weapon_id)
 	cfg.save(SAVE_FILE)
+
+static func get_grenade_count() -> int:
+	_ensure_profile_loaded()
+	return grenade_count
+
+static func use_grenade() -> bool:
+	_ensure_profile_loaded()
+	if grenade_count > 0:
+		grenade_count -= 1
+		save_profile()
+		if current_instance and is_instance_valid(current_instance):
+			current_instance.grenade_count_changed.emit(grenade_count)
+		return true
+	return false
+
+static func add_grenades(amount: int) -> void:
+	_ensure_profile_loaded()
+	grenade_count = mini(max_grenades, grenade_count + amount)
+	save_profile()
+	if current_instance and is_instance_valid(current_instance):
+		current_instance.grenade_count_changed.emit(grenade_count)
 
 static func add_credits(amount: int) -> void:
 	_ensure_profile_loaded()
@@ -122,7 +153,6 @@ static func get_next_owned_weapon(current_id: String = "") -> String:
 	var weapon_order := [
 		"k2c1_rifle",
 		"k5_pistol",
-		"k413_grenade",
 		"m4a1_carbine",
 		"hk416_elite",
 		"scar_h_battle",
@@ -132,11 +162,11 @@ static func get_next_owned_weapon(current_id: String = "") -> String:
 	]
 	var owned: Array[String] = []
 	for w in weapon_order:
-		if owned_weapons.has(w):
+		if owned_weapons.has(w) and w != "k413_grenade":
 			owned.append(w)
 	for w in owned_weapons.keys():
 		var sw := str(w)
-		if not owned.has(sw):
+		if not owned.has(sw) and sw != "k413_grenade":
 			owned.append(sw)
 	if owned.is_empty():
 		return cur

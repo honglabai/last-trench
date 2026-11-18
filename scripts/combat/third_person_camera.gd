@@ -3,17 +3,19 @@ extends Node3D
 
 @export var is_first_person: bool = true
 @export var normal_fov: float = 75.0
-@export var aim_fov: float = 50.0
+@export var aim_fov: float = 34.0
+@export var sniper_aim_fov: float = 20.0
 @export var normal_arm_length: float = 0.0
 @export var aim_arm_length: float = 0.0
 @export var normal_offset: Vector3 = Vector3.ZERO
 @export var aim_offset: Vector3 = Vector3.ZERO
-@export var transition_speed: float = 12.0
+@export var transition_speed: float = 14.0
 @export var mouse_sensitivity: float = 0.0035
 @export var min_pitch: float = -65.0
 @export var max_pitch: float = 65.0
 
 var is_aiming: bool = false
+var is_sniper_equipped: bool = false
 var pitch: float = 0.0
 var yaw: float = 0.0
 
@@ -46,7 +48,8 @@ func _ready() -> void:
 			camera.position = Vector3.ZERO
 
 func _process(delta: float) -> void:
-	var target_fov := aim_fov if is_aiming else normal_fov
+	var active_aim_fov := sniper_aim_fov if is_sniper_equipped else aim_fov
+	var target_fov := active_aim_fov if is_aiming else normal_fov
 	var target_length := aim_arm_length if is_aiming else normal_arm_length
 	var target_offset := aim_offset if is_aiming else normal_offset
 	
@@ -74,6 +77,9 @@ func handle_look_input(relative: Vector2) -> void:
 
 func set_aiming(aiming: bool) -> void:
 	is_aiming = aiming
+
+func set_sniper_mode(sniper: bool) -> void:
+	is_sniper_equipped = sniper
 
 func get_camera_forward() -> Vector3:
 	if camera:

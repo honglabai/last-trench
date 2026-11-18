@@ -60,7 +60,9 @@ var _aim_button: Button
 var aim_button: Button:
 	get:
 		if not _aim_button:
-			_aim_button = get_node_or_null("RightZone/ActionButtons/AimButton")
+			_aim_button = get_node_or_null("LeftZone/AimButton")
+			if not _aim_button:
+				_aim_button = get_node_or_null("RightZone/ActionButtons/AimButton")
 		return _aim_button
 
 var _reload_button: Button
@@ -123,6 +125,11 @@ func _ready() -> void:
 	if grenade_button:
 		if not grenade_button.pressed.is_connected(_on_grenade_pressed):
 			grenade_button.pressed.connect(_on_grenade_pressed)
+		update_grenade_count(GameSession.get_grenade_count())
+
+func update_grenade_count(count: int) -> void:
+	if grenade_button:
+		grenade_button.text = "%d" % count
 
 func _process(delta: float) -> void:
 	if is_input_locked:
