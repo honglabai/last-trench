@@ -179,15 +179,15 @@ func _on_grenade_pressed() -> void:
 	AudioManager.play_sound("click")
 	grenade_requested.emit()
 
-func set_interact_available(available: bool, label_text: String = "포탑 설치") -> void:
+func set_interact_available(available: bool, _label_text: String = "포탑 설치") -> void:
 	can_interact = available
 	if interact_button:
 		interact_button.visible = true
-		interact_button.text = label_text
+		interact_button.text = "" # Pure circular spanner icon without text clutter
 		if available:
-			interact_button.modulate = Color(0.3, 1.0, 0.5, 1.0) # Bright glowing green active
+			interact_button.modulate = Color(0.2, 1.0, 0.6, 1.0) # Bright glowing green active
 		else:
-			interact_button.modulate = Color(1.0, 1.0, 1.0, 0.85) # High visibility tactical cyan
+			interact_button.modulate = Color(1.0, 1.0, 1.0, 0.45) # Dimmed standby circular spanner
 
 func _on_aim_pressed() -> void:
 	if not _debounce("aim"): return

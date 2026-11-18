@@ -37,6 +37,7 @@ var visual_mesh: Node3D:
 		return _visual_mesh
 
 func _ready() -> void:
+	add_to_group("enemies")
 	current_health = max_health
 	collision_layer = 4 # Enemy layer
 	collision_mask = 1 # Environment
@@ -44,6 +45,9 @@ func _ready() -> void:
 	if dmg_comp:
 		dmg_comp.max_health = max_health
 		dmg_comp.current_health = max_health
+
+func is_alive() -> bool:
+	return not is_dead and current_health > 0.0
 
 func set_target(new_target: Node3D) -> void:
 	target = new_target

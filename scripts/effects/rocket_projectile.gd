@@ -10,6 +10,9 @@ var distance_traveled: float = 0.0
 var blast_radius: float = 7.0
 var damage: float = 220.0
 var has_exploded: bool = false
+var is_guided: bool = false
+var target_node: Node3D = null
+var homing_turn_rate: float = 7.5
 
 var explosion_scene: PackedScene = preload("res://scenes/effects/explosion_effect.tscn")
 var smoke_timer: float = 0.0
@@ -17,7 +20,7 @@ var smoke_timer: float = 0.0
 var rocket_root: Node3D
 var exhaust_flame: MeshInstance3D
 
-func setup(origin: Vector3, destination: Vector3, flight_speed: float = 68.0, radius: float = 7.0, dmg_amount: float = 220.0) -> void:
+func setup(origin: Vector3, destination: Vector3, flight_speed: float = 68.0, radius: float = 7.0, dmg_amount: float = 220.0, guided: bool = false, locked_target: Node3D = null) -> void:
 	if is_inside_tree():
 		global_position = origin
 	else:
@@ -26,6 +29,8 @@ func setup(origin: Vector3, destination: Vector3, flight_speed: float = 68.0, ra
 	speed = flight_speed
 	blast_radius = radius
 	damage = dmg_amount
+	is_guided = guided
+	target_node = locked_target
 	
 	var diff := destination - origin
 	total_distance = diff.length()
@@ -123,9 +128,43 @@ func _process(delta: float) -> void:
 	if has_exploded:
 		return
 		
+	# 1. Guided Missile Target Tracking (Hyungung K-ATGM)
+	if is_guided:
+		if not is_instance_valid(target_node) or (target_node.has_method("is_alive") and not target_node.is_alive()):
+			target_node = _find_nearest_enemy_in_cone()
+			
+		if is_instance_valid(target_node):
+			var cur_pos := global_position if is_inside_tree() else position
+			var tgt_pos: Vector3 = target_node.global_position if target_node.is_inside_tree() else target_node.position
+			tgt_pos += Vector3(0.0, 0.25, 0.0) # Center of enemy mass / drone core
+			target_position = tgt_pos
+			
+			var to_target := (tgt_pos - cur_pos).normalized()
+			var steer_amount := clampf(homing_turn_rate * delta, 0.0, 1.0)
+			travel_direction = travel_direction.slerp(to_target, steer_amount).normalized()
+			
+			var up_vec := Vector3.UP
+			if abs(travel_direction.dot(Vector3.UP)) > 0.95:
+				up_vec = Vector3.RIGHT
+			if is_inside_tree():
+				look_at(global_position + travel_direction, up_vec)
+			else:
+				var fwd := travel_direction
+				var right := up_vec.cross(fwd).normalized()
+				var up := fwd.cross(right).normalized()
+				transform.basis = Basis(right, up, fwd)
+			
+			# Proximity detonation on direct missile impact
+			if cur_pos.distance_to(tgt_pos) <= 2.2:
+				explode(tgt_pos)
+				return
+		
 	var step := speed * delta
 	distance_traveled += step
-	global_position += travel_direction * step
+	if is_inside_tree():
+		global_position += travel_direction * step
+	else:
+		position += travel_direction * step
 	
 	# Exhaust flame flicker
 	if exhaust_flame:
@@ -145,7 +184,37 @@ func _process(delta: float) -> void:
 	if distance_traveled >= total_distance:
 		explode(target_position)
 
+func _find_nearest_enemy_in_cone() -> Node3D:
+	if not is_inside_tree():
+		return null
+	var enemies := get_tree().get_nodes_in_group("enemies")
+	var best_target: Node3D = null
+	var best_score: float = -9999.0
+	for node in enemies:
+		if not is_instance_valid(node) or not (node is Node3D):
+			continue
+		var n3d := node as Node3D
+		if n3d.has_method("is_alive") and not n3d.is_alive():
+			continue
+		var to_node := (n3d.global_position - global_position).normalized()
+		var dot_prod := travel_direction.dot(to_node)
+		if dot_prod < 0.15: # Must be generally in front of missile
+			continue
+		var dist := global_position.distance_to(n3d.global_position)
+		if dist > 140.0:
+			continue
+		# High priority for Drones and heavy robots/walkers
+		var is_drone_or_robot: bool = n3d is DroneAI or n3d.name.to_lower().contains("drone") or n3d.name.to_lower().contains("robot")
+		var priority: float = 40.0 if is_drone_or_robot else 12.0
+		var score := (dot_prod * 45.0) + priority - (dist * 0.35)
+		if score > best_score:
+			best_score = score
+			best_target = n3d
+	return best_target
+
 func _spawn_smoke_puff() -> void:
+	if not is_inside_tree() or not get_parent():
+		return
 	var puff := MeshInstance3D.new()
 	var sphere := SphereMesh.new()
 	sphere.radius = 0.08

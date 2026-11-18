@@ -91,7 +91,7 @@ offset_right = 300.0
 offset_bottom = 22.0
 theme_override_colors/font_color = Color(0, 0.9, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "디펜스 장애물(참호) 내구도"
 
 [node name="ShieldIcon" type="TextureRect" parent="TopLeft/VBox"]
@@ -127,7 +127,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 15
 text = "참호 거점: 500 / 500"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -154,7 +154,7 @@ offset_right = 300.0
 offset_bottom = 120.0
 theme_override_colors/font_color = Color(0, 0.9, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "방어 중인 병사의 HP"
 
 [node name="EkgIcon" type="TextureRect" parent="TopLeft/VBox"]

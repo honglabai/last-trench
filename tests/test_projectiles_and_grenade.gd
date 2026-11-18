@@ -43,6 +43,26 @@ func _init() -> void:
 			errors += 1
 		rkt.explode(Vector3(0, 1, 20))
 		print("[PASS] RocketProjectile explode triggered cleanly")
+		
+		# 2-B. Test Guided Missile Homing for Hyungung K-ATGM
+		var guided_rkt = rkt_scene.instantiate()
+		var test_dummy = Node3D.new()
+		test_dummy.position = Vector3(10.0, 5.0, 20.0)
+		guided_rkt.setup(Vector3(0, 1, 0), Vector3(0, 1, 20), 75.0, 8.5, 340.0, true, test_dummy)
+		if guided_rkt.is_guided and guided_rkt.target_node == test_dummy:
+			print("[PASS] Hyungung K-ATGM auto-tracking guided missile initialized with target lock")
+		else:
+			print("[FAIL] Guided missile initialization failed")
+			errors += 1
+		# Run a physics/process frame to verify homing steer calculation
+		guided_rkt._process(0.1)
+		if guided_rkt.travel_direction.x > 0.0:
+			print("[PASS] Guided missile autonomously steered toward target dummy (direction.x = %.3f)" % guided_rkt.travel_direction.x)
+		else:
+			print("[FAIL] Guided missile failed to steer towards target")
+			errors += 1
+		guided_rkt.explode(test_dummy.position)
+		test_dummy.free()
 	else:
 		print("[FAIL] Failed to load rocket_projectile.tscn")
 		errors += 1
@@ -146,6 +166,26 @@ func _init() -> void:
 			print("[FAIL] Grenade button count display failed: text='%s'" % touch.grenade_button.text)
 			errors += 1
 			
+		# Sizing verification: all 4 auxiliary buttons must have diameter equal to FireButton radius (74px)
+		var fire_rad: float = fire_w * 0.5
+		var aux_buttons := [touch.interact_button, touch.grenade_button, touch.reload_button, touch.switch_button]
+		for ab in aux_buttons:
+			var aw: float = ab.offset_right - ab.offset_left
+			var ah: float = ab.offset_bottom - ab.offset_top
+			if absf(aw - fire_rad) <= 2.0 and absf(ah - fire_rad) <= 2.0:
+				pass
+			else:
+				print("[FAIL] Aux button %s size (%dx%d) != FireButton radius (%.0f)" % [ab.name, int(aw), int(ah), fire_rad])
+				errors += 1
+		print("[PASS] Verified all 4 auxiliary circular buttons (Turret, Grenade, Reload, Switch) have diameter equal to Fire button radius (74px)")
+		
+		# Turret button must be circular spanner icon without text clutter
+		if touch.interact_button.text.is_empty():
+			print("[PASS] Turret install button has no text overlay (clean circular spanner icon)")
+		else:
+			print("[FAIL] Turret install button should have no text overlay: '%s'" % touch.interact_button.text)
+			errors += 1
+			
 		touch.queue_free()
 	else:
 		print("[FAIL] Failed to load touch_controls.tscn")
@@ -157,6 +197,20 @@ func _init() -> void:
 		print("[PASS] RPG-7 texture loaded successfully (%dx%d)" % [rpg_tex.get_width(), rpg_tex.get_height()])
 	else:
 		print("[FAIL] Failed to load tex_fps_rpg.png")
+		errors += 1
+		
+	# 7. Test Hyungung K-ATGM Texture & Transparent Optic Window
+	var atgm_tex = load("res://assets/textures/tex_fps_atgm.png")
+	if atgm_tex:
+		var img: Image = atgm_tex.get_image()
+		var center_pixel: Color = img.get_pixel(640, 322)
+		if center_pixel.a > 0.05 and center_pixel.a < 0.6:
+			print("[PASS] Hyungung K-ATGM texture loaded with transparent optic window (alpha=%.2f)" % center_pixel.a)
+		else:
+			print("[FAIL] Hyungung K-ATGM targeting window alpha unexpected: %.2f" % center_pixel.a)
+			errors += 1
+	else:
+		print("[FAIL] Failed to load tex_fps_atgm.png")
 		errors += 1
 		
 	if errors == 0:

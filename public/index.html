@@ -251,6 +251,18 @@ const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
                          window.matchMedia('(display-mode: fullscreen)').matches ||
                          navigator.standalone === true;
 
+function updatePwaButtonVisibility() {
+	var btnPwa = document.getElementById('btn-pwa-install');
+	var tip = document.getElementById('landing-mode-tip');
+	if (!isStandaloneMode) {
+		if (btnPwa) btnPwa.style.display = 'inline-flex';
+		if (tip) tip.textContent = '💡 상단 바 제거: [앱 설치] 시 상단바 없는 100% 전체화면으로 실행됩니다';
+	} else {
+		if (btnPwa) btnPwa.style.display = 'none';
+		if (tip) tip.textContent = '🛡️ 최후의 참호 - 100% 전체화면 작전 모드';
+	}
+}
+
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function(reg) {
 		console.log('[PWA] Service Worker registered with scope:', reg.scope);
@@ -262,10 +274,11 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('beforeinstallprompt', function(e) {
 	e.preventDefault();
 	deferredInstallPrompt = e;
-	var btnPwa = document.getElementById('btn-pwa-install');
-	if (btnPwa && !isStandaloneMode) {
-		btnPwa.style.display = 'inline-flex';
-	}
+	updatePwaButtonVisibility();
+});
+
+window.addEventListener('DOMContentLoaded', function() {
+	updatePwaButtonVisibility();
 });
 
 function enterFullscreen() {
@@ -289,7 +302,7 @@ function enterFullscreen() {
 }
 
 // Immediately trigger immersive fullscreen on any user touch/tap
-['pointerdown', 'touchstart', 'click'].forEach(function(evName) {
+['pointerdown', 'touchstart', 'touchend', 'click'].forEach(function(evName) {
 	window.addEventListener(evName, function() {
 		enterFullscreen();
 	}, { passive: true });
@@ -330,14 +343,14 @@ function enterFullscreen() {
 					<button id="btn-enter" class="btn-deploy-start" type="button" disabled>
 						<span id="btn-enter-text">전투 출격</span>
 					</button>
-					<div class="landing-tip">💡 화면 어디든 터치 시 전체화면으로 자동 전환됩니다</div>
+					<div id="landing-mode-tip" class="landing-tip">💡 화면 어디든 터치 시 전체화면으로 자동 전환됩니다</div>
 				</div>
 			</div>
 		</div>
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":15802780,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":16219388,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -383,12 +396,17 @@ const engine = new Engine(GODOT_CONFIG);
 	if (btnPwa) {
 		btnPwa.addEventListener('click', async function (e) {
 			e.stopPropagation();
+			enterFullscreen();
 			if (deferredInstallPrompt) {
 				deferredInstallPrompt.prompt();
 				var choice = await deferredInstallPrompt.userChoice;
 				console.log('[PWA] User choice outcome:', choice.outcome);
+				if (choice.outcome === 'accepted') {
+					btnPwa.style.display = 'none';
+				}
 				deferredInstallPrompt = null;
-				btnPwa.style.display = 'none';
+			} else {
+				alert("💡 [상단바 없는 100% 전체화면 앱 설치 방법]\n\n1. 우측 상단 브라우저 메뉴(점 3개 ⋮)를 터치하세요.\n2. [앱 설치] (또는 '홈 화면에 추가')를 누르면 상단 주소창이 완전히 사라진 정식 전체화면 앱으로 설치됩니다.\n\n※ 이미 홈 화면에 이전 바로가기(LastTrench)가 있다면, 기존 아이콘을 길게 눌러 [삭제]하신 후 새로 설치해주세요!");
 			}
 		});
 	}

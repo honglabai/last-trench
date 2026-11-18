@@ -6,7 +6,7 @@ config_version=5
 
 [application]
 
-config/name="LastTrench"
+config/name="최후의 참호 - LAST TRENCH"
 run/main_scene="res://scenes/app/main_menu.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"

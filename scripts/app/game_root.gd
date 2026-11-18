@@ -444,11 +444,37 @@ func _on_bullet_fired(start_pos: Vector3, target_pos: Vector3) -> void:
 		elif player.weapon.is_explosive:
 			var rkt = rocket_scene.instantiate()
 			add_child(rkt)
+			var is_guided: bool = (player.weapon.current_weapon_id == "hyungung_atgm")
+			var best_target: Node3D = null
+			if is_guided:
+				best_target = _find_guided_missile_target(muzzle_start, (target_pos - muzzle_start).normalized())
+				if battle_hud:
+					battle_hud.show_toast("[현궁 K-ATGM] 드론/로봇 자동 추적 유도탄 발사!")
 			if rkt.has_method("setup"):
-				rkt.setup(muzzle_start, target_pos, 68.0, player.weapon.splash_radius, player.weapon.damage)
+				rkt.setup(muzzle_start, target_pos, 75.0 if is_guided else 68.0, player.weapon.splash_radius, player.weapon.damage, is_guided, best_target)
 			return
 			
 	_spawn_tracer(muzzle_start, target_pos, 220.0, Color(1.0, 0.88, 0.25))
+
+func _find_guided_missile_target(aim_origin: Vector3, aim_dir: Vector3) -> Node3D:
+	var best_candidate: Node3D = null
+	var best_score: float = -9999.0
+	if wave_director and not wave_director.active_enemies.is_empty():
+		for e in wave_director.active_enemies:
+			if not is_instance_valid(e) or e.is_dead:
+				continue
+			var to_enemy := (e.global_position - aim_origin).normalized()
+			var dot_prod := aim_dir.dot(to_enemy)
+			if dot_prod < 0.2: # Must be generally in front of player
+				continue
+			var dist := aim_origin.distance_to(e.global_position)
+			var is_drone_or_robot: bool = (e is DroneAI or e.name.to_lower().contains("drone") or e.name.to_lower().contains("robot"))
+			var priority: float = 40.0 if is_drone_or_robot else 15.0
+			var score: float = (dot_prod * 50.0) + priority - (dist * 0.4)
+			if score > best_score:
+				best_score = score
+				best_candidate = e
+	return best_candidate
 
 func _on_quick_grenade_requested() -> void:
 	if not player or player.is_dead:

@@ -222,20 +222,20 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	var key_badge := Label.new()
 	key_badge.text = "[키보드 %d]" % key_num
 	key_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	key_badge.add_theme_font_size_override("font_size", 11)
+	key_badge.add_theme_font_size_override("font_size", 13)
 	key_badge.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3, 0.9))
 	thumb_inner.add_child(key_badge)
 	
 	# 2. Weapon Identity & Status Box
 	var info_box := VBoxContainer.new()
-	info_box.custom_minimum_size = Vector2(180, 0)
+	info_box.custom_minimum_size = Vector2(200, 0)
 	info_box.alignment = BoxContainer.ALIGNMENT_CENTER
 	hbox.add_child(info_box)
 	
 	var name_lbl := Label.new()
 	var country_name = info.get("country", "")
 	name_lbl.text = "[%s] %s" % [country_name, info.get("name", w_id)]
-	name_lbl.add_theme_font_size_override("font_size", 16)
+	name_lbl.add_theme_font_size_override("font_size", 19)
 	if w_id == "k413_grenade":
 		name_lbl.modulate = Color(0.3, 0.85, 1.0)
 	elif is_equipped:
@@ -247,7 +247,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	var type_lbl := Label.new()
 	type_lbl.text = "구분: %s" % info.get("type", "화기")
 	type_lbl.add_theme_color_override("font_color", Color(0.7, 0.85, 0.95, 0.8))
-	type_lbl.add_theme_font_size_override("font_size", 12)
+	type_lbl.add_theme_font_size_override("font_size", 14)
 	info_box.add_child(type_lbl)
 	
 	var lvl_lbl := Label.new()
@@ -260,7 +260,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	else:
 		lvl_lbl.text = "구매가: %d P (미보유)" % int(info.get("price", 500))
 		lvl_lbl.add_theme_color_override("font_color", Color(1.0, 0.5, 0.4))
-	lvl_lbl.add_theme_font_size_override("font_size", 12)
+	lvl_lbl.add_theme_font_size_override("font_size", 15)
 	info_box.add_child(lvl_lbl)
 	
 	# 3. Performance Stats Box
@@ -286,7 +286,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		stats_lbl1.text = "화력: %.0f (광역 폭발 피해) | 폭발 반경: %.1fm | 사거리: %.0fm" % [cur_dmg, splash, cur_rng]
 	else:
 		stats_lbl1.text = "화력: %.0f (관통 탄환 피해) | 사거리: %.0fm" % [cur_dmg, cur_rng]
-	stats_lbl1.add_theme_font_size_override("font_size", 13)
+	stats_lbl1.add_theme_font_size_override("font_size", 15)
 	stats_lbl1.add_theme_color_override("font_color", Color(1.0, 0.85, 0.35) if is_explosive else Color(0.9, 0.95, 1.0))
 	stats_box.add_child(stats_lbl1)
 	
@@ -295,20 +295,20 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		stats_lbl2.text = "작전 투입 기본: 3발 지급 | 투척 쿨타임: %.1fs | 상점 추가 보급 가능" % cur_fr
 	else:
 		stats_lbl2.text = "장탄수: %d발 | 연사속도: %.2fs | 재장전: %.1fs" % [cur_mag, cur_fr, cur_rel]
-	stats_lbl2.add_theme_font_size_override("font_size", 12)
+	stats_lbl2.add_theme_font_size_override("font_size", 14)
 	stats_lbl2.add_theme_color_override("font_color", Color(0.75, 0.85, 0.95, 0.85))
 	stats_box.add_child(stats_lbl2)
 	
 	var desc_lbl := Label.new()
 	desc_lbl.text = info.get("description", "")
 	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	desc_lbl.add_theme_font_size_override("font_size", 11)
+	desc_lbl.add_theme_font_size_override("font_size", 13)
 	desc_lbl.add_theme_color_override("font_color", Color(0.7, 0.75, 0.8, 0.75))
 	stats_box.add_child(desc_lbl)
 	
 	# 4. Action Buttons Box (Buy, Upgrade, Equip)
 	var action_box := VBoxContainer.new()
-	action_box.custom_minimum_size = Vector2(170, 0)
+	action_box.custom_minimum_size = Vector2(185, 0)
 	action_box.alignment = BoxContainer.ALIGNMENT_CENTER
 	action_box.add_theme_constant_override("separation", 6)
 	hbox.add_child(action_box)
@@ -316,7 +316,8 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	if w_id == "k413_grenade":
 		var grn_price: int = int(info.get("price", 250))
 		var grn_btn := Button.new()
-		grn_btn.custom_minimum_size = Vector2(0, 48)
+		grn_btn.custom_minimum_size = Vector2(0, 52)
+		grn_btn.add_theme_font_size_override("font_size", 16)
 		var is_max := (GameSession.grenade_count >= GameSession.max_grenades)
 		if is_max:
 			grn_btn.text = "보급 완료\n(최대 %d발)" % GameSession.max_grenades
@@ -343,7 +344,8 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		var buy_btn := Button.new()
 		var price: int = int(info.get("price", 500))
 		buy_btn.text = "무기 구매 [%d]\n(%d P)" % [key_num, price]
-		buy_btn.custom_minimum_size = Vector2(0, 48)
+		buy_btn.custom_minimum_size = Vector2(0, 52)
+		buy_btn.add_theme_font_size_override("font_size", 16)
 		buy_btn.disabled = (GameSession.credits < price)
 		var do_buy = func():
 			if not buy_btn.disabled and GameSession.buy_weapon(w_id, price):
@@ -360,7 +362,8 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	else:
 		# Equip / Status button
 		var equip_btn := Button.new()
-		equip_btn.custom_minimum_size = Vector2(0, 38)
+		equip_btn.custom_minimum_size = Vector2(0, 44)
+		equip_btn.add_theme_font_size_override("font_size", 16)
 		if is_equipped:
 			equip_btn.text = "장착 완료 (EQUIPPED)"
 			equip_btn.disabled = true
@@ -383,7 +386,8 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		if cur_lvl < 5:
 			var up_cost: int = int(up_dict.get("cost_multiplier", 300)) * cur_lvl
 			var up_btn := Button.new()
-			up_btn.custom_minimum_size = Vector2(0, 32)
+			up_btn.custom_minimum_size = Vector2(0, 36)
+			up_btn.add_theme_font_size_override("font_size", 15)
 			up_btn.text = "Lv.%d 강화 (%d P)" % [cur_lvl + 1, up_cost]
 			up_btn.disabled = (GameSession.credits < up_cost)
 			var do_up = func():
@@ -401,7 +405,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 			var max_lbl := Label.new()
 			max_lbl.text = "최고 레벨 (MAX)"
 			max_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			max_lbl.add_theme_font_size_override("font_size", 12)
+			max_lbl.add_theme_font_size_override("font_size", 15)
 			max_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
 			action_box.add_child(max_lbl)
 			
