@@ -8,9 +8,13 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 		<meta name="theme-color" content="#000000">
-		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
-		<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
-		<link rel="manifest" href="manifest.json">
+		<meta name="apple-mobile-web-app-title" content="최후의참호">
+		<meta name="application-name" content="최후의 참호 - LAST TRENCH">
+		<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+		<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="/index.icon.png">
+		<link rel="apple-touch-icon" href="/index.apple-touch-icon.png">
+		<link rel="manifest" href="/manifest.json">
 		<style>
 * {
 	box-sizing: border-box;
@@ -209,21 +213,43 @@ body {
 }
 		</style>
 		<script>
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+	window.addEventListener('load', function() {
+		navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function(reg) {
+			console.log('[PWA] Service Worker registered with scope:', reg.scope);
+		}).catch(function(err) {
+			console.warn('[PWA] Service Worker registration failed:', err);
+		});
+	});
+}
+
 function enterFullscreen() {
 	var doc = window.document;
 	var docEl = doc.documentElement;
 	var req = docEl.requestFullscreen || docEl.webkitRequestFullScreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
 	if (req && !doc.fullscreenElement && !doc.webkitFullscreenElement) {
-		req.call(docEl).then(function() {
-			if (screen.orientation && screen.orientation.lock) {
-				screen.orientation.lock('landscape').catch(function(){});
+		try {
+			var p = req.call(docEl, { navigationUI: 'hide' });
+			if (p && p.then) {
+				p.then(function() {
+					if (screen.orientation && screen.orientation.lock) {
+						screen.orientation.lock('landscape').catch(function(){});
+					}
+				}).catch(function(){});
 			}
-		}).catch(function(){});
+		} catch (e) {
+			req.call(docEl);
+		}
 	}
 }
-window.addEventListener('pointerdown', function() {
-	enterFullscreen();
-}, { passive: true });
+
+// Immediately trigger immersive fullscreen on any user touch/tap
+['pointerdown', 'touchstart', 'click'].forEach(function(evName) {
+	window.addEventListener(evName, function() {
+		enterFullscreen();
+	}, { passive: true });
+});
 		</script>
 	</head>
 	<body>
@@ -306,16 +332,24 @@ const engine = new Engine(GODOT_CONFIG);
 
 	// Button Action
 	btnEnter.addEventListener('click', function (e) {
+		enterFullscreen();
 		e.stopPropagation();
 		enterGame();
 	});
+	btnEnter.addEventListener('touchstart', function () {
+		enterFullscreen();
+	}, { passive: true });
 
 	// If player taps ready overlay, enter game
 	overlay.addEventListener('click', function () {
+		enterFullscreen();
 		if (isEngineReady) {
 			enterGame();
 		}
 	});
+	overlay.addEventListener('touchstart', function () {
+		enterFullscreen();
+	}, { passive: true });
 
 	function displayFailureNotice(err) {
 		console.error(err);

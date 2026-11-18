@@ -1,0 +1,24 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.lasttrench.game",
+      "sha256_cert_fingerprints": [
+        "B5:6B:DE:22:EF:1B:AF:F0:20:26:B0:39:F2:F4:97:4E:B5:68:77:59:FA:29:7E:C4:6B:D4:8E:10:DF:24:04:FD",
+        "E7:38:3F:EB:0E:71:80:9D:30:33:D3:D0:75:C8:07:C9:CB:1D:FF:A7:D0:F9:44:99:49:46:7A:E9:A2:2A:21:0E"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.vercel.last_trench.twa",
+      "sha256_cert_fingerprints": [
+        "B5:6B:DE:22:EF:1B:AF:F0:20:26:B0:39:F2:F4:97:4E:B5:68:77:59:FA:29:7E:C4:6B:D4:8E:10:DF:24:04:FD",
+        "E7:38:3F:EB:0E:71:80:9D:30:33:D3:D0:75:C8:07:C9:CB:1D:FF:A7:D0:F9:44:99:49:46:7A:E9:A2:2A:21:0E"
+      ]
+    }
+  }
+]
