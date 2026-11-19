@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ai/boss_drone_commander_ai.gd" id="1_ai"]
+[ext_resource type="Script" path="res://scripts/combat/damageable_component.gd" id="2_dmg"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_boss_drone_commander.png" id="3_boss_tex"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_boss"]
+radius = 1.8
+
+[node name="BossDroneCommander" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_ai")
+cruise_altitude = 11.0
+max_health = 650.0
+move_speed = 3.2
+attack_range = 25.0
+attack_damage = 18.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_boss")
+
+[node name="VisualMesh" type="Node3D" parent="."]
+
+[node name="BossSprite" type="Sprite3D" parent="VisualMesh"]
+pixel_size = 0.0075
+billboard = 1
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("3_boss_tex")
+
+[node name="BeaconLight" type="OmniLight3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+light_color = Color(1, 0.1, 0.1, 1)
+light_energy = 2.5
+omni_range = 6.0
+
+[node name="DamageableComponent" type="Node" parent="."]
+script = ExtResource("2_dmg")
+max_health = 650.0

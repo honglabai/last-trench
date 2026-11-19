@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ai/rpg_infantry_ai.gd" id="1_ai"]
+[ext_resource type="Script" path="res://scripts/combat/damageable_component.gd" id="2_dmg"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_enemy_rpg_soldier.png" id="3_rpg_tex"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rpg"]
+radius = 0.55
+height = 1.9
+
+[node name="EnemyRPG" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_ai")
+max_health = 85.0
+move_speed = 2.8
+attack_range = 22.0
+attack_damage = 25.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_rpg")
+
+[node name="VisualMesh" type="Node3D" parent="."]
+
+[node name="SoldierSprite" type="Sprite3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+pixel_size = 0.0019
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("3_rpg_tex")
+
+[node name="DamageableComponent" type="Node" parent="."]
+script = ExtResource("2_dmg")
+max_health = 85.0

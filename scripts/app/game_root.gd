@@ -160,7 +160,28 @@ func _ready() -> void:
 		)
 		wave_director.wave_cleared.connect(func(w_num):
 			battle_hud.update_wave(w_num, wave_director.max_waves_in_run, "웨이브 %d 클리어!" % w_num)
+			battle_hud.show_toast("웨이브 %02d 격퇴 완료! 전공 점수 지급" % w_num, 2.5)
 		)
+		wave_director.boss_spawned.connect(func(_boss, b_title, max_hp):
+			if battle_hud:
+				battle_hud.show_boss_bar(b_title, max_hp)
+				battle_hud.show_tactical_alert("⚠️ [BOSS] %s 출현! 화력을 집중하십시오!" % b_title, 4.0)
+			AudioManager.play_sound("alarm", 0.0, 1.0)
+		)
+		wave_director.boss_damaged.connect(func(cur, max_hp):
+			if battle_hud:
+				battle_hud.update_boss_hp(cur, max_hp)
+		)
+		wave_director.boss_defeated.connect(func(_boss, b_title):
+			if battle_hud:
+				battle_hud.hide_boss_bar()
+				battle_hud.show_toast("🏆 [BOSS 격퇴] %s 격파 성공!" % b_title, 3.5)
+				battle_hud.show_tactical_alert("🏆 [BOSS 격퇴] %s 섬멸 완료!" % b_title, 3.5)
+			GameSession.add_credits(1500)
+			if battle_hud:
+				battle_hud.update_credits(GameSession.credits)
+		)
+		wave_director.wave_event_triggered.connect(_handle_wave_event)
 		wave_director.enemy_spawned.connect(func(enemy, _count):
 			if enemy and enemy.has_signal("bullet_fired"):
 				enemy.bullet_fired.connect(func(start_p, target_p):
@@ -215,7 +236,7 @@ func _ready() -> void:
 		
 	# 9. Start the run
 	if wave_director:
-		wave_director.start_run(3)
+		wave_director.start_run(15)
 
 func _physics_process(delta: float) -> void:
 	if trench_map and player:
@@ -366,9 +387,28 @@ func _on_wave_state_changed(state: int) -> void:
 	if not battle_hud or not wave_director:
 		return
 	if state == WaveDirector.WaveState.PREPARATION:
-		battle_hud.update_wave(wave_director.current_wave_number, wave_director.max_waves_in_run, "정비 시간...")
+		battle_hud.update_wave(wave_director.current_wave_number, wave_director.max_waves_in_run, "작전 정비 시간...")
 	elif state == WaveDirector.WaveState.COMBAT:
 		battle_hud.update_wave(wave_director.current_wave_number, wave_director.max_waves_in_run, "적 공세 방어 중!")
+
+func _handle_wave_event(event_name: String, _wave_num: int) -> void:
+	if not battle_hud:
+		return
+	match event_name:
+		"boss_air", "boss_ground", "final_combined_assault":
+			battle_hud.show_tactical_alert("🚨 경보: 강력한 지휘체 신호 감지! 대공/대전차 화기 준비!", 4.0)
+		"partial_cover_damage":
+			battle_hud.show_tactical_alert("⚠️ 위험: 적 집중 포화로 전방 엄폐물 파손 발생!", 3.5)
+		"jamming":
+			battle_hud.show_tactical_alert("🚨 전자전: 적 통신 재밍 발생! 조준선 교란 주의!", 3.5)
+		"night", "dust":
+			battle_hud.show_tactical_alert("🌙 야간/먼지 폭풍 작전: 열화상 탐지 모드 가동!", 3.5)
+		"artillery_warning":
+			battle_hud.show_tactical_alert("⚠️ 적 야포 포격 경보: 참호 엄폐를 유지하십시오!", 4.0)
+		"rocket_artillery":
+			battle_hud.show_tactical_alert("🚀 방사포 일제 사격 경보: 전 구역 충격 대비!", 4.0)
+		"helicopter_event":
+			battle_hud.show_tactical_alert("🚁 적 항공 지원 접근: 대공 사격 준비!", 3.5)
 
 func _start_turret_build(slot: DefenseSlot) -> void:
 	if is_building_turret and building_slot == slot:

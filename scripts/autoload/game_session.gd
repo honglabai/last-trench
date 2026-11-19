@@ -242,9 +242,16 @@ func _on_enemy_killed(_enemy, _rem, _act) -> void:
 	GameSession.add_credits(25)
 	credits_changed.emit(GameSession.credits)
 
-func _on_wave_cleared(_wave_num: int) -> void:
-	# Award credits for wave defense completion
-	GameSession.add_credits(200)
+func _on_wave_cleared(wave_num: int) -> void:
+	# Award escalating credits for wave defense completion
+	var wave_reward := 250 + (wave_num * 60)
+	if wave_num == 5:
+		wave_reward += 500 # Boss 1 bonus
+	elif wave_num == 10:
+		wave_reward += 1000 # Boss 2 bonus
+	elif wave_num == 15:
+		wave_reward += 2500 # Final Boss victory bonus
+	GameSession.add_credits(wave_reward)
 	credits_changed.emit(GameSession.credits)
 
 func _on_player_died() -> void:

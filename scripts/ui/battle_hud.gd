@@ -106,6 +106,42 @@ var crosshair_ring: Control:
 		if not _crosshair_ring: _crosshair_ring = get_node_or_null("Center/Crosshair/Ring")
 		return _crosshair_ring
 
+var _boss_container: Control
+var boss_container: Control:
+	get:
+		if not _boss_container: _boss_container = get_node_or_null("TopCenter/BossContainer")
+		return _boss_container
+
+var _boss_name_label: Label
+var boss_name_label: Label:
+	get:
+		if not _boss_name_label: _boss_name_label = get_node_or_null("TopCenter/BossContainer/BossNameLabel")
+		return _boss_name_label
+
+var _boss_hp_bar: Range
+var boss_hp_bar: Range:
+	get:
+		if not _boss_hp_bar: _boss_hp_bar = get_node_or_null("TopCenter/BossContainer/BossHPBar")
+		return _boss_hp_bar
+
+var _boss_hp_label: Label
+var boss_hp_label: Label:
+	get:
+		if not _boss_hp_label: _boss_hp_label = get_node_or_null("TopCenter/BossContainer/BossHPLabel")
+		return _boss_hp_label
+
+var _tactical_alert_banner: Control
+var tactical_alert_banner: Control:
+	get:
+		if not _tactical_alert_banner: _tactical_alert_banner = get_node_or_null("TopCenter/TacticalAlertBanner")
+		return _tactical_alert_banner
+
+var _tactical_alert_label: Label
+var tactical_alert_label: Label:
+	get:
+		if not _tactical_alert_label: _tactical_alert_label = get_node_or_null("TopCenter/TacticalAlertBanner/AlertLabel")
+		return _tactical_alert_label
+
 var _victory_panel: Control
 var victory_panel: Control:
 	get:
@@ -661,11 +697,13 @@ func _unhandled_input(event: InputEvent) -> void:
 				return
 
 func show_victory() -> void:
+	hide_boss_bar()
 	if victory_panel:
 		victory_panel.visible = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func show_defeat(reason: String) -> void:
+	hide_boss_bar()
 	if defeat_panel:
 		defeat_panel.visible = true
 		if defeat_reason_label:
@@ -676,3 +714,46 @@ func show_defeat(reason: String) -> void:
 			else:
 				defeat_reason_label.text = "작전 실패: %s" % reason
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func show_boss_bar(boss_title: String, max_hp: float) -> void:
+	if boss_container:
+		boss_container.visible = true
+	if boss_name_label:
+		boss_name_label.text = "⚠️ [BOSS] %s" % boss_title
+	if boss_hp_bar:
+		boss_hp_bar.max_value = max_hp
+		boss_hp_bar.value = max_hp
+	if boss_hp_label:
+		boss_hp_label.text = "%d / %d HP" % [int(max_hp), int(max_hp)]
+
+func update_boss_hp(cur_hp: float, max_hp: float) -> void:
+	if boss_hp_bar:
+		boss_hp_bar.max_value = max_hp
+		boss_hp_bar.value = maxf(0.0, cur_hp)
+	if boss_hp_label:
+		boss_hp_label.text = "%d / %d HP" % [int(maxf(0.0, cur_hp)), int(max_hp)]
+
+func hide_boss_bar() -> void:
+	if boss_container:
+		boss_container.visible = false
+
+var alert_timer: float = 0.0
+
+func show_tactical_alert(alert_text: String, duration: float = 3.5) -> void:
+	if tactical_alert_banner and tactical_alert_label:
+		tactical_alert_label.text = alert_text
+		tactical_alert_banner.visible = true
+		tactical_alert_banner.modulate = Color(1, 1, 1, 1)
+		alert_timer = duration
+
+func _process(delta: float) -> void:
+	if alert_timer > 0.0:
+		alert_timer -= delta
+		if alert_timer <= 0.0:
+			if tactical_alert_banner and is_inside_tree():
+				var tw := create_tween()
+				tw.tween_property(tactical_alert_banner, "modulate:a", 0.0, 0.4)
+				tw.tween_callback(func():
+					if tactical_alert_banner:
+						tactical_alert_banner.visible = false
+				)

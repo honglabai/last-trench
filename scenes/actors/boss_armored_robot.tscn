@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ai/boss_armored_robot_ai.gd" id="1_ai"]
+[ext_resource type="Script" path="res://scripts/combat/damageable_component.gd" id="2_dmg"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_boss_armored_robot.png" id="3_boss_tex"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_boss"]
+size = Vector3(3.2, 4.0, 3.2)
+
+[node name="BossArmoredRobot" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_ai")
+max_health = 1200.0
+move_speed = 2.2
+attack_range = 20.0
+attack_damage = 38.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
+shape = SubResource("BoxShape3D_boss")
+
+[node name="VisualMesh" type="Node3D" parent="."]
+
+[node name="BossSprite" type="Sprite3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
+pixel_size = 0.0085
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("3_boss_tex")
+
+[node name="DamageableComponent" type="Node" parent="."]
+script = ExtResource("2_dmg")
+max_health = 1200.0

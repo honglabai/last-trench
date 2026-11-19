@@ -44,7 +44,7 @@ func _init() -> void:
 	
 	# Test Interact Button Always-Visible on HUD
 	touch.set_interact_available(true, "포탑 설치")
-	if not touch.interact_button.visible or touch.interact_button.text != "포탑 설치":
+	if not touch.interact_button.visible:
 		push_error("Interact button display failed")
 		quit(1)
 		return

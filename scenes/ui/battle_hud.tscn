@@ -39,6 +39,8 @@
 [ext_resource type="Texture2D" uid="uid://t74wijb8xces" path="res://assets/ui/buttons/btn_dec_pressed.png" id="37_dec_p"]
 [ext_resource type="Texture2D" uid="uid://exyh2yd4rnt3" path="res://assets/ui/buttons/btn_inc_normal.png" id="38_inc_n"]
 [ext_resource type="Texture2D" uid="uid://h8a0iv86r2eo" path="res://assets/ui/buttons/btn_inc_pressed.png" id="39_inc_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_bar_under_boss.png" id="45_bos_u"]
+[ext_resource type="Texture2D" path="res://assets/ui/tex_bar_fill_boss.png" id="46_bos_f"]
 
 [node name="BattleHUD" type="CanvasLayer"]
 layer = 10
@@ -220,6 +222,101 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
 theme_override_font_sizes/font_size = 12
 text = "즉시 부활: 1 / 1"
 horizontal_alignment = 2
+
+[node name="TopCenter" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 16.0
+offset_right = 300.0
+offset_bottom = 160.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="BossContainer" type="Control" parent="TopCenter"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -240.0
+offset_top = 0.0
+offset_right = 240.0
+offset_bottom = 54.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="BossNameLabel" type="Label" parent="TopCenter/BossContainer"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 24.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.25, 0.2, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_font_sizes/font_size = 16
+text = "⚠️ [BOSS] 드론 군집 지휘체"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BossHPBar" type="TextureProgressBar" parent="TopCenter/BossContainer"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -24.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+max_value = 1000.0
+value = 1000.0
+texture_under = ExtResource("45_bos_u")
+texture_progress = ExtResource("46_bos_f")
+
+[node name="BossHPLabel" type="Label" parent="TopCenter/BossContainer"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -24.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_font_sizes/font_size = 12
+text = "1000 / 1000 HP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TacticalAlertBanner" type="PanelContainer" parent="TopCenter"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -54.0
+offset_right = 280.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="AlertLabel" type="Label" parent="TopCenter/TacticalAlertBanner"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_colors/font_shadow_color = Color(0.6, 0, 0, 0.95)
+theme_override_font_sizes/font_size = 16
+text = "⚠️ TACTICAL ALERT"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TopRightTactical" type="Control" parent="."]
 layout_mode = 3
