@@ -77,33 +77,43 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 		
-	# 1. Read input (Supports both Keyboard WASD/Arrow Keys and Mobile Touch)
-	var kb_x := 0.0
-	var kb_y := 0.0
-	if Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT) or Input.is_action_pressed("move_left"):
-		kb_x -= 1.0
-	if Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT) or Input.is_action_pressed("move_right"):
-		kb_x += 1.0
-	if Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP) or Input.is_action_pressed("move_forward"):
-		kb_y -= 1.0
-	if Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN) or Input.is_action_pressed("move_backward"):
-		kb_y += 1.0
+	# 1. Read input: Keyboard Arrow Keys (키보드 화살표 방향키: ←, →, ↑, ↓) rotate aim & view direction
+	var arrow_x := 0.0
+	var arrow_y := 0.0
+	if Input.is_physical_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_LEFT) or Input.is_action_pressed("aim_left"):
+		arrow_x -= 1.0
+	if Input.is_physical_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_RIGHT) or Input.is_action_pressed("aim_right"):
+		arrow_x += 1.0
+	if Input.is_physical_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_UP) or Input.is_action_pressed("aim_up"):
+		arrow_y -= 1.0
+	if Input.is_physical_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_DOWN) or Input.is_action_pressed("aim_down"):
+		arrow_y += 1.0
 		
-	var keyboard_vec := Vector2(kb_x, kb_y)
-	if keyboard_vec.length_squared() > 1.0:
-		keyboard_vec = keyboard_vec.normalized()
+	var arrow_vec := Vector2(arrow_x, arrow_y)
+	if arrow_vec.length_squared() > 1.0:
+		arrow_vec = arrow_vec.normalized()
 		
-	# WASD / Arrow keys smoothly rotate aim & view direction
-	if keyboard_vec.length_squared() > 0.01 and camera_rig:
-		var keyboard_look_speed: float = 950.0
-		var look_delta := keyboard_vec * keyboard_look_speed * delta
+	# Keyboard Arrow keys smoothly rotate aim & view direction
+	if arrow_vec.length_squared() > 0.01 and camera_rig:
+		var arrow_look_speed: float = 950.0
+		var look_delta := arrow_vec * arrow_look_speed * delta
 		camera_rig.handle_look_input(look_delta)
 
 	var move_vec := Vector2.ZERO
-	if keyboard_vec.length_squared() > 0.01:
-		move_vec = keyboard_vec
+	if arrow_vec.length_squared() > 0.01:
+		move_vec = arrow_vec
 	elif manual_input_override:
 		move_vec = input_move_vector
+	else:
+		var wasd_x := 0.0
+		var wasd_y := 0.0
+		if Input.is_action_pressed("move_left"): wasd_x -= 1.0
+		if Input.is_action_pressed("move_right"): wasd_x += 1.0
+		if Input.is_action_pressed("move_forward"): wasd_y -= 1.0
+		if Input.is_action_pressed("move_backward"): wasd_y += 1.0
+		var wasd_vec := Vector2(wasd_x, wasd_y)
+		if wasd_vec.length_squared() > 0.01:
+			move_vec = wasd_vec.normalized()
 		
 	if manual_input_override:
 		# is_aiming is maintained as set by set_aiming() / touch controls

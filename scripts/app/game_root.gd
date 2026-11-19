@@ -58,6 +58,9 @@ var build_progress: float = 0.0
 const TURRET_BUILD_TIME: float = 2.5
 var build_tick_timer: float = 0.0
 
+var _g_key_was_pressed: bool = false
+var _last_grenade_time: float = -1.0
+
 
 func _ready() -> void:
 	if _is_initialized:
@@ -337,6 +340,24 @@ func _physics_process(delta: float) -> void:
 					if touch_controls:
 						touch_controls.set_interact_available(false)
 
+	# Continuous G key check (immediate responsive throw)
+	var g_is_pressed: bool = Input.is_physical_key_pressed(KEY_G) or Input.is_key_pressed(KEY_G) or Input.is_action_just_pressed("throw_grenade")
+	if g_is_pressed and not _g_key_was_pressed:
+		if not battle_hud or not battle_hud.armory_shop or not battle_hud.armory_shop.visible:
+			_on_quick_grenade_requested()
+	_g_key_was_pressed = Input.is_physical_key_pressed(KEY_G) or Input.is_key_pressed(KEY_G)
+
+func _is_grenade_key(event: InputEvent) -> bool:
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.physical_keycode == KEY_G or event.keycode == KEY_G:
+			return true
+		var t := event.as_text().to_upper()
+		if t == "G" or t.contains("G"):
+			return true
+		if event.unicode == 103 or event.unicode == 71 or event.unicode == 12622: # 'g', 'G', 'ㅎ'
+			return true
+	return false
+
 func _unhandled_input(event: InputEvent) -> void:
 	# 1. DefenseSlot interaction / Turret Build
 	if event.is_action_pressed("interact"):
@@ -357,9 +378,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		if player and player.weapon:
 			player.weapon.start_reload()
 	# 6. Quick Grenade throw ('G')
-	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_G:
+	elif _is_grenade_key(event) or event.is_action_pressed("throw_grenade"):
 		if not battle_hud or not battle_hud.armory_shop or not battle_hud.armory_shop.visible:
 			_on_quick_grenade_requested()
+			if get_viewport():
+				get_viewport().set_input_as_handled()
 	# 7. Direct numeric weapon select (1 to 9)
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode >= KEY_1 and event.keycode <= KEY_9:
 		var slot_idx: int = event.keycode - KEY_1
@@ -561,17 +584,22 @@ func _find_guided_missile_target(aim_origin: Vector3, aim_dir: Vector3) -> Node3
 func _on_quick_grenade_requested() -> void:
 	if not player or player.is_dead:
 		return
+	var now := Time.get_ticks_msec() / 1000.0
+	if now - _last_grenade_time < 0.25:
+		return
+	_last_grenade_time = now
 	if not GameSession.use_grenade():
 		AudioManager.play_sound("click", 0.04, 0.5)
 		if battle_hud:
 			battle_hud.show_toast("[수류탄 소진] B키(상점)에서 추가 구매할 수 있습니다")
 		return
 		
-	var origin := player.global_position + Vector3(0.0, 1.5, 0.0)
-	var throw_dir := Vector3.FORWARD
-	if player.camera_rig and player.camera_rig.camera:
-		origin = player.camera_rig.camera.global_position
+	var origin: Vector3 = player.global_position + Vector3(0.0, 1.5, 0.0) if player.is_inside_tree() else player.position + Vector3(0.0, 1.5, 0.0)
+	var throw_dir: Vector3 = Vector3.FORWARD
+	if player.camera_rig:
 		throw_dir = player.camera_rig.get_camera_forward()
+		if player.camera_rig.camera and player.camera_rig.camera.is_inside_tree():
+			origin = player.camera_rig.camera.global_position
 	var grn = grenade_scene.instantiate()
 	add_child(grn)
 	if grn.has_method("setup"):

@@ -82,9 +82,13 @@ func set_sniper_mode(sniper: bool) -> void:
 	is_sniper_equipped = sniper
 
 func get_camera_forward() -> Vector3:
-	if camera:
+	if camera and camera.is_inside_tree():
 		return -camera.global_transform.basis.z
-	return -global_transform.basis.z
+	elif camera:
+		return -camera.transform.basis.z
+	if is_inside_tree():
+		return -global_transform.basis.z
+	return -transform.basis.z
 
 func get_yaw_basis() -> Basis:
 	return Basis(Vector3.UP, yaw)

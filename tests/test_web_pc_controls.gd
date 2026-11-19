@@ -24,16 +24,16 @@ func _init() -> void:
 		return
 	print("[PASS] Mouse motion camera aiming verified: yaw = ", player.camera_rig.yaw)
 	
-	# 1-B. Test WASD keyboard direction control
+	# 1-B. Test Keyboard Arrow keys direction control
 	var yaw_before: float = player.camera_rig.yaw
-	Input.action_press("move_right")
+	Input.action_press("aim_right")
 	player._physics_process(0.05)
-	Input.action_release("move_right")
+	Input.action_release("aim_right")
 	if is_equal_approx(player.camera_rig.yaw, yaw_before):
-		push_error("WASD [D] key failed to rotate camera yaw")
+		push_error("Arrow key [aim_right] failed to rotate camera yaw")
 		quit(1)
 		return
-	print("[PASS] WASD key camera aiming verified: yaw = ", player.camera_rig.yaw)
+	print("[PASS] Keyboard Arrow key camera aiming verified: yaw = ", player.camera_rig.yaw)
 	
 	# 2. Test GameRoot Keyboard Interact & DefenseSlot E shortcut
 	var root_scene = load("res://scenes/app/game_root.tscn")
@@ -89,6 +89,19 @@ func _init() -> void:
 		quit(1)
 		return
 	print("[PASS] BattleHUD PC controls guide text verified: ", game_root.battle_hud.help_label.text)
+	
+	# 4. Test Quick Grenade throw via G key
+	GameSession.grenade_count = 3
+	var g_key_event = InputEventKey.new()
+	g_key_event.physical_keycode = KEY_G
+	g_key_event.keycode = KEY_G
+	g_key_event.pressed = true
+	game_root._unhandled_input(g_key_event)
+	if GameSession.grenade_count != 2:
+		push_error("G key failed to trigger quick grenade throw, grenade_count is: %d" % GameSession.grenade_count)
+		quit(1)
+		return
+	print("[PASS] G key quick grenade throw verified (grenade count decremented from 3 to 2)")
 	
 	player.queue_free()
 	game_root.queue_free()
