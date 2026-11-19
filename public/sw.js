@@ -1,12 +1,14 @@
 // Service Worker for LAST TRENCH PWA Fullscreen Support
-const CACHE_NAME = 'last-trench-v1';
+const CACHE_NAME = 'last-trench-v2';
 const PRECACHE_ASSETS = [
 	'/',
 	'/manifest.json',
 	'/index.html',
 	'/index.js',
+	'/icon-144.png',
 	'/icon-192.png',
 	'/icon-512.png',
+	'/icon-maskable-144.png',
 	'/icon-maskable-192.png',
 	'/icon-maskable-512.png'
 ];

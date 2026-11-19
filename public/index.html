@@ -284,8 +284,11 @@ window.addEventListener('DOMContentLoaded', function() {
 function enterFullscreen() {
 	var doc = window.document;
 	var docEl = doc.documentElement;
-	var req = docEl.requestFullscreen || docEl.webkitRequestFullScreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
-	if (req && !doc.fullscreenElement && !doc.webkitFullscreenElement) {
+	if (doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement) {
+		return;
+	}
+	var req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.webkitRequestFullScreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+	if (req) {
 		try {
 			var p = req.call(docEl, { navigationUI: 'hide' });
 			if (p && p.then) {
@@ -293,19 +296,25 @@ function enterFullscreen() {
 					if (screen.orientation && screen.orientation.lock) {
 						screen.orientation.lock('landscape').catch(function(){});
 					}
-				}).catch(function(){});
+				}).catch(function() {
+					try {
+						req.call(docEl);
+					} catch (e2) {}
+				});
 			}
 		} catch (e) {
-			req.call(docEl);
+			try {
+				req.call(docEl);
+			} catch (e3) {}
 		}
 	}
 }
 
-// Immediately trigger immersive fullscreen on any user touch/tap
-['pointerdown', 'touchstart', 'touchend', 'click'].forEach(function(evName) {
+// Immediately trigger immersive fullscreen on any user touch/tap (active gesture, not passive)
+['pointerup', 'touchend', 'click'].forEach(function(evName) {
 	window.addEventListener(evName, function() {
 		enterFullscreen();
-	}, { passive: true });
+	}, false);
 });
 		</script>
 	</head>
@@ -350,7 +359,7 @@ function enterFullscreen() {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":16328372,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":16288908,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -412,25 +421,31 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 
 	// Button Action
+	btnEnter.addEventListener('pointerup', function () {
+		enterFullscreen();
+	}, false);
+	btnEnter.addEventListener('touchend', function () {
+		enterFullscreen();
+	}, false);
 	btnEnter.addEventListener('click', function (e) {
 		enterFullscreen();
 		e.stopPropagation();
 		enterGame();
-	});
-	btnEnter.addEventListener('touchstart', function () {
-		enterFullscreen();
-	}, { passive: true });
+	}, false);
 
 	// If player taps ready overlay, enter game
+	overlay.addEventListener('pointerup', function () {
+		enterFullscreen();
+	}, false);
+	overlay.addEventListener('touchend', function () {
+		enterFullscreen();
+	}, false);
 	overlay.addEventListener('click', function () {
 		enterFullscreen();
 		if (isEngineReady) {
 			enterGame();
 		}
-	});
-	overlay.addEventListener('touchstart', function () {
-		enterFullscreen();
-	}, { passive: true });
+	}, false);
 
 	function displayFailureNotice(err) {
 		console.error(err);
