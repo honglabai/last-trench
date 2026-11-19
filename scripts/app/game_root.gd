@@ -340,19 +340,13 @@ func _physics_process(delta: float) -> void:
 					if touch_controls:
 						touch_controls.set_interact_available(false)
 
-	# Continuous G key check (immediate responsive throw)
-	var g_is_pressed: bool = Input.is_physical_key_pressed(KEY_G) or Input.is_key_pressed(KEY_G) or Input.is_action_just_pressed("throw_grenade")
-	if g_is_pressed and not _g_key_was_pressed:
-		if not battle_hud or not battle_hud.armory_shop or not battle_hud.armory_shop.visible:
-			_on_quick_grenade_requested()
-	_g_key_was_pressed = Input.is_physical_key_pressed(KEY_G) or Input.is_key_pressed(KEY_G)
-
 func _is_grenade_key(event: InputEvent) -> bool:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.physical_keycode == KEY_G or event.keycode == KEY_G:
 			return true
-		var t := event.as_text().to_upper()
-		if t == "G" or t.contains("G"):
+		# Strict exact match only - NEVER use .contains("G") as keys like 'Right' contain 'g'
+		var t := event.as_text().strip_edges().to_upper()
+		if t == "G":
 			return true
 		if event.unicode == 103 or event.unicode == 71 or event.unicode == 12622: # 'g', 'G', 'ㅎ'
 			return true

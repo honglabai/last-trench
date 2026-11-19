@@ -27,7 +27,8 @@ const SOUND_FILES := {
 	"explosion": "sfx_explosion.wav",
 	"drone_hum": "sfx_drone_hum.wav",
 	"hit_enemy": "sfx_hit_enemy.wav",
-	"click": "sfx_ui_click.wav"
+	"click": "sfx_ui_click.wav",
+	"dry_fire": "sfx_dry_fire.wav"
 }
 
 static func ensure_instance(parent: Node = null) -> AudioManager:

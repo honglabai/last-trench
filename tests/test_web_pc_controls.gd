@@ -92,6 +92,20 @@ func _init() -> void:
 	
 	# 4. Test Quick Grenade throw via G key
 	GameSession.grenade_count = 3
+	
+	# 4-A. Verify Arrow Right key does NOT throw grenade
+	var right_key_event = InputEventKey.new()
+	right_key_event.physical_keycode = KEY_RIGHT
+	right_key_event.keycode = KEY_RIGHT
+	right_key_event.pressed = true
+	game_root._unhandled_input(right_key_event)
+	if GameSession.grenade_count != 3:
+		push_error("Arrow Right key incorrectly threw a grenade!")
+		quit(1)
+		return
+	print("[PASS] Verified Arrow keys do NOT trigger grenade throw")
+	
+	# 4-B. Verify G key throws grenade
 	var g_key_event = InputEventKey.new()
 	g_key_event.physical_keycode = KEY_G
 	g_key_event.keycode = KEY_G
