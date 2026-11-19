@@ -217,31 +217,43 @@ body {
 	display: none;
 	align-items: center;
 	justify-content: center;
-	gap: 6px;
+	gap: 8px;
 	margin: 8px auto 6px auto;
-	padding: 7px 16px;
-	background: rgba(0, 180, 216, 0.2);
-	border: 1px solid #00e5ff;
-	border-radius: 18px;
-	color: #e0f7fa;
-	font-size: 12px;
-	font-weight: 600;
+	padding: 9px 20px;
+	background: linear-gradient(135deg, rgba(0, 180, 216, 0.3), rgba(0, 229, 255, 0.2));
+	border: 1.5px solid #00e5ff;
+	border-radius: 20px;
+	color: #ffffff;
+	font-size: 13px;
+	font-weight: 700;
 	cursor: pointer;
 	backdrop-filter: blur(8px);
-	box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+	box-shadow: 0 0 18px rgba(0, 229, 255, 0.45);
 	transition: all 0.2s ease;
+	animation: pwaPulse 2.5s infinite ease-in-out;
+}
+@keyframes pwaPulse {
+	0%, 100% {
+		box-shadow: 0 0 14px rgba(0, 229, 255, 0.4);
+		transform: scale(1);
+	}
+	50% {
+		box-shadow: 0 0 24px rgba(0, 229, 255, 0.75);
+		transform: scale(1.02);
+	}
 }
 .btn-pwa-install:active {
 	transform: scale(0.96);
-	background: rgba(0, 180, 216, 0.45);
+	background: rgba(0, 180, 216, 0.55);
 }
 
 .landing-tip {
 	font-size: 11px;
-	color: rgba(255, 255, 255, 0.55);
+	color: rgba(0, 229, 255, 0.9);
 	margin-top: 6px;
 	letter-spacing: 0.3px;
-	text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+	text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+	font-weight: 600;
 }
 		</style>
 		<script>
@@ -256,7 +268,7 @@ function updatePwaButtonVisibility() {
 	var tip = document.getElementById('landing-mode-tip');
 	if (!isStandaloneMode) {
 		if (btnPwa) btnPwa.style.display = 'inline-flex';
-		if (tip) tip.textContent = '💡 상단 바 제거: [앱 설치] 시 상단바 없는 100% 전체화면으로 실행됩니다';
+		if (tip) tip.textContent = '💡 상단 바 제거: 기존 바로가기 삭제 후 [앱 설치] 시 상단바 없는 100% 전체화면으로 실행됩니다';
 	} else {
 		if (btnPwa) btnPwa.style.display = 'none';
 		if (tip) tip.textContent = '🛡️ 최후의 참호 - 100% 전체화면 작전 모드';
@@ -310,11 +322,11 @@ function enterFullscreen() {
 	}
 }
 
-// Immediately trigger immersive fullscreen on any user touch/tap (active gesture, not passive)
-['pointerup', 'touchend', 'click'].forEach(function(evName) {
+// Immediately trigger immersive fullscreen on any touch/pointer down or click
+['pointerdown', 'touchstart', 'mousedown', 'pointerup', 'touchend', 'click'].forEach(function(evName) {
 	window.addEventListener(evName, function() {
 		enterFullscreen();
-	}, false);
+	}, { passive: true });
 });
 		</script>
 	</head>
