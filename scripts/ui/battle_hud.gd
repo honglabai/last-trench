@@ -609,6 +609,18 @@ func trigger_weapon_fire() -> void:
 	if viewmodel:
 		viewmodel.on_fire()
 
+func update_stage_and_wave(stage_id: int, total_stages: int, stage_wave: int, total_stage_waves: int, diff_text: String = "", info_text: String = "") -> void:
+	if level_title_label:
+		level_title_label.text = "STAGE %d/%d" % [stage_id, total_stages]
+	if wave_title_label:
+		wave_title_label.text = "WAVE %d/%d" % [stage_wave, total_stage_waves]
+	if wave_info_label:
+		var prefix := "[%s] " % diff_text if diff_text != "" else ""
+		wave_info_label.text = prefix + (info_text if info_text != "" else "작전 구역 방어")
+	if defense_bar and total_stage_waves > 0:
+		defense_bar.max_value = float(total_stage_waves)
+		defense_bar.value = float(stage_wave)
+
 func update_wave(current_wave: int, max_waves: int, info_text: String = "") -> void:
 	if wave_title_label:
 		wave_title_label.text = "WAVE %02d / %02d" % [current_wave, max_waves]

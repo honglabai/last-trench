@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/ai/boss_armored_robot_ai.gd" id="1_ai"]
 [ext_resource type="Script" path="res://scripts/combat/damageable_component.gd" id="2_dmg"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_boss_armored_robot.png" id="3_boss_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/weapons/tex_wpn_boss_siege_railgun.png" id="4_wpn_railgun"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_boss"]
 size = Vector3(3.2, 4.0, 3.2)
@@ -29,6 +30,22 @@ billboard = 2
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("3_boss_tex")
+
+[node name="LeftRailgunSprite" type="Sprite3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 2.5, 0.2)
+pixel_size = 0.008
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("4_wpn_railgun")
+
+[node name="RightRailgunSprite" type="Sprite3D" parent="VisualMesh"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 2.5, 0.2)
+pixel_size = 0.008
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("4_wpn_railgun")
 
 [node name="DamageableComponent" type="Node" parent="."]
 script = ExtResource("2_dmg")

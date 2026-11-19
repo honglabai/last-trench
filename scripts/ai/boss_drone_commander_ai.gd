@@ -48,9 +48,5 @@ func _execute_attack() -> void:
 	for side in [-0.9, 0.9]:
 		var muzzle_pos := my_pos + Vector3(side, -0.4, 0.6)
 		var target_pos := tgt_pos + Vector3(randf_range(-1.4, 1.4), randf_range(0.2, 1.2), 0.0)
-		AudioManager.play_sound_at("drone_rocket", muzzle_pos, my_pos)
 		rocket_fired.emit(muzzle_pos, target_pos)
-		
-	if target.has_method("apply_damage"):
-		target.apply_damage(attack_damage)
-	attack_performed.emit(target, attack_damage)
+		launch_projectile(EnemyProjectile.ProjectileType.MISSILE_SALVO, muzzle_pos, target_pos, attack_damage * 0.5, 36.0, 4.0, target)

@@ -1,17 +1,365 @@
 {
-  "_notice": "적 수치는 누적 출현 수 예시이며 동시에 활성화되는 적 수는 최대 12개(설정 cap)를 넘으면 안 됨. 1~3웨이브만 MVP1 적용, 이후 ID는 P17+ 구현.",
-  "schema_version": 1,
-  "spawn_policy": "front_focused_only",
+  "_notice": "지역별 5개 스테이지 구성 (웨이브 수: 2, 3, 4, 5, 6으로 난이도 세분화). 동시 활성 적 수는 최대 12개 cap 유지.",
+  "schema_version": 2,
+  "region_id": "sector_alpha",
+  "region_name": "제1작전구역: 서부 최전방 참호선 (Sector Alpha)",
+  "total_stages": 5,
   "max_active_enemies": 12,
+  "spawn_policy": "front_focused_only",
   "boss_waves": [
-    5,
-    10,
-    15
+    14,
+    17,
+    20
+  ],
+  "stages": [
+    {
+      "stage_id": 1,
+      "stage_name": "제1스테이지: 전초 경계선 (Outpost Perimeter)",
+      "difficulty": "쉬움 (EASY)",
+      "total_waves": 2,
+      "reward_credits": 1000,
+      "waves": [
+        {
+          "wave_index": 1,
+          "label_ko": "적 정찰 보병대",
+          "enemy_total": {
+            "infantry_basic": 4
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground"
+          ]
+        },
+        {
+          "wave_index": 2,
+          "label_ko": "전방 경계 분대 + 경량 드론",
+          "enemy_total": {
+            "infantry_basic": 5,
+            "drone_attack": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        }
+      ]
+    },
+    {
+      "stage_id": 2,
+      "stage_name": "제2스테이지: 주 참호선 사수 (Main Trench Line)",
+      "difficulty": "보통 (NORMAL)",
+      "total_waves": 3,
+      "reward_credits": 1500,
+      "waves": [
+        {
+          "wave_index": 1,
+          "label_ko": "적 돌격 제대",
+          "enemy_total": {
+            "infantry_basic": 7
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground"
+          ]
+        },
+        {
+          "wave_index": 2,
+          "label_ko": "공중 침투 편대",
+          "enemy_total": {
+            "infantry_basic": 5,
+            "drone_attack": 4
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "wave_index": 3,
+          "label_ko": "혼성 침투 부대 + RPG 분대",
+          "enemy_total": {
+            "infantry_basic": 6,
+            "rpg_infantry": 3,
+            "drone_attack": 2
+          },
+          "boss": false,
+          "events": [
+            "heavy_artillery_incoming"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        }
+      ]
+    },
+    {
+      "stage_id": 3,
+      "stage_name": "제3스테이지: 고지 방어 결전 (Highland Stronghold)",
+      "difficulty": "도전 (CHALLENGING)",
+      "total_waves": 4,
+      "reward_credits": 2000,
+      "waves": [
+        {
+          "wave_index": 1,
+          "label_ko": "기계화 수색대",
+          "enemy_total": {
+            "infantry_basic": 6,
+            "combat_robot": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground"
+          ]
+        },
+        {
+          "wave_index": 2,
+          "label_ko": "대공/대지 협동 타격대",
+          "enemy_total": {
+            "drone_attack": 5,
+            "rpg_infantry": 3
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "wave_index": 3,
+          "label_ko": "중장갑 전투로봇 진격",
+          "enemy_total": {
+            "combat_robot": 4,
+            "infantry_basic": 6
+          },
+          "boss": false,
+          "events": [
+            "smoke_screen_deployed"
+          ],
+          "spawn_zones": [
+            "front_ground"
+          ]
+        },
+        {
+          "wave_index": 4,
+          "label_ko": "고지 총공세 돌격대",
+          "enemy_total": {
+            "infantry_basic": 8,
+            "rpg_infantry": 4,
+            "drone_attack": 3,
+            "combat_robot": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        }
+      ]
+    },
+    {
+      "stage_id": 4,
+      "stage_name": "제4스테이지: 기계화 군단 격돌 (Mechanized Incursion)",
+      "difficulty": "어려움 (HARD)",
+      "total_waves": 5,
+      "reward_credits": 3000,
+      "waves": [
+        {
+          "wave_index": 1,
+          "label_ko": "무인 침투 군집",
+          "enemy_total": {
+            "drone_attack": 6,
+            "combat_robot": 3
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "wave_index": 2,
+          "label_ko": "중화기 지원 제대",
+          "enemy_total": {
+            "infantry_basic": 8,
+            "rpg_infantry": 4,
+            "combat_robot": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground"
+          ]
+        },
+        {
+          "wave_index": 3,
+          "label_ko": "기계화 총격전",
+          "enemy_total": {
+            "combat_robot": 6,
+            "drone_attack": 4
+          },
+          "boss": false,
+          "events": [
+            "radar_interference"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "wave_index": 4,
+          "label_ko": "정예 돌격 결전대",
+          "enemy_total": {
+            "infantry_basic": 10,
+            "rpg_infantry": 4,
+            "combat_robot": 4
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground"
+          ]
+        },
+        {
+          "wave_index": 5,
+          "label_ko": "드론 스웜 커맨더 편대",
+          "enemy_total": {
+            "drone_swarm_commander": 1,
+            "drone_attack": 6
+          },
+          "boss": true,
+          "events": [
+            "boss_arrival_warning"
+          ],
+          "spawn_zones": [
+            "front_air"
+          ]
+        }
+      ]
+    },
+    {
+      "stage_id": 5,
+      "stage_name": "제5스테이지: 최후의 참호 결전 (The Last Trench: Final Stand)",
+      "difficulty": "극난도 (EXTREME)",
+      "total_waves": 6,
+      "reward_credits": 5000,
+      "waves": [
+        {
+          "wave_index": 1,
+          "label_ko": "적 선봉 로봇 돌파대",
+          "enemy_total": {
+            "combat_robot": 7,
+            "rpg_infantry": 4
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground"
+          ]
+        },
+        {
+          "wave_index": 2,
+          "label_ko": "공중 집중 포화 공습",
+          "enemy_total": {
+            "drone_attack": 8,
+            "infantry_basic": 6,
+            "rpg_infantry": 4
+          },
+          "boss": false,
+          "events": [
+            "heavy_artillery_incoming"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "wave_index": 3,
+          "label_ko": "중장갑 타이탄 로봇 진격",
+          "enemy_total": {
+            "armored_robot_boss": 1,
+            "combat_robot": 3,
+            "infantry_basic": 5
+          },
+          "boss": true,
+          "events": [
+            "boss_arrival_warning"
+          ],
+          "spawn_zones": [
+            "front_ground"
+          ]
+        },
+        {
+          "wave_index": 4,
+          "label_ko": "기계화 총력전 대공세",
+          "enemy_total": {
+            "combat_robot": 8,
+            "drone_attack": 6,
+            "rpg_infantry": 4
+          },
+          "boss": false,
+          "events": [
+            "emp_detonation"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "wave_index": 5,
+          "label_ko": "총동원 파상 공세",
+          "enemy_total": {
+            "infantry_basic": 10,
+            "combat_robot": 6,
+            "rpg_infantry": 4,
+            "drone_attack": 6
+          },
+          "boss": false,
+          "events": [
+            "total_assault_alert"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "wave_index": 6,
+          "label_ko": "최후의 결전병기 에이펙스 드레드노트",
+          "enemy_total": {
+            "final_assault_boss": 1,
+            "combat_robot": 4,
+            "drone_attack": 4
+          },
+          "boss": true,
+          "events": [
+            "final_battle_warning"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        }
+      ]
+    }
   ],
   "waves": [
     {
-      "id": 1,
-      "label_ko": "기본 보병",
+      "wave_index": 1,
+      "label_ko": "적 정찰 보병대",
       "enemy_total": {
         "infantry_basic": 4
       },
@@ -20,11 +368,16 @@
       "spawn_zones": [
         "front_ground"
       ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+      "id": 1,
+      "stage_id": 1,
+      "stage_name": "제1스테이지: 전초 경계선 (Outpost Perimeter)",
+      "stage_wave_index": 1,
+      "total_stage_waves": 2,
+      "difficulty": "쉬움 (EASY)"
     },
     {
-      "id": 2,
-      "label_ko": "보병+드론",
+      "wave_index": 2,
+      "label_ko": "전방 경계 분대 + 경량 드론",
       "enemy_total": {
         "infantry_basic": 5,
         "drone_attack": 2
@@ -35,142 +388,98 @@
         "front_ground",
         "front_air"
       ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+      "id": 2,
+      "stage_id": 1,
+      "stage_name": "제1스테이지: 전초 경계선 (Outpost Perimeter)",
+      "stage_wave_index": 2,
+      "total_stage_waves": 2,
+      "difficulty": "쉬움 (EASY)"
     },
     {
+      "wave_index": 1,
+      "label_ko": "적 돌격 제대",
+      "enemy_total": {
+        "infantry_basic": 7
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground"
+      ],
       "id": 3,
-      "label_ko": "MVP 종료",
+      "stage_id": 2,
+      "stage_name": "제2스테이지: 주 참호선 사수 (Main Trench Line)",
+      "stage_wave_index": 1,
+      "total_stage_waves": 3,
+      "difficulty": "보통 (NORMAL)"
+    },
+    {
+      "wave_index": 2,
+      "label_ko": "공중 침투 편대",
+      "enemy_total": {
+        "infantry_basic": 5,
+        "drone_attack": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "id": 4,
+      "stage_id": 2,
+      "stage_name": "제2스테이지: 주 참호선 사수 (Main Trench Line)",
+      "stage_wave_index": 2,
+      "total_stage_waves": 3,
+      "difficulty": "보통 (NORMAL)"
+    },
+    {
+      "wave_index": 3,
+      "label_ko": "혼성 침투 부대 + RPG 분대",
       "enemy_total": {
         "infantry_basic": 6,
-        "drone_attack": 4
+        "rpg_infantry": 3,
+        "drone_attack": 2
       },
       "boss": false,
-      "events": [],
+      "events": [
+        "heavy_artillery_incoming"
+      ],
       "spawn_zones": [
         "front_ground",
         "front_air"
       ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
-    },
-    {
-      "id": 4,
-      "label_ko": "돌격/RPG",
-      "enemy_total": {
-        "infantry_basic": 9,
-        "rpg_infantry": 2
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground"
-      ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
-    },
-    {
       "id": 5,
-      "label_ko": "드론 군집 지휘체",
-      "enemy_total": {
-        "drone_attack": 8,
-        "drone_swarm_commander": 1
-      },
-      "boss": true,
-      "events": [
-        "boss_air"
-      ],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+      "stage_id": 2,
+      "stage_name": "제2스테이지: 주 참호선 사수 (Main Trench Line)",
+      "stage_wave_index": 3,
+      "total_stage_waves": 3,
+      "difficulty": "보통 (NORMAL)"
     },
     {
-      "id": 6,
-      "label_ko": "보병+엄폐 파손",
+      "wave_index": 1,
+      "label_ko": "기계화 수색대",
       "enemy_total": {
-        "infantry_basic": 10,
-        "drone_attack": 4
-      },
-      "boss": false,
-      "events": [
-        "partial_cover_damage"
-      ],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
-    },
-    {
-      "id": 7,
-      "label_ko": "전투로봇",
-      "enemy_total": {
-        "infantry_basic": 8,
-        "combat_robot": 3
+        "infantry_basic": 6,
+        "combat_robot": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground"
       ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+      "id": 6,
+      "stage_id": 3,
+      "stage_name": "제3스테이지: 고지 방어 결전 (Highland Stronghold)",
+      "stage_wave_index": 1,
+      "total_stage_waves": 4,
+      "difficulty": "도전 (CHALLENGING)"
     },
     {
-      "id": 8,
-      "label_ko": "정찰+재밍",
+      "wave_index": 2,
+      "label_ko": "대공/대지 협동 타격대",
       "enemy_total": {
-        "infantry_basic": 10,
-        "drone_attack": 4
-      },
-      "boss": false,
-      "events": [
-        "jamming"
-      ],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
-    },
-    {
-      "id": 9,
-      "label_ko": "야간 드론",
-      "enemy_total": {
-        "infantry_basic": 9,
-        "drone_attack": 7
-      },
-      "boss": false,
-      "events": [
-        "night",
-        "dust"
-      ],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
-    },
-    {
-      "id": 10,
-      "label_ko": "중장갑 전투로봇",
-      "enemy_total": {
-        "infantry_basic": 8,
-        "armored_robot_boss": 1
-      },
-      "boss": true,
-      "events": [
-        "boss_ground"
-      ],
-      "spawn_zones": [
-        "front_ground"
-      ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
-    },
-    {
-      "id": 11,
-      "label_ko": "복합 공세",
-      "enemy_total": {
-        "infantry_basic": 12,
-        "drone_attack": 7,
+        "drone_attack": 5,
         "rpg_infantry": 3
       },
       "boss": false,
@@ -179,79 +488,292 @@
         "front_ground",
         "front_air"
       ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+      "id": 7,
+      "stage_id": 3,
+      "stage_name": "제3스테이지: 고지 방어 결전 (Highland Stronghold)",
+      "stage_wave_index": 2,
+      "total_stage_waves": 4,
+      "difficulty": "도전 (CHALLENGING)"
     },
     {
-      "id": 12,
-      "label_ko": "포격+보병",
+      "wave_index": 3,
+      "label_ko": "중장갑 전투로봇 진격",
       "enemy_total": {
-        "infantry_basic": 12,
-        "drone_attack": 6
+        "combat_robot": 4,
+        "infantry_basic": 6
       },
       "boss": false,
       "events": [
-        "artillery_warning"
-      ],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
-    },
-    {
-      "id": 13,
-      "label_ko": "헬기/날씨",
-      "enemy_total": {
-        "infantry_basic": 13,
-        "drone_attack": 7
-      },
-      "boss": false,
-      "events": [
-        "helicopter_event",
-        "rain",
-        "fog"
-      ],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
-    },
-    {
-      "id": 14,
-      "label_ko": "방사포 공세",
-      "enemy_total": {
-        "infantry_basic": 15,
-        "rpg_infantry": 4,
-        "combat_robot": 4
-      },
-      "boss": false,
-      "events": [
-        "rocket_artillery"
+        "smoke_screen_deployed"
       ],
       "spawn_zones": [
         "front_ground"
       ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+      "id": 8,
+      "stage_id": 3,
+      "stage_name": "제3스테이지: 고지 방어 결전 (Highland Stronghold)",
+      "stage_wave_index": 3,
+      "total_stage_waves": 4,
+      "difficulty": "도전 (CHALLENGING)"
     },
     {
-      "id": 15,
-      "label_ko": "최종 복합 보스",
+      "wave_index": 4,
+      "label_ko": "고지 총공세 돌격대",
       "enemy_total": {
-        "infantry_basic": 14,
-        "drone_attack": 12,
-        "final_assault_boss": 1
+        "infantry_basic": 8,
+        "rpg_infantry": 4,
+        "drone_attack": 3,
+        "combat_robot": 2
       },
-      "boss": true,
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "id": 9,
+      "stage_id": 3,
+      "stage_name": "제3스테이지: 고지 방어 결전 (Highland Stronghold)",
+      "stage_wave_index": 4,
+      "total_stage_waves": 4,
+      "difficulty": "도전 (CHALLENGING)"
+    },
+    {
+      "wave_index": 1,
+      "label_ko": "무인 침투 군집",
+      "enemy_total": {
+        "drone_attack": 6,
+        "combat_robot": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "id": 10,
+      "stage_id": 4,
+      "stage_name": "제4스테이지: 기계화 군단 격돌 (Mechanized Incursion)",
+      "stage_wave_index": 1,
+      "total_stage_waves": 5,
+      "difficulty": "어려움 (HARD)"
+    },
+    {
+      "wave_index": 2,
+      "label_ko": "중화기 지원 제대",
+      "enemy_total": {
+        "infantry_basic": 8,
+        "rpg_infantry": 4,
+        "combat_robot": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground"
+      ],
+      "id": 11,
+      "stage_id": 4,
+      "stage_name": "제4스테이지: 기계화 군단 격돌 (Mechanized Incursion)",
+      "stage_wave_index": 2,
+      "total_stage_waves": 5,
+      "difficulty": "어려움 (HARD)"
+    },
+    {
+      "wave_index": 3,
+      "label_ko": "기계화 총격전",
+      "enemy_total": {
+        "combat_robot": 6,
+        "drone_attack": 4
+      },
+      "boss": false,
       "events": [
-        "final_combined_assault",
-        "artillery_warning"
+        "radar_interference"
       ],
       "spawn_zones": [
         "front_ground",
         "front_air"
       ],
-      "pacing_note": "제안 초기값; 총량을 최대 12개 동시 활성 상한 아래에서 배치"
+      "id": 12,
+      "stage_id": 4,
+      "stage_name": "제4스테이지: 기계화 군단 격돌 (Mechanized Incursion)",
+      "stage_wave_index": 3,
+      "total_stage_waves": 5,
+      "difficulty": "어려움 (HARD)"
+    },
+    {
+      "wave_index": 4,
+      "label_ko": "정예 돌격 결전대",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "rpg_infantry": 4,
+        "combat_robot": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground"
+      ],
+      "id": 13,
+      "stage_id": 4,
+      "stage_name": "제4스테이지: 기계화 군단 격돌 (Mechanized Incursion)",
+      "stage_wave_index": 4,
+      "total_stage_waves": 5,
+      "difficulty": "어려움 (HARD)"
+    },
+    {
+      "wave_index": 5,
+      "label_ko": "드론 스웜 커맨더 편대",
+      "enemy_total": {
+        "drone_swarm_commander": 1,
+        "drone_attack": 6
+      },
+      "boss": true,
+      "events": [
+        "boss_arrival_warning"
+      ],
+      "spawn_zones": [
+        "front_air"
+      ],
+      "id": 14,
+      "stage_id": 4,
+      "stage_name": "제4스테이지: 기계화 군단 격돌 (Mechanized Incursion)",
+      "stage_wave_index": 5,
+      "total_stage_waves": 5,
+      "difficulty": "어려움 (HARD)"
+    },
+    {
+      "wave_index": 1,
+      "label_ko": "적 선봉 로봇 돌파대",
+      "enemy_total": {
+        "combat_robot": 7,
+        "rpg_infantry": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground"
+      ],
+      "id": 15,
+      "stage_id": 5,
+      "stage_name": "제5스테이지: 최후의 참호 결전 (The Last Trench: Final Stand)",
+      "stage_wave_index": 1,
+      "total_stage_waves": 6,
+      "difficulty": "극난도 (EXTREME)"
+    },
+    {
+      "wave_index": 2,
+      "label_ko": "공중 집중 포화 공습",
+      "enemy_total": {
+        "drone_attack": 8,
+        "infantry_basic": 6,
+        "rpg_infantry": 4
+      },
+      "boss": false,
+      "events": [
+        "heavy_artillery_incoming"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "id": 16,
+      "stage_id": 5,
+      "stage_name": "제5스테이지: 최후의 참호 결전 (The Last Trench: Final Stand)",
+      "stage_wave_index": 2,
+      "total_stage_waves": 6,
+      "difficulty": "극난도 (EXTREME)"
+    },
+    {
+      "wave_index": 3,
+      "label_ko": "중장갑 타이탄 로봇 진격",
+      "enemy_total": {
+        "armored_robot_boss": 1,
+        "combat_robot": 3,
+        "infantry_basic": 5
+      },
+      "boss": true,
+      "events": [
+        "boss_arrival_warning"
+      ],
+      "spawn_zones": [
+        "front_ground"
+      ],
+      "id": 17,
+      "stage_id": 5,
+      "stage_name": "제5스테이지: 최후의 참호 결전 (The Last Trench: Final Stand)",
+      "stage_wave_index": 3,
+      "total_stage_waves": 6,
+      "difficulty": "극난도 (EXTREME)"
+    },
+    {
+      "wave_index": 4,
+      "label_ko": "기계화 총력전 대공세",
+      "enemy_total": {
+        "combat_robot": 8,
+        "drone_attack": 6,
+        "rpg_infantry": 4
+      },
+      "boss": false,
+      "events": [
+        "emp_detonation"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "id": 18,
+      "stage_id": 5,
+      "stage_name": "제5스테이지: 최후의 참호 결전 (The Last Trench: Final Stand)",
+      "stage_wave_index": 4,
+      "total_stage_waves": 6,
+      "difficulty": "극난도 (EXTREME)"
+    },
+    {
+      "wave_index": 5,
+      "label_ko": "총동원 파상 공세",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "combat_robot": 6,
+        "rpg_infantry": 4,
+        "drone_attack": 6
+      },
+      "boss": false,
+      "events": [
+        "total_assault_alert"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "id": 19,
+      "stage_id": 5,
+      "stage_name": "제5스테이지: 최후의 참호 결전 (The Last Trench: Final Stand)",
+      "stage_wave_index": 5,
+      "total_stage_waves": 6,
+      "difficulty": "극난도 (EXTREME)"
+    },
+    {
+      "wave_index": 6,
+      "label_ko": "최후의 결전병기 에이펙스 드레드노트",
+      "enemy_total": {
+        "final_assault_boss": 1,
+        "combat_robot": 4,
+        "drone_attack": 4
+      },
+      "boss": true,
+      "events": [
+        "final_battle_warning"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ],
+      "id": 20,
+      "stage_id": 5,
+      "stage_name": "제5스테이지: 최후의 참호 결전 (The Last Trench: Final Stand)",
+      "stage_wave_index": 6,
+      "total_stage_waves": 6,
+      "difficulty": "극난도 (EXTREME)"
     }
   ]
 }

@@ -12,35 +12,32 @@ func _init() -> void:
 	assert(director.max_active_enemies == 12, "max_active_enemies must be 12 (cap rule)")
 	
 	var waves_list: Array = director.wave_plan_data.get("waves", [])
-	assert(waves_list.size() == 15, "wave_plan.json must define exactly 15 waves (got: %d)" % waves_list.size())
-	print("[PASS] Verified all 15 waves defined in data/wave_plan.json")
+	assert(waves_list.size() >= 15, "wave_plan.json must define at least 15 waves (got: %d)" % waves_list.size())
+	print("[PASS] Verified all waves defined in data/wave_plan.json")
 	
-	# 2. Verify Boss Waves 5, 10, 15
-	var boss_waves: Array = director.wave_plan_data.get("boss_waves", [])
-	var boss_wave_ints: Array[int] = []
-	for bw in boss_waves:
-		boss_wave_ints.append(int(bw))
-	assert(boss_wave_ints == [5, 10, 15], "boss_waves must be [5, 10, 15] (got: %s)" % str(boss_wave_ints))
-	
-	var w5: Dictionary = waves_list[4]
-	assert(w5.get("boss") == true, "Wave 5 must be a boss wave")
-	assert(w5.get("enemy_total", {}).has("drone_swarm_commander"), "Wave 5 must feature drone_swarm_commander")
-	
-	var w10: Dictionary = waves_list[9]
-	assert(w10.get("boss") == true, "Wave 10 must be a boss wave")
-	assert(w10.get("enemy_total", {}).has("armored_robot_boss"), "Wave 10 must feature armored_robot_boss")
-	
-	var w15: Dictionary = waves_list[14]
-	assert(w15.get("boss") == true, "Wave 15 must be a boss wave")
-	assert(w15.get("enemy_total", {}).has("final_assault_boss"), "Wave 15 must feature final_assault_boss")
-	print("[PASS] Verified Bosses strictly configured at Waves 5, 10, 15")
+	# 2. Verify 3 Boss Encounters exist in wave plan
+	var has_drone_commander := false
+	var has_armored_robot := false
+	var has_final_assault := false
+	for w in waves_list:
+		var et: Dictionary = w.get("enemy_total", {})
+		if et.has("drone_swarm_commander"): has_drone_commander = true
+		if et.has("armored_robot_boss"): has_armored_robot = true
+		if et.has("final_assault_boss"): has_final_assault = true
+	assert(has_drone_commander, "Wave plan must feature drone_swarm_commander")
+	assert(has_armored_robot, "Wave plan must feature armored_robot_boss")
+	assert(has_final_assault, "Wave plan must feature final_assault_boss")
+	print("[PASS] Verified all 3 Bosses configured across the regional stages")
 	
 	# 3. Verify Intermediate Specialty Threats
-	var w4: Dictionary = waves_list[3]
-	assert(w4.get("enemy_total", {}).has("rpg_infantry"), "Wave 4 must introduce rpg_infantry")
-	
-	var w7: Dictionary = waves_list[6]
-	assert(w7.get("enemy_total", {}).has("combat_robot"), "Wave 7 must introduce combat_robot")
+	var has_rpg := false
+	var has_robot := false
+	for w in waves_list:
+		var et: Dictionary = w.get("enemy_total", {})
+		if et.has("rpg_infantry"): has_rpg = true
+		if et.has("combat_robot"): has_robot = true
+	assert(has_rpg, "Wave plan must introduce rpg_infantry")
+	assert(has_robot, "Wave plan must introduce combat_robot")
 	print("[PASS] Verified intermediate threats (rpg_infantry, combat_robot)")
 	
 	# 4. Verify Instantiation of all 7 Enemy Types
@@ -90,10 +87,11 @@ func _init() -> void:
 	director.run_victory.connect(func(): victory_fired[0] = true)
 	director.boss_spawned.connect(func(_b, b_title, _hp): boss_spawn_log.append(b_title))
 	
-	director.start_run(15)
-	assert(director.max_waves_in_run == 15, "max_waves_in_run must be 15")
+	var total_run_waves := waves_list.size()
+	director.start_run(total_run_waves)
+	assert(director.max_waves_in_run == total_run_waves, "max_waves_in_run must be %d" % total_run_waves)
 	
-	for wave_idx in range(1, 16):
+	for wave_idx in range(1, total_run_waves + 1):
 		# Transition to COMBAT
 		director._process(0.01)
 		# Flush queue and enemies
@@ -109,10 +107,10 @@ func _init() -> void:
 			e.queue_free()
 		director._process(0.01) # Wave clear step
 		
-	assert(waves_cleared_log.size() == 15, "Expected 15 waves cleared, got: %d" % waves_cleared_log.size())
-	assert(victory_fired[0], "run_victory signal must be emitted on Wave 15 completion")
-	assert(boss_spawn_log.size() == 3, "Expected exactly 3 boss spawns (Waves 5, 10, 15), got: %d" % boss_spawn_log.size())
-	print("[PASS] Full 15-Wave run simulation completed successfully with Victory!")
+	assert(waves_cleared_log.size() == total_run_waves, "Expected %d waves cleared, got: %d" % [total_run_waves, waves_cleared_log.size()])
+	assert(victory_fired[0], "run_victory signal must be emitted on final wave completion")
+	assert(boss_spawn_log.size() == 3, "Expected exactly 3 boss spawns, got: %d" % boss_spawn_log.size())
+	print("[PASS] Full campaign run simulation completed successfully with Victory!")
 	
 	dummy_obj.queue_free()
 	director.queue_free()

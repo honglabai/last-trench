@@ -4,6 +4,7 @@ extends CharacterBody3D
 signal enemy_damaged(amount: float, current_hp: float, max_hp: float)
 signal enemy_died(enemy: EnemyBase)
 signal attack_performed(target: Node3D, damage: float)
+signal projectile_launched(p_type: int, start_pos: Vector3, target_pos: Vector3, damage: float, speed: float, radius: float, receiver: Node)
 
 enum State { SPAWN, APPROACH, ATTACK, HIT, DEAD }
 
@@ -51,6 +52,10 @@ func is_alive() -> bool:
 
 func set_target(new_target: Node3D) -> void:
 	target = new_target
+
+func launch_projectile(p_type: int, origin: Vector3, dest: Vector3, dmg: float, spd: float, rad: float = 0.0, receiver: Node = null) -> void:
+	projectile_launched.emit(p_type, origin, dest, dmg, spd, rad, receiver if receiver else target)
+	attack_performed.emit(target, dmg)
 
 func change_state(new_state: State) -> void:
 	if current_state == State.DEAD:

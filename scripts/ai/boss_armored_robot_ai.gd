@@ -114,15 +114,11 @@ func _execute_attack() -> void:
 	var tgt_pos := target.global_position if target.is_inside_tree() else target.position
 	
 	# Massive siege cannon blast
-	for side in [-1.2, 1.2]:
-		var muzzle_pos := my_pos + Vector3(side, 2.2, 0.8)
+	for side in [-1.5, 1.5]:
+		var muzzle_pos := my_pos + Vector3(side, 2.5, 0.8)
 		var target_pos := tgt_pos + Vector3(randf_range(-1.5, 1.5), randf_range(0.2, 1.5), 0.0)
-		AudioManager.play_sound_at("drone_rocket", muzzle_pos, my_pos)
 		rocket_fired.emit(muzzle_pos, target_pos)
-		
-	if target.has_method("apply_damage"):
-		target.apply_damage(attack_damage)
-	attack_performed.emit(target, attack_damage)
+		launch_projectile(EnemyProjectile.ProjectileType.SIEGE_SHELL, muzzle_pos, target_pos, attack_damage * 0.5, 42.0, 6.0, target)
 
 func _process_hit(delta: float) -> void:
 	velocity.x = 0.0

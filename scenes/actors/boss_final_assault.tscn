@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/ai/boss_final_assault_ai.gd" id="1_ai"]
 [ext_resource type="Script" path="res://scripts/combat/damageable_component.gd" id="2_dmg"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_boss_final_assault.png" id="3_boss_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/weapons/tex_wpn_boss_apex_battery.png" id="4_wpn_apex"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_boss"]
 size = Vector3(4.2, 4.8, 4.2)
@@ -29,6 +30,14 @@ billboard = 2
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("3_boss_tex")
+
+[node name="BatterySprite" type="Sprite3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0.3)
+pixel_size = 0.010
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("4_wpn_apex")
 
 [node name="CoreLight" type="OmniLight3D" parent="VisualMesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)

@@ -122,15 +122,12 @@ func _fire_single_shot() -> void:
 		return
 	var my_pos := global_position if is_inside_tree() else position
 	var tgt_pos := target.global_position if target.is_inside_tree() else target.position
-	var side := 0.4 if (burst_count % 2 == 0) else -0.4
-	var muzzle_pos := my_pos + Vector3(side, 0.8, 0.4)
+	var side := 0.65 if (burst_count % 2 == 0) else -0.65
+	var muzzle_pos := my_pos + Vector3(side, 0.85, 0.4)
 	var target_pos := tgt_pos + Vector3(randf_range(-0.8, 0.8), randf_range(0.2, 0.8), 0.0)
 	
-	AudioManager.play_sound_at("enemy_shot", muzzle_pos, my_pos)
 	bullet_fired.emit(muzzle_pos, target_pos)
-	if target.has_method("apply_damage"):
-		target.apply_damage(attack_damage)
-	attack_performed.emit(target, attack_damage)
+	launch_projectile(EnemyProjectile.ProjectileType.BULLET, muzzle_pos, target_pos, attack_damage, 70.0, 0.0, target)
 
 func _process_hit(delta: float) -> void:
 	velocity.x = 0.0

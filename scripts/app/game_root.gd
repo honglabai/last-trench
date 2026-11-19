@@ -48,6 +48,7 @@ var turret_scene: PackedScene = preload("res://scenes/defenses/mg_turret.tscn")
 var tracer_scene: PackedScene = preload("res://scenes/effects/bullet_tracer.tscn")
 var rocket_scene: PackedScene = preload("res://scenes/effects/rocket_projectile.tscn")
 var grenade_scene: PackedScene = preload("res://scenes/effects/grenade_projectile.tscn")
+var enemy_projectile_scene: PackedScene = preload("res://scenes/effects/enemy_projectile.tscn")
 var _is_initialized: bool = false
 
 # Timed Turret Construction System
@@ -152,15 +153,52 @@ func _ready() -> void:
 	if wave_director:
 		wave_director.set_battlefield_context(trench_map, base_obj, enemy_container)
 		wave_director.wave_state_changed.connect(_on_wave_state_changed)
+		wave_director.stage_started.connect(func(st_id, st_name, diff, total_w):
+			if battle_hud:
+				battle_hud.show_tactical_alert("🚩 [STAGE %d/5: %s] 난이도: %s" % [st_id, st_name, diff], 3.5)
+				battle_hud.update_stage_and_wave(st_id, wave_director.max_stages_in_region, 1, total_w, diff, "작전 개시")
+		)
+		wave_director.stage_cleared.connect(func(cleared_st, st_name, reward, next_st):
+			GameSession.add_credits(reward)
+			if battle_hud:
+				battle_hud.update_credits(GameSession.credits)
+				battle_hud.show_toast("🏆 [STAGE %d 클리어] 보너스 +%d 크레딧 획득!" % [cleared_st, reward], 4.0)
+				if next_st <= wave_director.max_stages_in_region:
+					battle_hud.show_tactical_alert("🏆 STAGE %d 완수! 다음 작전 구역(STAGE %d)으로 진격!" % [cleared_st, next_st], 4.0)
+		)
 		wave_director.wave_started.connect(func(w_num, total):
-			battle_hud.update_wave(w_num, wave_director.max_waves_in_run, "교전 시작! (적: %d)" % total)
+			if battle_hud:
+				battle_hud.update_stage_and_wave(
+					wave_director.current_stage_id,
+					wave_director.max_stages_in_region,
+					wave_director.current_stage_wave,
+					wave_director.total_waves_in_stage,
+					wave_director.stage_difficulty,
+					"교전 시작! (적: %d)" % total
+				)
 		)
 		wave_director.enemy_killed.connect(func(_e, remaining, _act):
-			battle_hud.update_wave(wave_director.current_wave_number, wave_director.max_waves_in_run, "남은 적: %d" % remaining)
+			if battle_hud:
+				battle_hud.update_stage_and_wave(
+					wave_director.current_stage_id,
+					wave_director.max_stages_in_region,
+					wave_director.current_stage_wave,
+					wave_director.total_waves_in_stage,
+					wave_director.stage_difficulty,
+					"남은 적: %d" % remaining
+				)
 		)
 		wave_director.wave_cleared.connect(func(w_num):
-			battle_hud.update_wave(w_num, wave_director.max_waves_in_run, "웨이브 %d 클리어!" % w_num)
-			battle_hud.show_toast("웨이브 %02d 격퇴 완료! 전공 점수 지급" % w_num, 2.5)
+			if battle_hud:
+				battle_hud.update_stage_and_wave(
+					wave_director.current_stage_id,
+					wave_director.max_stages_in_region,
+					wave_director.current_stage_wave,
+					wave_director.total_waves_in_stage,
+					wave_director.stage_difficulty,
+					"웨이브 %d 클리어!" % wave_director.current_stage_wave
+				)
+				battle_hud.show_toast("웨이브 %d 클리어! 전공 점수 지급" % wave_director.current_stage_wave, 2.5)
 		)
 		wave_director.boss_spawned.connect(func(_boss, b_title, max_hp):
 			if battle_hud:
@@ -183,13 +221,17 @@ func _ready() -> void:
 		)
 		wave_director.wave_event_triggered.connect(_handle_wave_event)
 		wave_director.enemy_spawned.connect(func(enemy, _count):
-			if enemy and enemy.has_signal("bullet_fired"):
-				enemy.bullet_fired.connect(func(start_p, target_p):
-					_spawn_tracer(start_p, target_p, 140.0, Color(1.0, 0.22, 0.12), 0.045, 0.85)
+			if enemy and enemy.has_signal("projectile_launched"):
+				enemy.projectile_launched.connect(func(p_type, start_p, target_p, dmg, spd, rad, recv):
+					_spawn_enemy_projectile(p_type, start_p, target_p, dmg, spd, rad, recv)
 				)
-			if enemy and enemy.has_signal("rocket_fired"):
+			elif enemy and enemy.has_signal("rocket_fired"):
 				enemy.rocket_fired.connect(func(start_p, target_p):
-					_spawn_tracer(start_p, target_p, 68.0, Color(1.0, 0.18, 0.35), 0.09, 1.4)
+					_spawn_enemy_projectile(EnemyProjectile.ProjectileType.ROCKET, start_p, target_p, 25.0, 34.0, 5.0, player)
+				)
+			elif enemy and enemy.has_signal("bullet_fired"):
+				enemy.bullet_fired.connect(func(start_p, target_p):
+					_spawn_enemy_projectile(EnemyProjectile.ProjectileType.BULLET, start_p, target_p, 8.0, 58.0, 0.0, player)
 				)
 		)
 		
@@ -544,3 +586,10 @@ func _spawn_tracer(start_pos: Vector3, target_pos: Vector3, speed: float, color:
 	var tracer := tracer_scene.instantiate() as BulletTracer
 	add_child(tracer)
 	tracer.setup(start_pos, target_pos, speed, color, custom_radius, custom_len)
+
+func _spawn_enemy_projectile(p_type: int, start_pos: Vector3, target_pos: Vector3, damage: float, speed: float, blast_rad: float, receiver: Node) -> void:
+	if not enemy_projectile_scene:
+		return
+	var proj := enemy_projectile_scene.instantiate() as EnemyProjectile
+	add_child(proj)
+	proj.setup(start_pos, target_pos, p_type as EnemyProjectile.ProjectileType, damage, speed, blast_rad, receiver)

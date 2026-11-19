@@ -130,24 +130,20 @@ func _execute_apex_barrage() -> void:
 	var my_pos := global_position if is_inside_tree() else position
 	var tgt_pos := target.global_position if target.is_inside_tree() else target.position
 	
-	# 1. Rotary Cannon salvo
+	# 1. Heavy Rotary Cannon salvo
 	for side in [-1.5, 1.5]:
 		var muzzle_pos := my_pos + Vector3(side, 1.8, 1.2)
 		var target_pos := tgt_pos + Vector3(randf_range(-1.8, 1.8), randf_range(0.2, 1.2), 0.0)
-		AudioManager.play_sound_at("enemy_shot", muzzle_pos, my_pos)
 		bullet_fired.emit(muzzle_pos, target_pos)
+		launch_projectile(EnemyProjectile.ProjectileType.BULLET, muzzle_pos, target_pos, attack_damage * 0.25, 75.0, 0.0, target)
 		
 	# 2. Quad Missile Barrage in Phase 2 & 3
 	if attack_phase >= 2:
 		for rx in [-0.8, 0.8]:
 			var r_muzzle := my_pos + Vector3(rx, 3.2, 0.5)
 			var r_target := tgt_pos + Vector3(randf_range(-2.0, 2.0), randf_range(0.2, 1.8), 0.0)
-			AudioManager.play_sound_at("drone_rocket", r_muzzle, my_pos)
 			rocket_fired.emit(r_muzzle, r_target)
-			
-	if target.has_method("apply_damage"):
-		target.apply_damage(attack_damage)
-	attack_performed.emit(target, attack_damage)
+			launch_projectile(EnemyProjectile.ProjectileType.SIEGE_SHELL, r_muzzle, r_target, attack_damage * 0.4, 44.0, 5.0, target)
 
 func _process_dead(delta: float) -> void:
 	velocity = Vector3.ZERO

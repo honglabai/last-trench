@@ -170,13 +170,10 @@ func _execute_attack() -> void:
 		return
 	var my_pos := global_position if is_inside_tree() else position
 	var tgt_pos := target.global_position if target.is_inside_tree() else target.position
-	var launch_pos := my_pos + Vector3(0.0, -0.3, 0.3)
+	var launch_pos := my_pos + Vector3(0.0, -0.32, 0.3)
 	var target_pos := tgt_pos + Vector3(randf_range(-1.2, 1.2), randf_range(0.1, 0.8), 0.0)
-	AudioManager.play_sound_at("drone_rocket", launch_pos, my_pos)
 	rocket_fired.emit(launch_pos, target_pos)
-	if target.has_method("apply_damage"):
-		target.apply_damage(attack_damage)
-	attack_performed.emit(target, attack_damage)
+	launch_projectile(EnemyProjectile.ProjectileType.MISSILE_SALVO, launch_pos, target_pos, attack_damage, 38.0, 3.5, target)
 
 func _process_hit(delta: float) -> void:
 	hit_recovery_timer += delta

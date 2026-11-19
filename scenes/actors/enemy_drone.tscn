@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/combat/damageable_component.gd" id="2_dmg"]
 [ext_resource type="Texture2D" uid="uid://cin0e41hkb4fi" path="res://assets/textures/tex_enemy_drone.png" id="3_drone_tex"]
 [ext_resource type="Texture2D" uid="uid://b30hs1vr3e6fm" path="res://assets/textures/tex_enemy_drone_realistic.png" id="4_realistic_drone"]
+[ext_resource type="Texture2D" path="res://assets/textures/weapons/tex_wpn_enemy_drone_turret.png" id="5_wpn_drone"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_drone"]
 radius = 0.65
@@ -53,6 +54,14 @@ billboard = 1
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("4_realistic_drone")
+
+[node name="TurretSprite" type="Sprite3D" parent="VisualMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.32, 0.05)
+pixel_size = 0.0025
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("5_wpn_drone")
 
 [node name="BeaconLight" type="OmniLight3D" parent="VisualMesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)

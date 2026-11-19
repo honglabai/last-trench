@@ -11,13 +11,23 @@ signal boss_spawned(boss_enemy: EnemyBase, boss_title: String, max_hp: float)
 signal boss_damaged(cur_hp: float, max_hp: float)
 signal boss_defeated(boss_enemy: EnemyBase, boss_title: String)
 signal wave_event_triggered(event_name: String, wave_number: int)
+signal stage_started(stage_id: int, stage_name: String, difficulty: String, total_waves: int)
+signal stage_cleared(stage_id: int, stage_name: String, reward_credits: int, next_stage_id: int)
 
 enum WaveState { IDLE, PREPARATION, COMBAT, WAVE_CLEARED, VICTORY, GAME_OVER }
 
 @export var max_active_enemies: int = 12
 @export var default_spawn_interval: float = 1.0
 @export var preparation_duration: float = 3.0
-@export var max_waves_in_run: int = 15 # Full 15 waves
+@export var max_waves_in_run: int = 20 # 20 waves across 5 stages (2+3+4+5+6)
+
+var current_stage_id: int = 1
+var max_stages_in_region: int = 5
+var current_stage_wave: int = 1
+var total_waves_in_stage: int = 2
+var stage_name: String = "제1스테이지: 전초 경계선 (Outpost Perimeter)"
+var stage_difficulty: String = "쉬움 (EASY)"
+var stage_reward_credits: int = 1000
 
 var current_state: WaveState = WaveState.IDLE
 var current_wave_number: int = 0
@@ -45,8 +55,12 @@ var boss_drone_scene: PackedScene = preload("res://scenes/actors/boss_drone_comm
 var boss_robot_scene: PackedScene = preload("res://scenes/actors/boss_armored_robot.tscn")
 var boss_final_scene: PackedScene = preload("res://scenes/actors/boss_final_assault.tscn")
 
-func _ready() -> void:
+func _init() -> void:
 	load_wave_plan()
+
+func _ready() -> void:
+	if wave_plan_data.is_empty():
+		load_wave_plan()
 
 func load_wave_plan(path: String = "res://data/wave_plan.json") -> bool:
 	if not FileAccess.file_exists(path):
@@ -67,9 +81,39 @@ func set_battlefield_context(map: TrenchMap, objective: Node3D, parent: Node) ->
 	target_objective = objective
 	enemy_parent = parent
 
-func start_run(target_max_waves: int = 15) -> void:
+func get_stage_info(stage_id: int) -> Dictionary:
+	var stages: Array = wave_plan_data.get("stages", [])
+	for st in stages:
+		if int(st.get("stage_id", 0)) == stage_id:
+			return st
+	return {}
+
+func start_stage(stage_id: int) -> void:
+	current_stage_id = stage_id
+	var st := get_stage_info(stage_id)
+	if not st.is_empty():
+		stage_name = str(st.get("stage_name", "제%d스테이지" % stage_id))
+		stage_difficulty = str(st.get("difficulty", "보통"))
+		total_waves_in_stage = int(st.get("total_waves", 2))
+		stage_reward_credits = int(st.get("reward_credits", 1000))
+	current_stage_wave = 0
+	stage_started.emit(current_stage_id, stage_name, stage_difficulty, total_waves_in_stage)
+	
+	# Find starting global wave index for this stage
+	var waves_list: Array = wave_plan_data.get("waves", [])
+	var found_first_wave: int = -1
+	for w in waves_list:
+		if int(w.get("stage_id", 0)) == stage_id:
+			found_first_wave = int(w.get("id", 1))
+			break
+	if found_first_wave != -1:
+		current_wave_number = found_first_wave - 1
+	start_next_wave()
+
+func start_run(target_max_waves: int = 20) -> void:
 	max_waves_in_run = target_max_waves
 	current_wave_number = 0
+	current_stage_id = 1
 	active_enemies.clear()
 	pending_spawn_queue.clear()
 	victory_emitted = false
@@ -126,6 +170,17 @@ func _build_wave_queue(wave_num: int) -> void:
 			for i in range(4): pending_spawn_queue.append("drone_attack")
 		return
 		
+	# Synchronize stage metadata from wave_info
+	if wave_info.has("stage_id"):
+		current_stage_id = int(wave_info.get("stage_id", 1))
+		current_stage_wave = int(wave_info.get("stage_wave_index", 1))
+		total_waves_in_stage = int(wave_info.get("total_stage_waves", 2))
+		stage_name = str(wave_info.get("stage_name", "제%d스테이지" % current_stage_id))
+		stage_difficulty = str(wave_info.get("difficulty", "보통"))
+		var st := get_stage_info(current_stage_id)
+		if not st.is_empty():
+			stage_reward_credits = int(st.get("reward_credits", 1000))
+			
 	# Trigger wave events and boss warnings
 	var events: Array = wave_info.get("events", [])
 	for ev in events:
@@ -231,6 +286,16 @@ func _on_enemy_died(enemy: EnemyBase) -> void:
 func _on_wave_completed() -> void:
 	_change_state(WaveState.WAVE_CLEARED)
 	wave_cleared.emit(current_wave_number)
+	
+	# Check if current stage is completed
+	if current_stage_wave >= total_waves_in_stage:
+		var cleared_stage := current_stage_id
+		var next_stage := cleared_stage + 1
+		stage_cleared.emit(cleared_stage, stage_name, stage_reward_credits, next_stage)
+		if next_stage > max_stages_in_region or current_wave_number >= max_waves_in_run:
+			_trigger_victory()
+			return
+			
 	if current_wave_number >= max_waves_in_run:
 		_trigger_victory()
 	else:
