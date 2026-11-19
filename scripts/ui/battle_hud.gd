@@ -663,7 +663,7 @@ func show_toast(msg: String, duration: float = 2.0) -> void:
 		t.tween_property(help_label, "modulate:a", 0.0, 0.5)
 		t.tween_callback(func():
 			if help_label:
-				help_label.text = "[마우스] 조준 | [좌클릭/스페이스] 사격 | [우클릭/C] 정밀조준 | [R] 재장전 | [E] 포탑설치 | [Q/1~7] 무기교체 | [B] 상점 | [O] 설정"
+				help_label.text = "[WASD/마우스] 조준 | [좌클릭/스페이스] 사격 | [우클릭/C] 정밀조준 | [R] 재장전 | [E] 포탑설치 | [Q/1~7] 무기교체 | [B] 상점 | [O] 설정"
 				help_label.modulate = Color(0.85, 0.9, 0.95, 0.75)
 		)
 

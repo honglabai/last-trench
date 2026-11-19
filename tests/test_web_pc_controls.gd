@@ -24,6 +24,17 @@ func _init() -> void:
 		return
 	print("[PASS] Mouse motion camera aiming verified: yaw = ", player.camera_rig.yaw)
 	
+	# 1-B. Test WASD keyboard direction control
+	var yaw_before: float = player.camera_rig.yaw
+	Input.action_press("move_right")
+	player._physics_process(0.05)
+	Input.action_release("move_right")
+	if is_equal_approx(player.camera_rig.yaw, yaw_before):
+		push_error("WASD [D] key failed to rotate camera yaw")
+		quit(1)
+		return
+	print("[PASS] WASD key camera aiming verified: yaw = ", player.camera_rig.yaw)
+	
 	# 2. Test GameRoot Keyboard Interact & DefenseSlot E shortcut
 	var root_scene = load("res://scenes/app/game_root.tscn")
 	var game_root = root_scene.instantiate() as GameRoot

@@ -56,6 +56,11 @@ func set_target(new_target: Node3D) -> void:
 func launch_projectile(p_type: int, origin: Vector3, dest: Vector3, dmg: float, spd: float, rad: float = 0.0, receiver: Node = null) -> void:
 	projectile_launched.emit(p_type, origin, dest, dmg, spd, rad, receiver if receiver else target)
 	attack_performed.emit(target, dmg)
+	# If running in standalone test without GameRoot, apply direct fallback damage
+	if projectile_launched.get_connections().is_empty():
+		var recv: Node = receiver if receiver else target
+		if recv and is_instance_valid(recv) and recv.has_method("apply_damage"):
+			recv.apply_damage(dmg)
 
 func change_state(new_state: State) -> void:
 	if current_state == State.DEAD:
