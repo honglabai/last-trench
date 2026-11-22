@@ -153,16 +153,16 @@ func _ready() -> void:
 		wave_director.wave_state_changed.connect(_on_wave_state_changed)
 		wave_director.stage_started.connect(func(st_id, st_name, diff, total_w):
 			if battle_hud:
-				battle_hud.show_tactical_alert("🚩 [STAGE %d/5: %s] 난이도: %s" % [st_id, st_name, diff], 3.5)
+				battle_hud.show_tactical_alert("[작전 개시] STAGE %d/5: %s (난이도: %s)" % [st_id, st_name, diff], 3.5)
 				battle_hud.update_stage_and_wave(st_id, wave_director.max_stages_in_region, 1, total_w, diff, "작전 개시")
 		)
 		wave_director.stage_cleared.connect(func(cleared_st, st_name, reward, next_st):
-			GameSession.add_credits(reward)
+			GameSession.on_stage_completed(cleared_st, reward)
 			if battle_hud:
 				battle_hud.update_credits(GameSession.credits)
-				battle_hud.show_toast("🏆 [STAGE %d 클리어] 보너스 +%d 크레딧 획득!" % [cleared_st, reward], 4.0)
+				battle_hud.show_toast("[STAGE %d 클리어] 보너스 +%d P 획득!" % [cleared_st, reward], 4.0)
 				if next_st <= wave_director.max_stages_in_region:
-					battle_hud.show_tactical_alert("🏆 STAGE %d 완수! 다음 작전 구역(STAGE %d)으로 진격!" % [cleared_st, next_st], 4.0)
+					battle_hud.show_tactical_alert("[STAGE %d 완수] 다음 작전 구역(STAGE %d) 해금!" % [cleared_st, next_st], 4.0)
 		)
 		wave_director.wave_started.connect(func(w_num, total):
 			if battle_hud:
@@ -201,7 +201,7 @@ func _ready() -> void:
 		wave_director.boss_spawned.connect(func(_boss, b_title, max_hp):
 			if battle_hud:
 				battle_hud.show_boss_bar(b_title, max_hp)
-				battle_hud.show_tactical_alert("⚠️ [BOSS] %s 출현! 화력을 집중하십시오!" % b_title, 4.0)
+				battle_hud.show_tactical_alert("[BOSS 경보] %s 출현! 화력을 집중하십시오!" % b_title, 4.0)
 			AudioManager.play_sound("alarm", 0.0, 1.0)
 		)
 		wave_director.boss_damaged.connect(func(cur, max_hp):
@@ -211,8 +211,8 @@ func _ready() -> void:
 		wave_director.boss_defeated.connect(func(_boss, b_title):
 			if battle_hud:
 				battle_hud.hide_boss_bar()
-				battle_hud.show_toast("🏆 [BOSS 격퇴] %s 격파 성공!" % b_title, 3.5)
-				battle_hud.show_tactical_alert("🏆 [BOSS 격퇴] %s 섬멸 완료!" % b_title, 3.5)
+				battle_hud.show_toast("[BOSS 격퇴] %s 격파 성공!" % b_title, 3.5)
+				battle_hud.show_tactical_alert("[BOSS 격퇴] %s 섬멸 완료!" % b_title, 3.5)
 			GameSession.add_credits(1500)
 			if battle_hud:
 				battle_hud.update_credits(GameSession.credits)
@@ -261,7 +261,7 @@ func _ready() -> void:
 			get_tree().reload_current_scene()
 		)
 		battle_hud.menu_requested.connect(func():
-			get_tree().change_scene_to_file("res://scenes/app/main_menu.tscn")
+			get_tree().change_scene_to_file("res://scenes/ui/operations_hq.tscn")
 		)
 		battle_hud.modal_visibility_changed.connect(func(is_open):
 			if touch_controls:
@@ -279,7 +279,7 @@ func _ready() -> void:
 		
 	# 9. Start the run
 	if wave_director:
-		wave_director.start_run(15)
+		wave_director.start_stage(GameSession.selected_stage)
 
 func _physics_process(delta: float) -> void:
 	if trench_map and player:
@@ -453,19 +453,19 @@ func _handle_wave_event(event_name: String, _wave_num: int) -> void:
 		return
 	match event_name:
 		"boss_air", "boss_ground", "final_combined_assault":
-			battle_hud.show_tactical_alert("🚨 경보: 강력한 지휘체 신호 감지! 대공/대전차 화기 준비!", 4.0)
+			battle_hud.show_tactical_alert("[긴급 경보] 강력한 지휘체 신호 감지! 대공/대전차 화기 준비!", 4.0)
 		"partial_cover_damage":
-			battle_hud.show_tactical_alert("⚠️ 위험: 적 집중 포화로 전방 엄폐물 파손 발생!", 3.5)
+			battle_hud.show_tactical_alert("[위험 경보] 적 집중 포화로 전방 엄폐물 파손 발생!", 3.5)
 		"jamming":
-			battle_hud.show_tactical_alert("🚨 전자전: 적 통신 재밍 발생! 조준선 교란 주의!", 3.5)
+			battle_hud.show_tactical_alert("[전자전 경보] 적 통신 재밍 발생! 조준선 교란 주의!", 3.5)
 		"night", "dust":
-			battle_hud.show_tactical_alert("🌙 야간/먼지 폭풍 작전: 열화상 탐지 모드 가동!", 3.5)
+			battle_hud.show_tactical_alert("[야간 작전] 야간/먼지 폭풍 작전: 열화상 탐지 모드 가동!", 3.5)
 		"artillery_warning":
-			battle_hud.show_tactical_alert("⚠️ 적 야포 포격 경보: 참호 엄폐를 유지하십시오!", 4.0)
+			battle_hud.show_tactical_alert("[포격 경보] 적 야포 포격 경보: 참호 엄폐를 유지하십시오!", 4.0)
 		"rocket_artillery":
-			battle_hud.show_tactical_alert("🚀 방사포 일제 사격 경보: 전 구역 충격 대비!", 4.0)
+			battle_hud.show_tactical_alert("[방사포 경보] 방사포 일제 사격 경보: 전 구역 충격 대비!", 4.0)
 		"helicopter_event":
-			battle_hud.show_tactical_alert("🚁 적 항공 지원 접근: 대공 사격 준비!", 3.5)
+			battle_hud.show_tactical_alert("[적기 접근] 적 항공 지원 접근: 대공 사격 준비!", 3.5)
 
 func _start_turret_build(slot: DefenseSlot) -> void:
 	if is_building_turret and building_slot == slot:

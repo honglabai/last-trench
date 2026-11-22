@@ -729,6 +729,12 @@ func show_victory() -> void:
 	hide_boss_bar()
 	if victory_panel:
 		victory_panel.visible = true
+		var title_lbl = victory_panel.get_node_or_null("VBox/Title") as Label
+		var reason_lbl = victory_panel.get_node_or_null("VBox/Reason") as Label
+		if title_lbl:
+			title_lbl.text = "[작전 성공] 제%d작전 사수 완수!" % GameSession.selected_stage
+		if reason_lbl:
+			reason_lbl.text = "10개 웨이브 방어 성공! 다음 작전을 위해 사령부로 귀환합니다."
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func show_defeat(reason: String) -> void:
@@ -748,7 +754,7 @@ func show_boss_bar(boss_title: String, max_hp: float) -> void:
 	if boss_container:
 		boss_container.visible = true
 	if boss_name_label:
-		boss_name_label.text = "⚠️ [BOSS] %s" % boss_title
+		boss_name_label.text = "[BOSS 경보] %s" % boss_title
 	if boss_hp_bar:
 		boss_hp_bar.max_value = max_hp
 		boss_hp_bar.value = max_hp

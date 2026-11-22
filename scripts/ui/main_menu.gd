@@ -193,7 +193,7 @@ func _init_settings_sliders() -> void:
 func _on_start_pressed() -> void:
 	AudioManager.play_sound("click")
 	GameSettings.toggle_fullscreen()
-	get_tree().change_scene_to_file("res://scenes/app/game_root.tscn")
+	get_tree().change_scene_to_file("res://scenes/ui/operations_hq.tscn")
 
 func _on_shop_pressed() -> void:
 	AudioManager.play_sound("click")

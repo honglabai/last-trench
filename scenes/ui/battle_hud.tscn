@@ -257,7 +257,7 @@ grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.25, 0.2, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
 theme_override_font_sizes/font_size = 16
-text = "⚠️ [BOSS] 드론 군집 지휘체"
+text = "[BOSS 경보] 드론 군집 지휘체"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -314,7 +314,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
 theme_override_colors/font_shadow_color = Color(0.6, 0, 0, 0.95)
 theme_override_font_sizes/font_size = 16
-text = "⚠️ TACTICAL ALERT"
+text = "[작전 경보] TACTICAL ALERT"
 horizontal_alignment = 1
 vertical_alignment = 1
 

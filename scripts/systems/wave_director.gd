@@ -41,6 +41,7 @@ var killed_enemies_in_wave: int = 0
 var spawn_timer: float = 0.0
 var state_timer: float = 0.0
 var victory_emitted: bool = false
+var is_stage_mode: bool = false
 
 # External references
 var map_node: TrenchMap = null
@@ -89,28 +90,33 @@ func get_stage_info(stage_id: int) -> Dictionary:
 	return {}
 
 func start_stage(stage_id: int) -> void:
+	is_stage_mode = true
 	current_stage_id = stage_id
 	var st := get_stage_info(stage_id)
 	if not st.is_empty():
 		stage_name = str(st.get("stage_name", "제%d스테이지" % stage_id))
 		stage_difficulty = str(st.get("difficulty", "보통"))
-		total_waves_in_stage = int(st.get("total_waves", 2))
-		stage_reward_credits = int(st.get("reward_credits", 1000))
+		total_waves_in_stage = int(st.get("total_waves", 10))
+		stage_reward_credits = int(st.get("reward_credits", 1500))
 	current_stage_wave = 0
 	stage_started.emit(current_stage_id, stage_name, stage_difficulty, total_waves_in_stage)
 	
-	# Find starting global wave index for this stage
+	# Find starting and ending global wave index for this stage
 	var waves_list: Array = wave_plan_data.get("waves", [])
 	var found_first_wave: int = -1
+	var found_last_wave: int = -1
 	for w in waves_list:
 		if int(w.get("stage_id", 0)) == stage_id:
-			found_first_wave = int(w.get("id", 1))
-			break
+			if found_first_wave == -1:
+				found_first_wave = int(w.get("id", 1))
+			found_last_wave = int(w.get("id", 1))
 	if found_first_wave != -1:
 		current_wave_number = found_first_wave - 1
+		max_waves_in_run = found_last_wave
 	start_next_wave()
 
 func start_run(target_max_waves: int = 20) -> void:
+	is_stage_mode = false
 	max_waves_in_run = target_max_waves
 	current_wave_number = 0
 	current_stage_id = 1
@@ -287,14 +293,13 @@ func _on_wave_completed() -> void:
 	_change_state(WaveState.WAVE_CLEARED)
 	wave_cleared.emit(current_wave_number)
 	
-	# Check if current stage is completed
-	if current_stage_wave >= total_waves_in_stage:
+	# Check if current stage is completed in stage mode
+	if is_stage_mode and current_stage_wave >= total_waves_in_stage:
 		var cleared_stage := current_stage_id
 		var next_stage := cleared_stage + 1
 		stage_cleared.emit(cleared_stage, stage_name, stage_reward_credits, next_stage)
-		if next_stage > max_stages_in_region or current_wave_number >= max_waves_in_run:
-			_trigger_victory()
-			return
+		_trigger_victory()
+		return
 			
 	if current_wave_number >= max_waves_in_run:
 		_trigger_victory()

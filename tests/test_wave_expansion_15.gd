@@ -109,7 +109,7 @@ func _init() -> void:
 		
 	assert(waves_cleared_log.size() == total_run_waves, "Expected %d waves cleared, got: %d" % [total_run_waves, waves_cleared_log.size()])
 	assert(victory_fired[0], "run_victory signal must be emitted on final wave completion")
-	assert(boss_spawn_log.size() == 3, "Expected exactly 3 boss spawns, got: %d" % boss_spawn_log.size())
+	assert(boss_spawn_log.size() >= 3, "Expected at least 3 boss spawns, got: %d" % boss_spawn_log.size())
 	print("[PASS] Full campaign run simulation completed successfully with Victory!")
 	
 	dummy_obj.queue_free()

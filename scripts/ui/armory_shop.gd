@@ -371,7 +371,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		equip_btn.custom_minimum_size = Vector2(136, 32)
 		equip_btn.add_theme_font_size_override("font_size", 12)
 		if is_equipped:
-			equip_btn.text = "✓ 장착 완료"
+			equip_btn.text = "[장착 완료]"
 			equip_btn.disabled = true
 			equip_btn.modulate = Color(0.3, 1.0, 0.6)
 		else:
@@ -411,7 +411,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 			action_box.add_child(up_btn)
 		else:
 			var max_btn := Button.new()
-			max_btn.text = "★ 최고 레벨 (MAX)"
+			max_btn.text = "[최고 레벨 (MAX)]"
 			max_btn.disabled = true
 			max_btn.custom_minimum_size = Vector2(136, 28)
 			max_btn.add_theme_font_size_override("font_size", 11)

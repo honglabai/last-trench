@@ -1,0 +1,255 @@
+[gd_scene load_steps=6 format=3 uid="uid://opshq987x"]
+
+[ext_resource type="Script" path="res://scripts/ui/operations_hq.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b0l0yjutgsfl4" path="res://assets/ui/bg_landing_title.png" id="2_bg"]
+[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="3_thm"]
+[ext_resource type="PackedScene" uid="uid://armoryshop91x" path="res://scenes/ui/armory_shop.tscn" id="4_shop"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.04, 0.07, 0.11, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.5, 0.7, 0.7)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+
+[node name="OperationsHQ" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_thm")
+script = ExtResource("1_script")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="DarkOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.04, 0.08, 0.88)
+
+[node name="Header" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 14.0
+offset_right = -20.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="HBox" type="HBoxContainer" parent="Header"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="Header/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="Header/HBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "[연합군 최전방 작전 사령부] ALLIED OPERATIONS COMMAND"
+
+[node name="ProgressRow" type="HBoxContainer" parent="Header/HBox/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ProgressBar" type="ProgressBar" parent="Header/HBox/VBox/ProgressRow"]
+custom_minimum_size = Vector2(280, 16)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 5.0
+step = 1.0
+show_percentage = false
+
+[node name="ProgressLabel" type="Label" parent="Header/HBox/VBox/ProgressRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 13
+text = "작전 총괄 진행도: 0 / 5 개 구역 완수 (0%)"
+
+[node name="CreditsLabel" type="Label" parent="Header/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
+theme_override_font_sizes/font_size = 17
+text = "보유 전공 점수: 5,000 P"
+
+[node name="MainSplit" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 100.0
+offset_right = -20.0
+offset_bottom = -68.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="StageListPanel" type="PanelContainer" parent="MainSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="MainSplit/StageListPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderLabel" type="Label" parent="MainSplit/StageListPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "[작전 구역 선택 (1~5 스테이지)]"
+
+[node name="HSeparator" type="HSeparator" parent="MainSplit/StageListPanel/VBox"]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="MainSplit/StageListPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="StageList" type="VBoxContainer" parent="MainSplit/StageListPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="BriefingPanel" type="PanelContainer" parent="MainSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="MainSplit/BriefingPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.6, 1)
+theme_override_font_sizes/font_size = 18
+text = "[작전 브리핑] 제1작전: 전초 경계선 방어"
+
+[node name="DiffLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 14
+text = "위험 등급: 보통 (EASY)"
+
+[node name="WavesLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "작전 규모: 10개 연속 제파 웨이브 (Wave 1 ~ 10)"
+
+[node name="HSeparator1" type="HSeparator" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "작전 목표:
+아군 전초기지 주변으로 침투하는 적 수색 정찰대와 경보병을 격퇴하고 방어선을 사수하십시오."
+autowrap_mode = 3
+
+[node name="ThreatsLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.55, 0.45, 1)
+theme_override_font_sizes/font_size = 13
+text = "예상 적 병력:
+- 기본 보병, 정찰 드론"
+autowrap_mode = 3
+
+[node name="RewardLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 14
+text = "완수 보상: 전공 점수 +1500 P 지급"
+
+[node name="HSeparator2" type="HSeparator" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+
+[node name="DeployButton" type="Button" parent="MainSplit/BriefingPanel/VBox"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 1, 0.6, 1)
+theme_override_font_sizes/font_size = 16
+text = "[제1작전 출격 (START OPERATION)]"
+
+[node name="Footer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -58.0
+offset_right = -20.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="HBox" type="HBoxContainer" parent="Footer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ShopButton" type="Button" parent="Footer/HBox"]
+custom_minimum_size = Vector2(160, 36)
+layout_mode = 2
+text = "무기 상점 [S]"
+
+[node name="GuideButton" type="Button" parent="Footer/HBox"]
+custom_minimum_size = Vector2(160, 36)
+layout_mode = 2
+text = "작전 지침 [G]"
+
+[node name="SettingsButton" type="Button" parent="Footer/HBox"]
+custom_minimum_size = Vector2(160, 36)
+layout_mode = 2
+text = "환경 설정 [I]"
+
+[node name="Spacer" type="Control" parent="Footer/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TitleButton" type="Button" parent="Footer/HBox"]
+custom_minimum_size = Vector2(160, 36)
+layout_mode = 2
+text = "타이틀 화면 [ESC]"
+
+[node name="ArmoryShop" parent="." instance=ExtResource("4_shop")]
+visible = false

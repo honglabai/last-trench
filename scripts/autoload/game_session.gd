@@ -19,6 +19,9 @@ static var owned_weapons: Dictionary = { "k2c1_rifle": 1, "k5_pistol": 1 }
 static var grenade_count: int = 3
 static var max_grenades: int = 10
 static var equipped_weapon_id: String = "k2c1_rifle"
+static var highest_unlocked_stage: int = 1
+static var selected_stage: int = 1
+static var cleared_stages: Dictionary = {}
 static var is_profile_loaded: bool = false
 static var current_instance: GameSession = null
 
@@ -64,11 +67,17 @@ static func _ensure_profile_loaded() -> void:
 		equipped_weapon_id = cfg.get_value("armory", "equipped_weapon_id", "k2c1_rifle")
 		if equipped_weapon_id == "k413_grenade":
 			equipped_weapon_id = "k2c1_rifle"
+		highest_unlocked_stage = clampi(int(cfg.get_value("campaign", "highest_unlocked_stage", 1)), 1, 5)
+		selected_stage = clampi(int(cfg.get_value("campaign", "selected_stage", 1)), 1, highest_unlocked_stage)
+		cleared_stages = cfg.get_value("campaign", "cleared_stages", {})
 	else:
 		credits = 5000
 		owned_weapons = { "k2c1_rifle": 1, "k5_pistol": 1 }
 		grenade_count = 3
 		equipped_weapon_id = "k2c1_rifle"
+		highest_unlocked_stage = 1
+		selected_stage = 1
+		cleared_stages = {}
 		save_profile()
 
 static func save_profile() -> void:
@@ -77,7 +86,38 @@ static func save_profile() -> void:
 	cfg.set_value("armory", "owned_weapons", owned_weapons)
 	cfg.set_value("armory", "grenade_count", grenade_count)
 	cfg.set_value("armory", "equipped_weapon_id", equipped_weapon_id)
+	cfg.set_value("campaign", "highest_unlocked_stage", highest_unlocked_stage)
+	cfg.set_value("campaign", "selected_stage", selected_stage)
+	cfg.set_value("campaign", "cleared_stages", cleared_stages)
 	cfg.save(SAVE_FILE)
+
+static func is_stage_unlocked(stage_id: int) -> bool:
+	_ensure_profile_loaded()
+	if stage_id == 1:
+		return true
+	return stage_id <= highest_unlocked_stage
+
+static func is_stage_cleared(stage_id: int) -> bool:
+	_ensure_profile_loaded()
+	return bool(cleared_stages.get(str(stage_id), false))
+
+static func select_stage(stage_id: int) -> bool:
+	_ensure_profile_loaded()
+	if is_stage_unlocked(stage_id):
+		selected_stage = clampi(stage_id, 1, 5)
+		save_profile()
+		return true
+	return false
+
+static func on_stage_completed(stage_id: int, reward: int = 0) -> void:
+	_ensure_profile_loaded()
+	cleared_stages[str(stage_id)] = true
+	highest_unlocked_stage = clampi(maxi(highest_unlocked_stage, stage_id + 1), 1, 5)
+	if reward > 0:
+		credits += reward
+	save_profile()
+	if current_instance and is_instance_valid(current_instance):
+		current_instance.credits_changed.emit(credits)
 
 static func get_grenade_count() -> int:
 	_ensure_profile_loaded()
