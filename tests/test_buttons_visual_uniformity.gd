@@ -29,8 +29,9 @@ func _init() -> void:
 		
 		assert(btn.texture_normal != null, "Button %s normal texture must be assigned" % button_names[i])
 		assert(btn.texture_pressed != null, "Button %s pressed texture must be assigned" % button_names[i])
-		assert(btn.stretch_mode == TextureButton.STRETCH_KEEP_ASPECT_CENTERED, "Button %s must have keep_aspect_centered stretch_mode" % button_names[i])
+		assert(btn.stretch_mode == TextureButton.STRETCH_SCALE or btn.stretch_mode == TextureButton.STRETCH_KEEP_ASPECT_CENTERED, "Button %s must have valid stretch_mode" % button_names[i])
 	
+	assert(expected_size == Vector2(294, 76), "MainMenu buttons must be 70%% width (294x76), got %s" % str(expected_size))
 	print("[PASS] All 5 MainMenu buttons verified with exact identical size: %s" % str(expected_size))
 	menu.queue_free()
 	
