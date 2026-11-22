@@ -19,6 +19,7 @@ func _init() -> void:
 		"m4a1_carbine",
 		"hk416_elite",
 		"scar_h_battle",
+		"usas12_shotgun",
 		"k14_sniper",
 		"rpg7_launcher",
 		"hyungung_atgm"
@@ -65,7 +66,7 @@ func _init() -> void:
 		assert(vm.rifle_rect.texture == tex, "FPSViewModel failed to display " + w_id)
 		
 	vm.queue_free()
-	print("[PASS] FPSViewModel cycled through all 9 realistic weapon viewmodels successfully")
+	print("[PASS] FPSViewModel cycled through all 10 realistic weapon viewmodels successfully")
 	
 	print("[TEST COMPLETE] test_all_weapon_renderings.gd PASSED ALL CHECKS (0 errors)!")
 	quit()

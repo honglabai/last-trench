@@ -23,6 +23,7 @@ func _init() -> void:
 		"m4a1_carbine",
 		"hk416_elite",
 		"scar_h_battle",
+		"usas12_shotgun",
 		"k14_sniper",
 		"rpg7_launcher",
 		"hyungung_atgm"
@@ -37,7 +38,7 @@ func _init() -> void:
 			push_error("Missing thumbnail picture for weapon: " + w_id)
 			quit(1)
 			return
-	print("[PASS] Verified all 9 weapons and thumbnails in weapons.json catalog")
+	print("[PASS] Verified all 10 weapons and thumbnails in weapons.json catalog")
 	
 	# 2. Test WeaponComponent level scaling & Explosive Weapons
 	var wc := WeaponComponent.new()
@@ -108,11 +109,11 @@ func _init() -> void:
 	var shop = shop_scene.instantiate() as ArmoryShop
 	root.add_child(shop)
 	await process_frame
-	if not shop.weapon_container or shop.weapon_container.get_child_count() < 9:
-		push_error("ArmoryShop failed to populate 9 weapon cards, count is: " + str(shop.weapon_container.get_child_count() if shop.weapon_container else 0))
+	if not shop.weapon_container or shop.weapon_container.get_child_count() < 10:
+		push_error("ArmoryShop failed to populate 10 weapon cards, count is: " + str(shop.weapon_container.get_child_count() if shop.weapon_container else 0))
 		quit(1)
 		return
-	print("[PASS] ArmoryShop UI populated 9 weapon cards with photos and stats successfully")
+	print("[PASS] ArmoryShop UI populated 10 weapon cards with photos and stats successfully")
 	
 	if not shop.grant_btn:
 		push_error("ArmoryShop missing grant_btn")

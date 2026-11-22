@@ -63,6 +63,14 @@ func _ready() -> void:
 	_build_stage_cards()
 	refresh_hq_ui()
 
+const SECTOR_NAMES: Dictionary = {
+	1: "SECTOR 01: 전초 경계선 (Alpha)",
+	2: "SECTOR 02: 험준 협곡 통로 (Bravo)",
+	3: "SECTOR 03: 도심 폐허 지구 (Charlie)",
+	4: "SECTOR 04: 야간 기습 구역 (Delta)",
+	5: "SECTOR 05: 사령부 중앙 결전지 (Omega)"
+}
+
 func _load_wave_plan() -> void:
 	var path := "res://data/wave_plan.json"
 	if not FileAccess.file_exists(path):
@@ -95,9 +103,10 @@ func _build_stage_cards() -> void:
 		var st_diff: String = st_info.get("difficulty", "보통")
 		
 		var card := Button.new()
-		card.custom_minimum_size = Vector2(0, 84)
+		card.custom_minimum_size = Vector2(0, 88)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		card.add_theme_font_size_override("font_size", 15)
 		
 		var do_select = func():
 			if GameSession.is_stage_unlocked(st_id):
@@ -167,21 +176,22 @@ func refresh_hq_ui() -> void:
 			
 	# Refresh Selected Stage Briefing
 	var cur_st := get_stage_info(selected_stage_id)
+	var sector_tag: String = SECTOR_NAMES.get(selected_stage_id, "SECTOR %02d" % selected_stage_id)
 	if briefing_title:
 		briefing_title.text = "[작전 브리핑] %s" % cur_st.get("stage_name", "제%d작전" % selected_stage_id)
 	if briefing_diff_label:
-		briefing_diff_label.text = "위험 등급: %s" % cur_st.get("difficulty", "보통")
+		briefing_diff_label.text = "위험 등급: %s  |  %s" % [cur_st.get("difficulty", "보통"), sector_tag]
 	if briefing_waves_label:
 		briefing_waves_label.text = "작전 규모: 10개 연속 제파 웨이브 (Wave 1 ~ 10)"
 	if briefing_desc_label:
-		briefing_desc_label.text = "작전 목표:\n%s" % cur_st.get("briefing", "적 침투를 저지하고 최후의 참호를 사수하십시오.")
+		briefing_desc_label.text = "작전 요도 목표:\n%s" % cur_st.get("briefing", "적 침투를 저지하고 최후의 참호를 사수하십시오.")
 	if briefing_threats_label:
-		briefing_threats_label.text = "예상 적 병력:\n- %s" % cur_st.get("expected_enemies", "적 보병 및 무인 드론 편대")
+		briefing_threats_label.text = "예상 적 병력: %s" % cur_st.get("expected_enemies", "적 보병 및 무인 드론 편대")
 	if briefing_reward_label:
 		briefing_reward_label.text = "완수 보상: 전공 점수 +%d P 지급" % int(cur_st.get("reward_credits", 1500))
 		
 	if deploy_button:
-		deploy_button.text = "[제%d작전 출격 (START OPERATION)]" % selected_stage_id
+		deploy_button.text = "[%s 출격 (START OPERATION)]" % sector_tag
 		deploy_button.disabled = not GameSession.is_stage_unlocked(selected_stage_id)
 
 func _on_deploy_pressed() -> void:

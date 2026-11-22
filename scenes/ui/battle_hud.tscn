@@ -93,7 +93,7 @@ offset_right = 300.0
 offset_bottom = 22.0
 theme_override_colors/font_color = Color(0, 0.9, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "디펜스 장애물(참호) 내구도"
 
 [node name="ShieldIcon" type="TextureRect" parent="TopLeft/VBox"]
@@ -129,7 +129,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 18
 text = "참호 거점: 500 / 500"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -144,7 +144,7 @@ offset_bottom = 30.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3, 0.85, 1, 0.9)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "강도(DURABILITY)"
 vertical_alignment = 1
 
@@ -156,7 +156,7 @@ offset_right = 300.0
 offset_bottom = 120.0
 theme_override_colors/font_color = Color(0, 0.9, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "방어 중인 병사의 HP"
 
 [node name="EkgIcon" type="TextureRect" parent="TopLeft/VBox"]
@@ -192,7 +192,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.7, 0.95, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 17
 text = "병사 HP: 100 / 100"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -207,7 +207,7 @@ offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.35, 0.35, 0.9)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 15
 text = "SOLDIER HP"
 vertical_alignment = 1
 
@@ -219,7 +219,7 @@ offset_right = 320.0
 offset_bottom = 188.0
 theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "즉시 부활: 1 / 1"
 horizontal_alignment = 2
 
@@ -256,7 +256,7 @@ offset_bottom = 24.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.25, 0.2, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "[BOSS 경보] 드론 군집 지휘체"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -288,7 +288,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "1000 / 1000 HP"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -313,7 +313,7 @@ mouse_filter = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
 theme_override_colors/font_shadow_color = Color(0.6, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "[작전 경보] TACTICAL ALERT"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -363,7 +363,7 @@ alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.65, 0.1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 24
 text = "LEVEL 01"
 horizontal_alignment = 2
 
@@ -371,14 +371,14 @@ horizontal_alignment = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 18
 text = "WAVE 01 / 05"
 horizontal_alignment = 2
 
 [node name="WaveInfoLabel" type="Label" parent="TopRightTactical/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "PHASE 1"
 horizontal_alignment = 2
 
@@ -390,7 +390,7 @@ alignment = 2
 [node name="ProgressTitle" type="Label" parent="TopRightTactical/VBox/ProgressRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5, 0.9, 1, 0.9)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 15
 text = "디펜스 진행률"
 
 [node name="DefenseBar" type="TextureProgressBar" parent="TopRightTactical/VBox/ProgressRow"]
@@ -405,7 +405,7 @@ texture_progress = ExtResource("25_def_f")
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 17
 text = "전공 점수: 0 P"
 horizontal_alignment = 2
 
@@ -463,7 +463,7 @@ offset_right = 140.0
 offset_bottom = 28.0
 theme_override_colors/font_color = Color(0.2, 0.95, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 text = "30 / 120"
 vertical_alignment = 1
 
@@ -497,7 +497,7 @@ offset_right = 160.0
 offset_bottom = 78.0
 theme_override_colors/font_color = Color(1, 0.88, 0.25, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 17
 text = "수류탄: 3발 [G]"
 vertical_alignment = 1
 
@@ -509,7 +509,7 @@ offset_top = 78.0
 offset_right = 160.0
 offset_bottom = 96.0
 theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "[재장전 중... (RELOAD)]"
 
 [node name="Center" type="Control" parent="."]
@@ -594,7 +594,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.85, 0.9, 0.95, 0.75)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 15
 text = "[화살표/마우스] 조준 | [좌클릭/스페이스] 사격 | [우클릭/C] 정밀조준 | [G] 수류탄 | [R] 재장전 | [E] 포탑설치 | [Q/1~7] 무기교체 | [S] 상점 | [I] 설정"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -644,7 +644,7 @@ stretch_mode = 5
 [node name="Title" type="Label" parent="Overlay/VictoryPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 34
 text = "작전 성공! 참호 사수 완수"
 horizontal_alignment = 1
 
@@ -709,7 +709,7 @@ stretch_mode = 5
 [node name="Title" type="Label" parent="Overlay/DefeatPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 34
 text = "작전 실패... 참호 함락"
 horizontal_alignment = 1
 
@@ -772,7 +772,7 @@ theme_override_constants/separation = 8
 [node name="Title" type="Label" parent="SettingsLayer/SettingsDialog/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 24
 text = "전장 환경 설정"
 horizontal_alignment = 1
 
@@ -781,7 +781,7 @@ layout_mode = 2
 
 [node name="SensitivityTitle" type="Label" parent="SettingsLayer/SettingsDialog/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 17
 text = "과녁 조준 감도 (Aim Sensitivity): 60%"
 
 [node name="SensitivityRow" type="HBoxContainer" parent="SettingsLayer/SettingsDialog/VBox"]
@@ -816,7 +816,7 @@ stretch_mode = 5
 
 [node name="MasterVolTitle" type="Label" parent="SettingsLayer/SettingsDialog/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 17
 text = "전체 음량 (Master Volume): 85%"
 
 [node name="MasterVolRow" type="HBoxContainer" parent="SettingsLayer/SettingsDialog/VBox"]
@@ -851,7 +851,7 @@ stretch_mode = 5
 
 [node name="BGMVolTitle" type="Label" parent="SettingsLayer/SettingsDialog/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 17
 text = "배경음악 음량 (BGM Volume): 70%"
 
 [node name="BGMVolRow" type="HBoxContainer" parent="SettingsLayer/SettingsDialog/VBox"]
@@ -886,7 +886,7 @@ stretch_mode = 5
 
 [node name="SFXVolTitle" type="Label" parent="SettingsLayer/SettingsDialog/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 17
 text = "효과음 음량 (SFX Volume): 85%"
 
 [node name="SFXVolRow" type="HBoxContainer" parent="SettingsLayer/SettingsDialog/VBox"]

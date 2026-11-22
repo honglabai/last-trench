@@ -58,7 +58,7 @@
     "upgrade_per_level": {
       "damage": 4.0,
       "magazine_size": 3,
-      "reload_time": -0.10,
+      "reload_time": -0.1,
       "fire_rate": -0.008,
       "cost_multiplier": 150
     },
@@ -96,7 +96,7 @@
     "description": "빠른 기동성과 고속 연사",
     "price": 500,
     "damage": 28.0,
-    "fire_rate": 0.10,
+    "fire_rate": 0.1,
     "magazine_size": 30,
     "max_reserve_ammo": 180,
     "reload_time": 1.5,
@@ -170,7 +170,7 @@
     "upgrade_per_level": {
       "damage": 30.0,
       "magazine_size": 2,
-      "reload_time": -0.20,
+      "reload_time": -0.2,
       "fire_rate": -0.025,
       "cost_multiplier": 1000
     },
@@ -224,5 +224,47 @@
     },
     "thumbnail": "res://assets/ui/weapons/thumb_atgm.png",
     "texture": "res://assets/textures/tex_fps_atgm.png"
+  },
+  "usas12_shotgun": {
+    "name": "USAS-12 자동 산탄총",
+    "country": "대한민국",
+    "type": "전투 산탄총",
+    "description": "근접 광역 산탄 제압",
+    "price": 1800,
+    "damage": 85.0,
+    "fire_rate": 0.35,
+    "magazine_size": 10,
+    "max_reserve_ammo": 60,
+    "reload_time": 2.0,
+    "range": 45.0,
+    "upgrade_per_level": {
+      "damage": 15.0,
+      "magazine_size": 2,
+      "reload_time": -0.15,
+      "cost_multiplier": 300
+    },
+    "thumbnail": "res://assets/ui/weapons/thumb_shotgun.png",
+    "texture": "res://assets/textures/tex_fps_shotgun.png"
+  },
+  "shotgun": {
+    "name": "USAS-12 자동 산탄총",
+    "country": "대한민국",
+    "type": "전투 산탄총",
+    "description": "근접 광역 산탄 제압",
+    "price": 1800,
+    "damage": 85.0,
+    "fire_rate": 0.35,
+    "magazine_size": 10,
+    "max_reserve_ammo": 60,
+    "reload_time": 2.0,
+    "range": 45.0,
+    "upgrade_per_level": {
+      "damage": 15.0,
+      "magazine_size": 2,
+      "reload_time": -0.15,
+      "cost_multiplier": 300
+    },
+    "thumbnail": "res://assets/ui/weapons/thumb_shotgun.png",
+    "texture": "res://assets/textures/tex_fps_shotgun.png"
   }
 }

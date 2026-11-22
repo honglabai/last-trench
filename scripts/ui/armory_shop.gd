@@ -36,6 +36,7 @@ const WEAPON_IDS: Array[String] = [
 	"m4a1_carbine",
 	"hk416_elite",
 	"scar_h_battle",
+	"usas12_shotgun",
 	"k14_sniper",
 	"rpg7_launcher",
 	"hyungung_atgm"
@@ -80,6 +81,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.keycode >= KEY_1 and event.keycode <= KEY_9:
 			var slot_idx: int = event.keycode - KEY_1
 			if slot_idx >= 0 and slot_idx < WEAPON_IDS.size():
+				var target_w_id: String = WEAPON_IDS[slot_idx]
+				_handle_quick_key_action(target_w_id)
+				var vp := get_viewport()
+				if vp: vp.set_input_as_handled()
+				return
+		elif event.keycode == KEY_0:
+			var slot_idx: int = 9
+			if slot_idx < WEAPON_IDS.size():
 				var target_w_id: String = WEAPON_IDS[slot_idx]
 				_handle_quick_key_action(target_w_id)
 				var vp := get_viewport()
@@ -159,7 +168,7 @@ func refresh_shop_ui() -> void:
 
 func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(530, 86)
+	panel.custom_minimum_size = Vector2(530, 94)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
 	var is_owned: bool = GameSession.owned_weapons.has(w_id)
@@ -236,7 +245,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	var key_badge := Label.new()
 	key_badge.text = "[키 %d]" % key_num
 	key_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	key_badge.add_theme_font_size_override("font_size", 11)
+	key_badge.add_theme_font_size_override("font_size", 13)
 	key_badge.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3, 0.9))
 	thumb_inner.add_child(key_badge)
 	
@@ -255,7 +264,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	var name_lbl := Label.new()
 	var country_name = info.get("country", "")
 	name_lbl.text = "[%s] %s" % [country_name, info.get("name", w_id)]
-	name_lbl.add_theme_font_size_override("font_size", 14)
+	name_lbl.add_theme_font_size_override("font_size", 17)
 	if is_equipped:
 		name_lbl.add_theme_color_override("font_color", Color(0.2, 0.95, 0.6))
 	elif is_owned:
@@ -267,7 +276,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	header_hbox.add_child(name_lbl)
 	
 	var badge_lbl := Label.new()
-	badge_lbl.add_theme_font_size_override("font_size", 11)
+	badge_lbl.add_theme_font_size_override("font_size", 14)
 	if w_id == "k413_grenade":
 		var cur_grn := GameSession.get_grenade_count()
 		badge_lbl.text = "[보유 %d/%d발]" % [cur_grn, GameSession.max_grenades]
@@ -286,7 +295,7 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	# Impactful 1-Line Description
 	var desc_lbl := Label.new()
 	desc_lbl.text = info.get("description", "")
-	desc_lbl.add_theme_font_size_override("font_size", 11)
+	desc_lbl.add_theme_font_size_override("font_size", 14)
 	desc_lbl.add_theme_color_override("font_color", Color(0.65, 0.8, 0.95, 0.9))
 	info_box.add_child(desc_lbl)
 	
@@ -301,19 +310,19 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	var stats_lbl := Label.new()
 	if w_id == "k413_grenade":
 		var splash: float = float(info.get("splash_radius", 6.5))
-		stats_lbl.text = "화력: %.0f | 폭발반경: %.1fm | 쿨타임: %.1fs" % [cur_dmg, splash, cur_fr]
+		stats_lbl.text = "위력: %.0f | 폭발반경: %.1fm | 쿨타임: %.1fs" % [cur_dmg, splash, cur_fr]
 	elif is_explosive:
 		var splash: float = float(info.get("splash_radius", 7.0))
-		stats_lbl.text = "화력: %.0f | 반경: %.1fm | 장탄: %d발 | 사거리: %.0fm" % [cur_dmg, splash, cur_mag, cur_rng]
+		stats_lbl.text = "위력: %.0f | 반경: %.1fm | 장탄: %d발 | 사거리: %.0fm" % [cur_dmg, splash, cur_mag, cur_rng]
 	else:
-		stats_lbl.text = "화력: %.0f | 장탄: %d발 | 연사: %.2fs | 사거리: %.0fm" % [cur_dmg, cur_mag, cur_fr, cur_rng]
-	stats_lbl.add_theme_font_size_override("font_size", 11)
+		stats_lbl.text = "위력: %.0f | 장탄: %d발 | 연사: %.2fs | 사거리: %.0fm" % [cur_dmg, cur_mag, cur_fr, cur_rng]
+	stats_lbl.add_theme_font_size_override("font_size", 13)
 	stats_lbl.add_theme_color_override("font_color", Color(0.55, 0.7, 0.8, 0.8))
 	info_box.add_child(stats_lbl)
 	
 	# 3. Right Action Box (Immediate 1-Click Purchase / Equip / Upgrade)
 	var action_box := VBoxContainer.new()
-	action_box.custom_minimum_size = Vector2(136, 0)
+	action_box.custom_minimum_size = Vector2(144, 0)
 	action_box.alignment = BoxContainer.ALIGNMENT_CENTER
 	action_box.add_theme_constant_override("separation", 4)
 	hbox.add_child(action_box)
@@ -322,8 +331,8 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		var grn_price: int = int(info.get("price", 250))
 		var is_max: bool = (GameSession.grenade_count >= GameSession.max_grenades)
 		var grn_btn := Button.new()
-		grn_btn.custom_minimum_size = Vector2(136, 48)
-		grn_btn.add_theme_font_size_override("font_size", 13)
+		grn_btn.custom_minimum_size = Vector2(144, 48)
+		grn_btn.add_theme_font_size_override("font_size", 14)
 		if is_max:
 			grn_btn.text = "보급 완료\n(최대 %d발)" % GameSession.max_grenades
 			grn_btn.disabled = true
@@ -349,8 +358,8 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		var buy_btn := Button.new()
 		var price: int = int(info.get("price", 500))
 		buy_btn.text = "무기 구매 [%d]\n%d P" % [key_num, price]
-		buy_btn.custom_minimum_size = Vector2(136, 50)
-		buy_btn.add_theme_font_size_override("font_size", 13)
+		buy_btn.custom_minimum_size = Vector2(144, 52)
+		buy_btn.add_theme_font_size_override("font_size", 14)
 		buy_btn.disabled = (GameSession.credits < price)
 		buy_btn.modulate = Color(1.0, 0.85, 0.3) if GameSession.credits >= price else Color(0.6, 0.6, 0.6)
 		var do_buy = func():
@@ -368,8 +377,8 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	else:
 		# Equip Button
 		var equip_btn := Button.new()
-		equip_btn.custom_minimum_size = Vector2(136, 32)
-		equip_btn.add_theme_font_size_override("font_size", 12)
+		equip_btn.custom_minimum_size = Vector2(144, 36)
+		equip_btn.add_theme_font_size_override("font_size", 14)
 		if is_equipped:
 			equip_btn.text = "[장착 완료]"
 			equip_btn.disabled = true
@@ -393,8 +402,8 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		if cur_lvl < 5:
 			var up_cost: int = int(up_dict.get("cost_multiplier", 300)) * cur_lvl
 			var up_btn := Button.new()
-			up_btn.custom_minimum_size = Vector2(136, 30)
-			up_btn.add_theme_font_size_override("font_size", 11)
+			up_btn.custom_minimum_size = Vector2(144, 34)
+			up_btn.add_theme_font_size_override("font_size", 13)
 			up_btn.text = "Lv.%d 강화 (%d P)" % [cur_lvl + 1, up_cost]
 			up_btn.disabled = (GameSession.credits < up_cost)
 			up_btn.modulate = Color(1.0, 0.85, 0.3) if GameSession.credits >= up_cost else Color(0.6, 0.6, 0.6)
@@ -413,8 +422,8 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 			var max_btn := Button.new()
 			max_btn.text = "[최고 레벨 (MAX)]"
 			max_btn.disabled = true
-			max_btn.custom_minimum_size = Vector2(136, 28)
-			max_btn.add_theme_font_size_override("font_size", 11)
+			max_btn.custom_minimum_size = Vector2(144, 32)
+			max_btn.add_theme_font_size_override("font_size", 13)
 			max_btn.modulate = Color(1.0, 0.85, 0.2)
 			action_box.add_child(max_btn)
 			

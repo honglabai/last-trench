@@ -22,7 +22,7 @@
       "difficulty": "보통 (EASY)",
       "total_waves": 10,
       "reward_credits": 1500,
-      "briefing": "아군 전초기지 주변으로 침투하는 적 수색 정찰대와 경보병을 격퇴하고 방어선을 사수하십시오.",
+      "briefing": "전초 방어선 사수. 침투하는 수색 정찰대와 경보병을 신속히 격퇴하십시오.",
       "expected_enemies": "기본 보병, 정찰 드론",
       "waves": [
         {
@@ -180,7 +180,7 @@
       "difficulty": "숙련 (NORMAL)",
       "total_waves": 10,
       "reward_credits": 2500,
-      "briefing": "험준한 협곡 통로를 돌파하려는 적 RPG 대전차 분대와 고속 드론의 침투를 차단하십시오.",
+      "briefing": "험준 협곡 통로 차단. 돌파를 시도하는 RPG 분대와 고속 드론을 저지하십시오.",
       "expected_enemies": "RPG 대전차 보병, 공격 드론, 전투 로봇 선봉",
       "waves": [
         {
@@ -345,8 +345,8 @@
       "difficulty": "정예 (HARD)",
       "total_waves": 10,
       "reward_credits": 3500,
-      "briefing": "폐허가 된 시가지 주요 방어 진지. 중장갑 전투 로봇과 RPG 저격 분대의 맹공에 맞서 진지를 고수하십시오.",
-      "expected_enemies": "중장갑 전투 로봇, RPG 보병, 드론 편대 지휘관",
+      "briefing": "도심 폐허 거점 고수. 중장갑 로봇과 RPG 저격 분대의 맹공을 분쇄하십시오.",
+      "expected_enemies": "중장갑 로봇, RPG 보병, 드론 편대장",
       "waves": [
         {
           "wave_index": 1,
@@ -507,7 +507,7 @@
       "difficulty": "특수작전 (VERY HARD)",
       "total_waves": 10,
       "reward_credits": 5000,
-      "briefing": "시야가 제한된 야간에 개시된 적 특수 제대의 침투 작전. 다수의 전투 로봇과 무인 드론 편대를 신속히 요격하십시오.",
+      "briefing": "야간 기습 제대 요격. 탐조등 시야를 확보하고 드론 스웜 편대를 격추하십시오.",
       "expected_enemies": "특수 돌격대, 드론 스웜 편대, 장갑 로봇 보스",
       "waves": [
         {
@@ -672,8 +672,8 @@
       "difficulty": "최종 결전 (EXTREME)",
       "total_waves": 10,
       "reward_credits": 8000,
-      "briefing": "전 전선에 걸친 적 사령부의 결사 총공세! 모든 화력과 전술을 총동원하여 최후의 참호와 조국을 수호하십시오!",
-      "expected_enemies": "최종 결전 보스, 장갑 로봇 보스, 드론 편대장, 전 군단 총출동",
+      "briefing": "전 전선 결사 총공세! 사령부 총력전으로 최후의 참호와 조국을 수호하십시오!",
+      "expected_enemies": "최종 결전 보스, 장갑 로봇, 드론 편대장, 전 군단 총출동",
       "waves": [
         {
           "wave_index": 1,

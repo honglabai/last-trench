@@ -278,8 +278,66 @@ func _ready() -> void:
 		)
 		
 	# 9. Start the run
+	_setup_stage_environment()
 	if wave_director:
 		wave_director.start_stage(GameSession.selected_stage)
+
+func _setup_stage_environment() -> void:
+	var st_id: int = clampi(GameSession.selected_stage, 1, 5)
+	var sky_path := "res://assets/environment/sky_stage_%d.png" % st_id
+	if not ResourceLoader.exists(sky_path):
+		sky_path = "res://assets/environment/sky_battlefield_panorama.png"
+		
+	var we: WorldEnvironment = get_node_or_null("WorldEnvironment")
+	if we and we.environment:
+		we.environment = we.environment.duplicate()
+		if we.environment.sky:
+			we.environment.sky = we.environment.sky.duplicate()
+			var sky_mat := we.environment.sky.sky_material as PanoramaSkyMaterial
+			if sky_mat:
+				we.environment.sky.sky_material = sky_mat.duplicate()
+				var tex: Texture2D = load(sky_path)
+				if tex:
+					(we.environment.sky.sky_material as PanoramaSkyMaterial).panorama = tex
+					
+		# Stage-specific atmospheric lighting and fog adjustments
+		var sun: DirectionalLight3D = get_node_or_null("DirectionalLight3D")
+		match st_id:
+			1: # Outpost (Daylight)
+				we.environment.ambient_light_color = Color(0.8, 0.72, 0.62, 1.0)
+				we.environment.fog_light_color = Color(0.52, 0.42, 0.32, 1.0)
+				we.environment.fog_density = 0.0075
+				if sun:
+					sun.light_color = Color(1.0, 0.95, 0.85, 1.0)
+					sun.light_energy = 1.2
+			2: # Canyon (Desert Dust Storm)
+				we.environment.ambient_light_color = Color(0.85, 0.70, 0.45, 1.0)
+				we.environment.fog_light_color = Color(0.65, 0.50, 0.32, 1.0)
+				we.environment.fog_density = 0.012
+				if sun:
+					sun.light_color = Color(1.0, 0.88, 0.65, 1.0)
+					sun.light_energy = 1.35
+			3: # Urban Ruins (Dark Smoldering Fires)
+				we.environment.ambient_light_color = Color(0.65, 0.55, 0.50, 1.0)
+				we.environment.fog_light_color = Color(0.40, 0.35, 0.32, 1.0)
+				we.environment.fog_density = 0.015
+				if sun:
+					sun.light_color = Color(0.9, 0.75, 0.65, 1.0)
+					sun.light_energy = 0.95
+			4: # Night Ambush (Midnight Moon & Searchlights)
+				we.environment.ambient_light_color = Color(0.25, 0.30, 0.45, 1.0)
+				we.environment.fog_light_color = Color(0.12, 0.15, 0.25, 1.0)
+				we.environment.fog_density = 0.010
+				if sun:
+					sun.light_color = Color(0.5, 0.65, 0.9, 1.0)
+					sun.light_energy = 0.45
+			5: # Final Hell / Total War (Fiery Blood-Red Sky)
+				we.environment.ambient_light_color = Color(0.95, 0.40, 0.25, 1.0)
+				we.environment.fog_light_color = Color(0.55, 0.20, 0.15, 1.0)
+				we.environment.fog_density = 0.014
+				if sun:
+					sun.light_color = Color(1.0, 0.45, 0.2, 1.0)
+					sun.light_energy = 1.4
 
 func _physics_process(delta: float) -> void:
 	if trench_map and player:
