@@ -70,6 +70,12 @@ var ammo_label: Label:
 		if not _ammo_label: _ammo_label = get_node_or_null("BottomRight/VBox/AmmoLabel")
 		return _ammo_label
 
+var _grenade_label: Label
+var grenade_label: Label:
+	get:
+		if not _grenade_label: _grenade_label = get_node_or_null("BottomRight/VBox/GrenadeLabel")
+		return _grenade_label
+
 var _ammo_bar: Range
 var ammo_bar: Range:
 	get:
@@ -389,6 +395,7 @@ func _ready() -> void:
 	
 	_init_settings_ui()
 	update_credits(GameSession.credits)
+	update_grenade_count(GameSession.get_grenade_count())
 
 func _on_restart_clicked() -> void:
 	AudioManager.play_sound("click")
@@ -516,6 +523,8 @@ func _on_settings_close_pressed() -> void:
 
 func _on_modal_closed() -> void:
 	modal_visibility_changed.emit(false)
+	update_grenade_count(GameSession.get_grenade_count())
+	update_credits(GameSession.credits)
 
 func _on_weapon_equipped_from_shop(w_id: String) -> void:
 	_update_viewmodel_texture(w_id)
@@ -599,6 +608,14 @@ func update_ammo(current: int, reserve: int) -> void:
 		ammo_bar.max_value = 30 # standard scale
 		ammo_bar.value = current
 
+func update_grenade_count(count: int) -> void:
+	if grenade_label:
+		grenade_label.text = "수류탄: %d발 [G]" % count
+		if count <= 0:
+			grenade_label.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4, 0.9))
+		else:
+			grenade_label.add_theme_color_override("font_color", Color(1.0, 0.88, 0.25, 1.0))
+
 func set_reload_indicator(is_reloading: bool) -> void:
 	if reload_label:
 		reload_label.visible = is_reloading
@@ -663,7 +680,7 @@ func show_toast(msg: String, duration: float = 2.0) -> void:
 		t.tween_property(help_label, "modulate:a", 0.0, 0.5)
 		t.tween_callback(func():
 			if help_label:
-				help_label.text = "[화살표/마우스] 조준 | [좌클릭/스페이스] 사격 | [우클릭/C] 정밀조준 | [G] 수류탄 | [R] 재장전 | [E] 포탑설치 | [Q/1~7] 무기교체 | [B] 상점 | [O] 설정"
+				help_label.text = "[화살표/마우스] 조준 | [좌클릭/스페이스] 사격 | [우클릭/C] 정밀조준 | [G] 수류탄 | [R] 재장전 | [E] 포탑설치 | [Q/1~7] 무기교체 | [S] 상점 | [I] 설정"
 				help_label.modulate = Color(0.85, 0.9, 0.95, 0.75)
 		)
 

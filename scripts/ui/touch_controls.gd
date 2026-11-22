@@ -93,6 +93,13 @@ var grenade_button: Button:
 			_grenade_button = get_node_or_null("RightZone/ActionButtons/GrenadeButton")
 		return _grenade_button
 
+var _grenade_count_badge: Label
+var grenade_count_badge: Label:
+	get:
+		if not _grenade_count_badge:
+			_grenade_count_badge = get_node_or_null("RightZone/ActionButtons/GrenadeButton/CountBadge")
+		return _grenade_count_badge
+
 func _ready() -> void:
 	if joystick_base:
 		joystick_center = joystick_base.size / 2.0
@@ -130,6 +137,16 @@ func _ready() -> void:
 func update_grenade_count(count: int) -> void:
 	if grenade_button:
 		grenade_button.text = "%d" % count
+		if count <= 0:
+			grenade_button.modulate = Color(0.5, 0.5, 0.5, 0.7)
+		else:
+			grenade_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
+	if grenade_count_badge:
+		grenade_count_badge.text = "%d" % count
+		if count <= 0:
+			grenade_count_badge.add_theme_color_override("font_color", Color(1.0, 0.35, 0.35, 1.0))
+		else:
+			grenade_count_badge.add_theme_color_override("font_color", Color(1.0, 0.92, 0.2, 1.0))
 
 func _process(delta: float) -> void:
 	if is_input_locked:

@@ -57,8 +57,9 @@ static func _ensure_profile_loaded() -> void:
 			owned_weapons["k5_pistol"] = 1
 		if owned_weapons.has("k413_grenade"):
 			owned_weapons.erase("k413_grenade")
-		grenade_count = cfg.get_value("armory", "grenade_count", 3)
-		if grenade_count <= 0:
+		if cfg.has_section_key("armory", "grenade_count"):
+			grenade_count = clampi(int(cfg.get_value("armory", "grenade_count", 3)), 0, max_grenades)
+		else:
 			grenade_count = 3
 		equipped_weapon_id = cfg.get_value("armory", "equipped_weapon_id", "k2c1_rifle")
 		if equipped_weapon_id == "k413_grenade":
@@ -81,6 +82,13 @@ static func save_profile() -> void:
 static func get_grenade_count() -> int:
 	_ensure_profile_loaded()
 	return grenade_count
+
+static func set_grenade_count(count: int) -> void:
+	_ensure_profile_loaded()
+	grenade_count = clampi(count, 0, max_grenades)
+	save_profile()
+	if current_instance and is_instance_valid(current_instance):
+		current_instance.grenade_count_changed.emit(grenade_count)
 
 static func ensure_initial_grenades(min_count: int = 3) -> void:
 	_ensure_profile_loaded()
@@ -184,6 +192,10 @@ static func get_next_owned_weapon(current_id: String = "") -> String:
 	var next_idx := (idx + 1) % owned.size()
 	return owned[next_idx]
 
+func _enter_tree() -> void:
+	current_instance = self
+	GameSession._ensure_profile_loaded()
+
 func _ready() -> void:
 	current_instance = self
 	GameSession._ensure_profile_loaded()
@@ -208,8 +220,7 @@ func start_session(player: PlayerController, base: BaseObjective, director: Wave
 	is_invulnerable = false
 	invulnerability_timer = 0.0
 	
-	# Ensure at least 3 initial grenades upon operational deployment
-	GameSession.ensure_initial_grenades(3)
+	_ensure_profile_loaded()
 	
 	if current_player and is_instance_valid(current_player):
 		current_player.is_invulnerable = false

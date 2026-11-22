@@ -44,7 +44,7 @@ const WEAPON_IDS: Array[String] = [
 func _ready() -> void:
 	layer = 30 # Topmost layer above touch controls and HUD
 	_load_weapons_data()
-	if close_btn:
+	if close_btn and not close_btn.pressed.is_connected(_on_close_pressed):
 		close_btn.pressed.connect(_on_close_pressed)
 	if grant_btn:
 		grant_btn.text = "+2,000 P 보급금 지원 [G]"
@@ -52,7 +52,8 @@ func _ready() -> void:
 			AudioManager.play_sound("click")
 			GameSession.add_credits(2000)
 			refresh_shop_ui()
-		grant_btn.pressed.connect(do_grant)
+		if not grant_btn.pressed.is_connected(do_grant):
+			grant_btn.pressed.connect(do_grant)
 		grant_btn.gui_input.connect(func(ev: InputEvent):
 			if ev is InputEventScreenTouch and ev.pressed:
 				do_grant.call()
@@ -254,8 +255,13 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	
 	var lvl_lbl := Label.new()
 	if w_id == "k413_grenade":
-		lvl_lbl.text = "보유 수량: %d발 / 최대 %d발 (기본 3발 지급)" % [GameSession.get_grenade_count(), GameSession.max_grenades]
-		lvl_lbl.add_theme_color_override("font_color", Color(0.2, 0.95, 0.6))
+		var cur_grn := GameSession.get_grenade_count()
+		if cur_grn <= 0:
+			lvl_lbl.text = "보유 수량: 0발 (소진됨) / 최대 %d발" % GameSession.max_grenades
+			lvl_lbl.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4))
+		else:
+			lvl_lbl.text = "보유 수량: %d발 / 최대 %d발" % [cur_grn, GameSession.max_grenades]
+			lvl_lbl.add_theme_color_override("font_color", Color(0.2, 0.95, 0.6))
 	elif is_owned:
 		lvl_lbl.text = "숙련도: Lv. %d / 5" % cur_lvl
 		lvl_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))

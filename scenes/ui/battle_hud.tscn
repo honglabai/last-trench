@@ -438,9 +438,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -380.0
-offset_top = -290.0
+offset_top = -295.0
 offset_right = -190.0
-offset_bottom = -210.0
+offset_bottom = -195.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
@@ -489,13 +489,25 @@ value = 30.0
 texture_under = ExtResource("26_am_u")
 texture_progress = ExtResource("27_am_f")
 
-[node name="ReloadLabel" type="Label" parent="BottomRight/VBox"]
-visible = false
+[node name="GrenadeLabel" type="Label" parent="BottomRight/VBox"]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 58.0
 offset_right = 160.0
 offset_bottom = 78.0
+theme_override_colors/font_color = Color(1, 0.88, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_font_sizes/font_size = 14
+text = "수류탄: 3발 [G]"
+vertical_alignment = 1
+
+[node name="ReloadLabel" type="Label" parent="BottomRight/VBox"]
+visible = false
+layout_mode = 0
+offset_left = 10.0
+offset_top = 78.0
+offset_right = 160.0
+offset_bottom = 96.0
 theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
 theme_override_font_sizes/font_size = 12
 text = "[재장전 중... (RELOAD)]"

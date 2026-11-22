@@ -91,7 +91,8 @@ func _init() -> void:
 	print("[PASS] BattleHUD PC controls guide text verified: ", game_root.battle_hud.help_label.text)
 	
 	# 4. Test Quick Grenade throw via G key
-	GameSession.grenade_count = 3
+	GameSession.set_grenade_count(3)
+	game_root._last_grenade_time = -1.0
 	
 	# 4-A. Verify Arrow Right key does NOT throw grenade
 	var right_key_event = InputEventKey.new()

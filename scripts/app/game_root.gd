@@ -131,14 +131,9 @@ func _ready() -> void:
 			switch_to_next_weapon()
 		)
 		touch_controls.grenade_requested.connect(_on_quick_grenade_requested)
-		touch_controls.update_grenade_count(GameSession.get_grenade_count())
-		if is_inside_tree():
-			var gs_node = get_node_or_null("/root/GameSession")
-			if gs_node and gs_node.has_signal("grenade_count_changed"):
-				gs_node.grenade_count_changed.connect(func(cnt: int):
-					if touch_controls:
-						touch_controls.update_grenade_count(cnt)
-				)
+		if game_session and not game_session.grenade_count_changed.is_connected(_on_grenade_count_changed):
+			game_session.grenade_count_changed.connect(_on_grenade_count_changed)
+		_on_grenade_count_changed(GameSession.get_grenade_count())
 		
 	# 5. Wire DefenseSlots proximity
 	if trench_map:
@@ -241,6 +236,8 @@ func _ready() -> void:
 	# 7. Wire GameSession
 	if game_session:
 		game_session.start_session(player, base_obj, wave_director)
+		if not game_session.grenade_count_changed.is_connected(_on_grenade_count_changed):
+			game_session.grenade_count_changed.connect(_on_grenade_count_changed)
 		game_session.player_revived.connect(func(left, _hp):
 			battle_hud.update_revives(left)
 			battle_hud.update_player_health(player.current_health, player.max_health)
@@ -256,6 +253,7 @@ func _ready() -> void:
 		)
 		battle_hud.update_revives(game_session.revives_remaining)
 		battle_hud.update_credits(GameSession.credits)
+		_on_grenade_count_changed(GameSession.get_grenade_count())
 		
 	# 8. HUD Buttons & Modals
 	if battle_hud:
@@ -575,6 +573,12 @@ func _find_guided_missile_target(aim_origin: Vector3, aim_dir: Vector3) -> Node3
 				best_candidate = e
 	return best_candidate
 
+func _on_grenade_count_changed(cnt: int) -> void:
+	if touch_controls:
+		touch_controls.update_grenade_count(cnt)
+	if battle_hud:
+		battle_hud.update_grenade_count(cnt)
+
 func _on_quick_grenade_requested() -> void:
 	if not player or player.is_dead:
 		return
@@ -585,7 +589,8 @@ func _on_quick_grenade_requested() -> void:
 	if not GameSession.use_grenade():
 		AudioManager.play_sound("click", 0.04, 0.5)
 		if battle_hud:
-			battle_hud.show_toast("[수류탄 소진] B키(상점)에서 추가 구매할 수 있습니다")
+			battle_hud.show_toast("[수류탄 소진] S키(상점)에서 추가 구매할 수 있습니다")
+		_on_grenade_count_changed(GameSession.get_grenade_count())
 		return
 		
 	var origin: Vector3 = player.global_position + Vector3(0.0, 1.5, 0.0) if player.is_inside_tree() else player.position + Vector3(0.0, 1.5, 0.0)
@@ -599,8 +604,9 @@ func _on_quick_grenade_requested() -> void:
 	if grn.has_method("setup"):
 		grn.setup(origin, throw_dir, 30.0, 6.5, 250.0)
 	AudioManager.play_sound("click", 0.05, 0.8)
+	_on_grenade_count_changed(GameSession.get_grenade_count())
 	if battle_hud:
-		battle_hud.show_toast("수류탄 투척! (잔여: %d발)" % GameSession.grenade_count)
+		battle_hud.show_toast("수류탄 투척! (잔여: %d발)" % GameSession.get_grenade_count())
 
 func _spawn_tracer(start_pos: Vector3, target_pos: Vector3, speed: float, color: Color, custom_radius: float = 0.035, custom_len: float = 0.9) -> void:
 	if not tracer_scene:
