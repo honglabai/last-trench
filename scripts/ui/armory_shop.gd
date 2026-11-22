@@ -22,8 +22,8 @@ var close_btn: BaseButton:
 		if not _close_btn: _close_btn = get_node_or_null("Panel/VBox/Footer/CloseBtn")
 		return _close_btn
 
-var _weapon_container: VBoxContainer
-var weapon_container: VBoxContainer:
+var _weapon_container: Control
+var weapon_container: Control:
 	get:
 		if not _weapon_container: _weapon_container = get_node_or_null("Panel/VBox/Scroll/WeaponList")
 		return _weapon_container
@@ -82,7 +82,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			if slot_idx >= 0 and slot_idx < WEAPON_IDS.size():
 				var target_w_id: String = WEAPON_IDS[slot_idx]
 				_handle_quick_key_action(target_w_id)
-				get_viewport().set_input_as_handled()
+				var vp := get_viewport()
+				if vp: vp.set_input_as_handled()
 				return
 
 func _handle_quick_key_action(w_id: String) -> void:
@@ -158,24 +159,29 @@ func refresh_shop_ui() -> void:
 
 func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 112)
+	panel.custom_minimum_size = Vector2(530, 86)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
 	var is_owned: bool = GameSession.owned_weapons.has(w_id)
 	var cur_lvl: int = GameSession.get_weapon_level(w_id)
 	var is_equipped: bool = (GameSession.equipped_weapon_id == w_id)
 	var is_explosive: bool = bool(info.get("is_explosive", false))
 	
-	# Tactical card border
+	# Compact tactical card style
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.06, 0.09, 0.13, 0.92)
-	if w_id == "k413_grenade":
-		style.border_color = Color(0.2, 0.75, 0.95, 0.85) # High-tech cyan for consumable ordnance
-	elif is_equipped:
-		style.border_color = Color(0.2, 0.95, 0.6, 0.9) # Glowing green for equipped
+	if is_equipped:
+		style.bg_color = Color(0.05, 0.12, 0.08, 0.94)
+		style.border_color = Color(0.2, 0.95, 0.55, 0.9) # Glowing green
 	elif is_owned:
-		style.border_color = Color(0.2, 0.75, 0.95, 0.6) # Cyan for owned
+		style.bg_color = Color(0.06, 0.09, 0.13, 0.92)
+		style.border_color = Color(0.2, 0.75, 0.95, 0.65) # Cyan
+	elif w_id == "k413_grenade":
+		style.bg_color = Color(0.07, 0.08, 0.12, 0.92)
+		style.border_color = Color(1.0, 0.65, 0.2, 0.7) # Orange
 	else:
-		style.border_color = Color(0.4, 0.5, 0.6, 0.4) # Subdued gray for locked
+		style.bg_color = Color(0.04, 0.06, 0.09, 0.88)
+		style.border_color = Color(0.35, 0.45, 0.55, 0.35) # Gray subdued
+		
 	style.border_width_left = 2
 	style.border_width_top = 2
 	style.border_width_right = 2
@@ -184,18 +190,22 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	style.corner_radius_top_right = 6
 	style.corner_radius_bottom_right = 6
 	style.corner_radius_bottom_left = 6
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 6
+	style.content_margin_bottom = 6
 	panel.add_theme_stylebox_override("panel", style)
 	
 	var hbox := HBoxContainer.new()
-	hbox.add_theme_constant_override("separation", 14)
+	hbox.add_theme_constant_override("separation", 10)
 	panel.add_child(hbox)
 	
-	# 1. Weapon Picture Thumbnail Box
+	# 1. Left Thumbnail Box
 	var thumb_box := PanelContainer.new()
-	thumb_box.custom_minimum_size = Vector2(136, 92)
+	thumb_box.custom_minimum_size = Vector2(74, 74)
 	var thumb_style := StyleBoxFlat.new()
-	thumb_style.bg_color = Color(0.02, 0.04, 0.07, 0.95)
-	thumb_style.border_color = Color(0.25, 0.55, 0.75, 0.4)
+	thumb_style.bg_color = Color(0.02, 0.03, 0.06, 0.95)
+	thumb_style.border_color = Color(0.25, 0.5, 0.7, 0.4)
 	thumb_style.border_width_left = 1
 	thumb_style.border_width_top = 1
 	thumb_style.border_width_right = 1
@@ -209,10 +219,11 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	
 	var thumb_inner := VBoxContainer.new()
 	thumb_inner.alignment = BoxContainer.ALIGNMENT_CENTER
+	thumb_inner.add_theme_constant_override("separation", 2)
 	thumb_box.add_child(thumb_inner)
 	
 	var thumb_img := TextureRect.new()
-	thumb_img.custom_minimum_size = Vector2(128, 70)
+	thumb_img.custom_minimum_size = Vector2(68, 44)
 	thumb_img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	thumb_img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	var thumb_path: String = info.get("thumbnail", "")
@@ -223,118 +234,104 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	thumb_inner.add_child(thumb_img)
 	
 	var key_badge := Label.new()
-	key_badge.text = "[키보드 %d]" % key_num
+	key_badge.text = "[키 %d]" % key_num
 	key_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	key_badge.add_theme_font_size_override("font_size", 13)
+	key_badge.add_theme_font_size_override("font_size", 11)
 	key_badge.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3, 0.9))
 	thumb_inner.add_child(key_badge)
 	
-	# 2. Weapon Identity & Status Box
+	# 2. Center Info & Impactful Descriptions
 	var info_box := VBoxContainer.new()
-	info_box.custom_minimum_size = Vector2(200, 0)
+	info_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	info_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	info_box.add_theme_constant_override("separation", 2)
 	hbox.add_child(info_box)
+	
+	# Header: Name + Status Badge
+	var header_hbox := HBoxContainer.new()
+	header_hbox.add_theme_constant_override("separation", 6)
+	info_box.add_child(header_hbox)
 	
 	var name_lbl := Label.new()
 	var country_name = info.get("country", "")
 	name_lbl.text = "[%s] %s" % [country_name, info.get("name", w_id)]
-	name_lbl.add_theme_font_size_override("font_size", 19)
-	if w_id == "k413_grenade":
-		name_lbl.modulate = Color(0.3, 0.85, 1.0)
-	elif is_equipped:
-		name_lbl.modulate = Color(0.2, 0.95, 0.6)
+	name_lbl.add_theme_font_size_override("font_size", 14)
+	if is_equipped:
+		name_lbl.add_theme_color_override("font_color", Color(0.2, 0.95, 0.6))
 	elif is_owned:
-		name_lbl.modulate = Color(0.3, 0.85, 1.0)
-	info_box.add_child(name_lbl)
+		name_lbl.add_theme_color_override("font_color", Color(0.3, 0.85, 1.0))
+	elif w_id == "k413_grenade":
+		name_lbl.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
+	else:
+		name_lbl.add_theme_color_override("font_color", Color(0.85, 0.9, 0.95))
+	header_hbox.add_child(name_lbl)
 	
-	var type_lbl := Label.new()
-	type_lbl.text = "구분: %s" % info.get("type", "화기")
-	type_lbl.add_theme_color_override("font_color", Color(0.7, 0.85, 0.95, 0.8))
-	type_lbl.add_theme_font_size_override("font_size", 14)
-	info_box.add_child(type_lbl)
-	
-	var lvl_lbl := Label.new()
+	var badge_lbl := Label.new()
+	badge_lbl.add_theme_font_size_override("font_size", 11)
 	if w_id == "k413_grenade":
 		var cur_grn := GameSession.get_grenade_count()
-		if cur_grn <= 0:
-			lvl_lbl.text = "보유 수량: 0발 (소진됨) / 최대 %d발" % GameSession.max_grenades
-			lvl_lbl.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4))
-		else:
-			lvl_lbl.text = "보유 수량: %d발 / 최대 %d발" % [cur_grn, GameSession.max_grenades]
-			lvl_lbl.add_theme_color_override("font_color", Color(0.2, 0.95, 0.6))
+		badge_lbl.text = "[보유 %d/%d발]" % [cur_grn, GameSession.max_grenades]
+		badge_lbl.add_theme_color_override("font_color", Color(0.2, 0.95, 0.6) if cur_grn > 0 else Color(1.0, 0.4, 0.4))
+	elif is_equipped:
+		badge_lbl.text = "[장착중]"
+		badge_lbl.add_theme_color_override("font_color", Color(0.2, 0.95, 0.6))
 	elif is_owned:
-		lvl_lbl.text = "숙련도: Lv. %d / 5" % cur_lvl
-		lvl_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))
+		badge_lbl.text = "[Lv.%d]" % cur_lvl
+		badge_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))
 	else:
-		lvl_lbl.text = "구매가: %d P (미보유)" % int(info.get("price", 500))
-		lvl_lbl.add_theme_color_override("font_color", Color(1.0, 0.5, 0.4))
-	lvl_lbl.add_theme_font_size_override("font_size", 15)
-	info_box.add_child(lvl_lbl)
+		badge_lbl.text = "[미보유]"
+		badge_lbl.add_theme_color_override("font_color", Color(0.7, 0.75, 0.8, 0.7))
+	header_hbox.add_child(badge_lbl)
 	
-	# 3. Performance Stats Box
-	var stats_box := VBoxContainer.new()
-	stats_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	stats_box.alignment = BoxContainer.ALIGNMENT_CENTER
-	hbox.add_child(stats_box)
+	# Impactful 1-Line Description
+	var desc_lbl := Label.new()
+	desc_lbl.text = info.get("description", "")
+	desc_lbl.add_theme_font_size_override("font_size", 11)
+	desc_lbl.add_theme_color_override("font_color", Color(0.65, 0.8, 0.95, 0.9))
+	info_box.add_child(desc_lbl)
 	
+	# Performance Stats (1 line)
 	var up_dict: Dictionary = info.get("upgrade_per_level", {})
 	var lvl_step: int = maxi(0, cur_lvl - 1)
 	var cur_dmg: float = float(info.get("damage", 25.0)) + float(up_dict.get("damage", 5.0)) * lvl_step
 	var cur_mag: int = int(info.get("magazine_size", 30)) + int(up_dict.get("magazine_size", 5)) * lvl_step
 	var cur_fr: float = maxf(0.05, float(info.get("fire_rate", 0.12)) + float(up_dict.get("fire_rate", -0.005)) * lvl_step)
-	var cur_rel: float = maxf(0.8, float(info.get("reload_time", 1.8)) + float(up_dict.get("reload_time", -0.12)) * lvl_step)
 	var cur_rng: float = float(info.get("range", 80.0))
 	
-	var stats_lbl1 := Label.new()
+	var stats_lbl := Label.new()
 	if w_id == "k413_grenade":
 		var splash: float = float(info.get("splash_radius", 6.5))
-		stats_lbl1.text = "화력: %.0f (광역 파편 폭발 피해) | 폭발 반경: %.1fm | 사거리: 50m" % [cur_dmg, splash]
+		stats_lbl.text = "화력: %.0f | 폭발반경: %.1fm | 쿨타임: %.1fs" % [cur_dmg, splash, cur_fr]
 	elif is_explosive:
 		var splash: float = float(info.get("splash_radius", 7.0))
-		stats_lbl1.text = "화력: %.0f (광역 폭발 피해) | 폭발 반경: %.1fm | 사거리: %.0fm" % [cur_dmg, splash, cur_rng]
+		stats_lbl.text = "화력: %.0f | 반경: %.1fm | 장탄: %d발 | 사거리: %.0fm" % [cur_dmg, splash, cur_mag, cur_rng]
 	else:
-		stats_lbl1.text = "화력: %.0f (관통 탄환 피해) | 사거리: %.0fm" % [cur_dmg, cur_rng]
-	stats_lbl1.add_theme_font_size_override("font_size", 15)
-	stats_lbl1.add_theme_color_override("font_color", Color(1.0, 0.85, 0.35) if is_explosive else Color(0.9, 0.95, 1.0))
-	stats_box.add_child(stats_lbl1)
+		stats_lbl.text = "화력: %.0f | 장탄: %d발 | 연사: %.2fs | 사거리: %.0fm" % [cur_dmg, cur_mag, cur_fr, cur_rng]
+	stats_lbl.add_theme_font_size_override("font_size", 11)
+	stats_lbl.add_theme_color_override("font_color", Color(0.55, 0.7, 0.8, 0.8))
+	info_box.add_child(stats_lbl)
 	
-	var stats_lbl2 := Label.new()
-	if w_id == "k413_grenade":
-		stats_lbl2.text = "작전 투입 기본: 3발 지급 | 투척 쿨타임: %.1fs | 상점 추가 보급 가능" % cur_fr
-	else:
-		stats_lbl2.text = "장탄수: %d발 | 연사속도: %.2fs | 재장전: %.1fs" % [cur_mag, cur_fr, cur_rel]
-	stats_lbl2.add_theme_font_size_override("font_size", 14)
-	stats_lbl2.add_theme_color_override("font_color", Color(0.75, 0.85, 0.95, 0.85))
-	stats_box.add_child(stats_lbl2)
-	
-	var desc_lbl := Label.new()
-	desc_lbl.text = info.get("description", "")
-	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	desc_lbl.add_theme_font_size_override("font_size", 13)
-	desc_lbl.add_theme_color_override("font_color", Color(0.7, 0.75, 0.8, 0.75))
-	stats_box.add_child(desc_lbl)
-	
-	# 4. Action Buttons Box (Buy, Upgrade, Equip)
+	# 3. Right Action Box (Immediate 1-Click Purchase / Equip / Upgrade)
 	var action_box := VBoxContainer.new()
-	action_box.custom_minimum_size = Vector2(185, 0)
+	action_box.custom_minimum_size = Vector2(136, 0)
 	action_box.alignment = BoxContainer.ALIGNMENT_CENTER
-	action_box.add_theme_constant_override("separation", 6)
+	action_box.add_theme_constant_override("separation", 4)
 	hbox.add_child(action_box)
 	
 	if w_id == "k413_grenade":
 		var grn_price: int = int(info.get("price", 250))
+		var is_max: bool = (GameSession.grenade_count >= GameSession.max_grenades)
 		var grn_btn := Button.new()
-		grn_btn.custom_minimum_size = Vector2(0, 52)
-		grn_btn.add_theme_font_size_override("font_size", 16)
-		var is_max := (GameSession.grenade_count >= GameSession.max_grenades)
+		grn_btn.custom_minimum_size = Vector2(136, 48)
+		grn_btn.add_theme_font_size_override("font_size", 13)
 		if is_max:
 			grn_btn.text = "보급 완료\n(최대 %d발)" % GameSession.max_grenades
 			grn_btn.disabled = true
 			grn_btn.modulate = Color(0.6, 0.6, 0.6)
 		else:
-			grn_btn.text = "수류탄 보급 (+3발) [%d]\n(%d P)" % [key_num, grn_price]
+			grn_btn.text = "수류탄 보급 (+3)\n[%d]  %d P" % [key_num, grn_price]
 			grn_btn.disabled = (GameSession.credits < grn_price)
-			grn_btn.modulate = Color(0.4, 0.9, 1.0)
+			grn_btn.modulate = Color(0.35, 0.9, 1.0)
 			var do_buy_grn = func():
 				if not grn_btn.disabled and GameSession.spend_credits(grn_price):
 					GameSession.add_grenades(3)
@@ -351,10 +348,11 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 	if not is_owned:
 		var buy_btn := Button.new()
 		var price: int = int(info.get("price", 500))
-		buy_btn.text = "무기 구매 [%d]\n(%d P)" % [key_num, price]
-		buy_btn.custom_minimum_size = Vector2(0, 52)
-		buy_btn.add_theme_font_size_override("font_size", 16)
+		buy_btn.text = "무기 구매 [%d]\n%d P" % [key_num, price]
+		buy_btn.custom_minimum_size = Vector2(136, 50)
+		buy_btn.add_theme_font_size_override("font_size", 13)
 		buy_btn.disabled = (GameSession.credits < price)
+		buy_btn.modulate = Color(1.0, 0.85, 0.3) if GameSession.credits >= price else Color(0.6, 0.6, 0.6)
 		var do_buy = func():
 			if not buy_btn.disabled and GameSession.buy_weapon(w_id, price):
 				AudioManager.play_sound("reload")
@@ -368,16 +366,17 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		)
 		action_box.add_child(buy_btn)
 	else:
-		# Equip / Status button
+		# Equip Button
 		var equip_btn := Button.new()
-		equip_btn.custom_minimum_size = Vector2(0, 44)
-		equip_btn.add_theme_font_size_override("font_size", 16)
+		equip_btn.custom_minimum_size = Vector2(136, 32)
+		equip_btn.add_theme_font_size_override("font_size", 12)
 		if is_equipped:
-			equip_btn.text = "장착 완료 (EQUIPPED)"
+			equip_btn.text = "✓ 장착 완료"
 			equip_btn.disabled = true
 			equip_btn.modulate = Color(0.3, 1.0, 0.6)
 		else:
 			equip_btn.text = "전투 장착 [%d]" % key_num
+			equip_btn.modulate = Color(0.4, 0.9, 1.0)
 			var do_equip = func():
 				AudioManager.play_sound("click")
 				GameSession.equip_weapon(w_id)
@@ -394,10 +393,11 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 		if cur_lvl < 5:
 			var up_cost: int = int(up_dict.get("cost_multiplier", 300)) * cur_lvl
 			var up_btn := Button.new()
-			up_btn.custom_minimum_size = Vector2(0, 36)
-			up_btn.add_theme_font_size_override("font_size", 15)
+			up_btn.custom_minimum_size = Vector2(136, 30)
+			up_btn.add_theme_font_size_override("font_size", 11)
 			up_btn.text = "Lv.%d 강화 (%d P)" % [cur_lvl + 1, up_cost]
 			up_btn.disabled = (GameSession.credits < up_cost)
+			up_btn.modulate = Color(1.0, 0.85, 0.3) if GameSession.credits >= up_cost else Color(0.6, 0.6, 0.6)
 			var do_up = func():
 				if not up_btn.disabled and GameSession.upgrade_weapon(w_id, up_cost):
 					AudioManager.play_sound("reload")
@@ -410,11 +410,12 @@ func _create_weapon_card(w_id: String, info: Dictionary, key_num: int) -> Contro
 			)
 			action_box.add_child(up_btn)
 		else:
-			var max_lbl := Label.new()
-			max_lbl.text = "최고 레벨 (MAX)"
-			max_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			max_lbl.add_theme_font_size_override("font_size", 15)
-			max_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
-			action_box.add_child(max_lbl)
+			var max_btn := Button.new()
+			max_btn.text = "★ 최고 레벨 (MAX)"
+			max_btn.disabled = true
+			max_btn.custom_minimum_size = Vector2(136, 28)
+			max_btn.add_theme_font_size_override("font_size", 11)
+			max_btn.modulate = Color(1.0, 0.85, 0.2)
+			action_box.add_child(max_btn)
 			
 	return panel

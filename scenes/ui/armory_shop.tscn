@@ -37,10 +37,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -460.0
-offset_top = -290.0
-offset_right = 460.0
-offset_bottom = 290.0
+offset_left = -560.0
+offset_top = -325.0
+offset_right = 560.0
+offset_bottom = 325.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_thm")
@@ -48,7 +48,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 8
 
 [node name="Header" type="HBoxContainer" parent="Panel/VBox"]
 layout_mode = 2
@@ -69,21 +69,24 @@ text = "보유 전공 점수: 5,000 P"
 [node name="GrantBtn" type="Button" parent="Panel/VBox/Header"]
 custom_minimum_size = Vector2(170, 36)
 layout_mode = 2
-text = "+2,000 P 보급금 지원"
+text = "+2,000 P 보급금 지원 [G]"
 
 [node name="HSeparator" type="HSeparator" parent="Panel/VBox"]
 layout_mode = 2
 
 [node name="Scroll" type="ScrollContainer" parent="Panel/VBox"]
-custom_minimum_size = Vector2(0, 400)
+custom_minimum_size = Vector2(0, 480)
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="WeaponList" type="VBoxContainer" parent="Panel/VBox/Scroll"]
+[node name="WeaponList" type="GridContainer" parent="Panel/VBox/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 10
+columns = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/VBox"]
 layout_mode = 2
@@ -96,7 +99,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 0.8)
 theme_override_font_sizes/font_size = 13
-text = "[단축키: 1~7 무기 구매/장착 | G 보급금 지원 | ESC / B 상점 닫기]"
+text = "[단축키: 1~9 무기 구매/장착 | G 보급금 지원 | S / ESC 상점 닫기]"
 
 [node name="CloseBtn" type="TextureButton" parent="Panel/VBox/Footer"]
 custom_minimum_size = Vector2(140, 42)

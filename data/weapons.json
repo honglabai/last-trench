@@ -2,8 +2,8 @@
   "rifle_basic": {
     "name": "K2C1 돌격소총",
     "country": "대한민국",
-    "type": "돌격소총 (Assault Rifle)",
-    "description": "대한민국 국군 제식 소총. 피카티니 레일과 균형 잡힌 연사력으로 전천후 교전에 최적화되었습니다.",
+    "type": "제식 돌격소총",
+    "description": "균형 잡힌 제식 연사소총",
     "price": 0,
     "damage": 25.0,
     "fire_rate": 0.12,
@@ -24,8 +24,8 @@
   "k2c1_rifle": {
     "name": "K2C1 돌격소총",
     "country": "대한민국",
-    "type": "제식 돌격소총 (5.56mm)",
-    "description": "대한민국 육군 주력 제식 소총. 높은 신뢰성과 균형 잡힌 사격 안정성을 제공합니다.",
+    "type": "제식 돌격소총",
+    "description": "균형 잡힌 제식 연사소총",
     "price": 0,
     "damage": 25.0,
     "fire_rate": 0.12,
@@ -44,10 +44,10 @@
     "texture": "res://assets/textures/tex_fps_iron_sights.png"
   },
   "k5_pistol": {
-    "name": "K5 제식 권총",
+    "name": "K5 권총",
     "country": "대한민국",
-    "type": "제식 반자동 권총 (9mm)",
-    "description": "대한민국 육군 주력 제식 권총. 패스트 드로우와 신속한 속사로 긴급 대처 및 근접 방어에 탁월합니다.",
+    "type": "제식 권총",
+    "description": "신속한 속사와 근접 방어",
     "price": 0,
     "damage": 22.0,
     "fire_rate": 0.16,
@@ -66,10 +66,10 @@
     "texture": "res://assets/textures/tex_fps_pistol.png"
   },
   "k413_grenade": {
-    "name": "K413 세열 수류탄 (+3발 보급)",
+    "name": "K413 세열 수류탄",
     "country": "대한민국",
-    "type": "투척형 세열 수류탄 (Frag Grenade)",
-    "description": "광범위한 살상 파편을 비산시키는 고폭 세열 수류탄 3발을 추가 보급합니다.",
+    "type": "투척 세열 수류탄",
+    "description": "광범위 파편 살상 폭발 (+3발)",
     "price": 250,
     "damage": 250.0,
     "fire_rate": 1.6,
@@ -92,8 +92,8 @@
   "m4a1_carbine": {
     "name": "M4A1 카빈",
     "country": "미국",
-    "type": "특수작전 카빈 (5.56mm)",
-    "description": "미 특수작전사령부(SOCOM) 및 전군 표준 카빈. 민첩한 기동성과 빠른 연사력, 신속 재장전을 제공합니다.",
+    "type": "특수작전 카빈",
+    "description": "빠른 기동성과 고속 연사",
     "price": 500,
     "damage": 28.0,
     "fire_rate": 0.10,
@@ -112,10 +112,10 @@
     "texture": "res://assets/textures/tex_fps_m4a1.png"
   },
   "hk416_elite": {
-    "name": "HK416 정예 돌격소총",
+    "name": "HK416 돌격소총",
     "country": "독일",
-    "type": "프리미엄 소총 (5.56mm)",
-    "description": "독일 H&K사 제작. 가스 피스톤 시스템으로 진흙과 먼지 속에서도 극상의 집탄율과 신뢰성을 자랑합니다.",
+    "type": "정예 돌격소총",
+    "description": "초정밀 집탄과 안정적 반동",
     "price": 1200,
     "damage": 36.0,
     "fire_rate": 0.095,
@@ -136,8 +136,8 @@
   "scar_h_battle": {
     "name": "FN SCAR-H",
     "country": "벨기에",
-    "type": "중(重)전투소총 (7.62mm)",
-    "description": "7.62x51mm 대구경 탄약 운용. 강력한 탄도 파괴력으로 방탄 장갑 보병과 적 드론을 분쇄합니다.",
+    "type": "중전투소총",
+    "description": "7.62mm 대구경 장갑 분쇄",
     "price": 2200,
     "damage": 55.0,
     "fire_rate": 0.15,
@@ -158,8 +158,8 @@
   "k14_sniper": {
     "name": "K14 정밀 저격총",
     "country": "대한민국",
-    "type": "대인/대물 저격소총 (.308 Win)",
-    "description": "대한민국 특수부대용 초정밀 볼트액션 저격총. 초원거리 적을 일격필살로 제압하는 최고 수준의 관통 파괴력.",
+    "type": "정밀 저격총",
+    "description": "초원거리 일격필살 관통탄",
     "price": 3500,
     "damage": 135.0,
     "fire_rate": 0.55,
@@ -180,8 +180,8 @@
   "rpg7_launcher": {
     "name": "RPG-7 대전차 로켓",
     "country": "연합 특수전",
-    "type": "대전차 로켓 발사관 (HEAT 성형작약)",
-    "description": "휴대용 대전차 로켓 발사기. 강력한 폭발 충격파로 밀집 보병 부대와 적 드론을 광범위하게 동시 격멸합니다.",
+    "type": "대전차 로켓",
+    "description": "강력한 광역 폭발 파괴력",
     "price": 2800,
     "damage": 220.0,
     "fire_rate": 1.4,
@@ -202,10 +202,10 @@
     "texture": "res://assets/textures/tex_fps_rpg.png"
   },
   "hyungung_atgm": {
-    "name": "현궁 대전차 미사일",
+    "name": "현궁 K-ATGM",
     "country": "대한민국",
-    "type": "3세대 보병용 대전차 유도화기 (ATGM)",
-    "description": "국방과학연구소(ADD) 개발 3세대 유도미사일. 디지털 열영상 추적 및 상부 장갑 관통 모드로 전차와 드론을 완전 분쇄합니다.",
+    "type": "유도 미사일",
+    "description": "스마트 자동 추적 유도탄",
     "price": 4200,
     "damage": 340.0,
     "fire_rate": 1.8,
