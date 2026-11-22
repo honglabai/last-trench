@@ -283,31 +283,36 @@ func _unhandled_input(event: InputEvent) -> void:
 		if guide_dialog and guide_dialog.visible:
 			if event.keycode == KEY_ESCAPE or event.keycode == KEY_G or event.keycode == KEY_ENTER or event.keycode == KEY_SPACE:
 				_on_guide_close_pressed()
-				get_viewport().set_input_as_handled()
+				_consume_input()
 			return
 			
 		if settings_dialog and settings_dialog.visible:
-			if event.keycode == KEY_ESCAPE or event.keycode == KEY_O:
+			if event.keycode == KEY_ESCAPE or event.keycode == KEY_I or event.keycode == KEY_O:
 				_on_settings_close_pressed()
-				get_viewport().set_input_as_handled()
+				_consume_input()
 			return
 			
 		if event.keycode == KEY_ENTER or event.keycode == KEY_SPACE or event.keycode == KEY_1:
 			_on_start_pressed()
-			get_viewport().set_input_as_handled()
-		elif event.keycode == KEY_B or event.keycode == KEY_S or event.keycode == KEY_2:
+			_consume_input()
+		elif event.keycode == KEY_S or event.keycode == KEY_B or event.keycode == KEY_2:
 			_on_shop_pressed()
-			get_viewport().set_input_as_handled()
+			_consume_input()
 		elif event.keycode == KEY_G or event.keycode == KEY_C or event.keycode == KEY_3:
 			_on_guide_pressed()
-			get_viewport().set_input_as_handled()
-		elif event.keycode == KEY_O or event.keycode == KEY_P or event.keycode == KEY_4:
+			_consume_input()
+		elif event.keycode == KEY_I or event.keycode == KEY_O or event.keycode == KEY_P or event.keycode == KEY_4:
 			_on_settings_pressed()
-			get_viewport().set_input_as_handled()
+			_consume_input()
 		elif event.keycode == KEY_ESCAPE or event.keycode == KEY_X:
 			_on_exit_pressed()
-			get_viewport().set_input_as_handled()
+			_consume_input()
 		elif event.keycode == KEY_F11 or event.keycode == KEY_F:
 			_on_fullscreen_pressed()
-			get_viewport().set_input_as_handled()
+			_consume_input()
+
+func _consume_input() -> void:
+	var vp := get_viewport()
+	if vp:
+		vp.set_input_as_handled()
 

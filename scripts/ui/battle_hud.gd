@@ -683,7 +683,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		var is_settings_open: bool = (settings_layer and settings_layer.visible) or (settings_dialog and settings_dialog.visible)
 		if is_settings_open:
-			if event.keycode == KEY_ESCAPE or event.keycode == KEY_O:
+			if event.keycode == KEY_ESCAPE or event.keycode == KEY_I or event.keycode == KEY_O:
 				_on_settings_close_pressed()
 				get_viewport().set_input_as_handled()
 				return

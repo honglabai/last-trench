@@ -64,15 +64,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 		
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_ESCAPE or event.keycode == KEY_B:
+		if event.keycode == KEY_ESCAPE or event.keycode == KEY_S or event.keycode == KEY_B:
 			_on_close_pressed()
-			get_viewport().set_input_as_handled()
+			var vp := get_viewport()
+			if vp: vp.set_input_as_handled()
 			return
 		elif event.keycode == KEY_G:
 			AudioManager.play_sound("click")
 			GameSession.add_credits(2000)
 			refresh_shop_ui()
-			get_viewport().set_input_as_handled()
+			var vp := get_viewport()
+			if vp: vp.set_input_as_handled()
 			return
 		elif event.keycode >= KEY_1 and event.keycode <= KEY_9:
 			var slot_idx: int = event.keycode - KEY_1

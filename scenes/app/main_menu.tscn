@@ -111,7 +111,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.9, 1.0, 0.75)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_font_sizes/font_size = 13
-text = "[키보드 단축키] Enter/Space: 출격 | B: 상점 | G: 지침 | O: 설정 | ESC: 종료"
+text = "[키보드 단축키] Enter/Space: 출격 | S: 상점 | G: 지침 | I: 설정 | ESC: 종료"
 horizontal_alignment = 1
 
 [node name="GuideDialog" type="Panel" parent="."]

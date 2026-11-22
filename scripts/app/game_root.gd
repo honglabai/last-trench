@@ -360,11 +360,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("switch_weapon") or (event is InputEventKey and event.pressed and event.keycode == KEY_Q):
 		switch_to_next_weapon()
 	# 3. Open Armory Shop
-	elif event.is_action_pressed("open_shop") or (event is InputEventKey and event.pressed and event.keycode == KEY_B):
+	elif event.is_action_pressed("open_shop") or (event is InputEventKey and event.pressed and (event.keycode == KEY_S or event.keycode == KEY_B)):
 		if battle_hud:
 			battle_hud.open_armory_shop()
 	# 4. Open Settings
-	elif event.is_action_pressed("open_settings") or (event is InputEventKey and event.pressed and event.keycode == KEY_O):
+	elif event.is_action_pressed("open_settings") or (event is InputEventKey and event.pressed and (event.keycode == KEY_I or event.keycode == KEY_O)):
 		if battle_hud:
 			battle_hud.open_settings()
 	# 5. Reload
