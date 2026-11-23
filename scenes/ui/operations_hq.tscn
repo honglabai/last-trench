@@ -22,17 +22,35 @@ content_margin_top = 10.0
 content_margin_right = 16.0
 content_margin_bottom = 10.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_map_hud"]
+bg_color = Color(0.02, 0.05, 0.1, 0.78)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.6, 0.85, 0.6)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_briefing_panel"]
-bg_color = Color(0.02, 0.04, 0.07, 0.45)
+bg_color = Color(0.02, 0.04, 0.08, 0.92)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.2, 0.85, 1, 0.85)
+border_color = Color(0.2, 0.85, 1, 0.9)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.65)
+shadow_size = 8
 content_margin_left = 18.0
 content_margin_top = 12.0
 content_margin_right = 18.0
@@ -121,7 +139,7 @@ theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_font_sizes/font_size = 19
 text = "보유 전공 점수: 5,000 P"
 
-[node name="MainSplit" type="HBoxContainer" parent="."]
+[node name="MainSplit" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -132,28 +150,90 @@ offset_right = -20.0
 offset_bottom = -68.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 14
+
+[node name="MapArea" type="Control" parent="MainSplit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MapHudPanel" type="PanelContainer" parent="MainSplit/MapArea"]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 470.0
+offset_bottom = 68.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_map_hud")
+
+[node name="VBox" type="VBoxContainer" parent="MainSplit/MapArea/MapHudPanel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="HudTitle" type="Label" parent="MainSplit/MapArea/MapHudPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "[위성 정찰 전구 요도] 러우전 전선 실시간 작전 구역 (SECTOR 01~05)"
+
+[node name="HudDesc" type="Label" parent="MainSplit/MapArea/MapHudPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 12
+text = "지도의 아래 방향 화살표 핀을 클릭하면 플로팅 박스로 세부 브리핑이 표시됩니다."
+
+[node name="OpenBriefingBtn" type="Button" parent="MainSplit/MapArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 50.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.2, 0.95, 0.7, 1)
+theme_override_font_sizes/font_size = 15
+text = "[작전 브리핑 열기 >>]"
+
+[node name="PinsContainer" type="Control" parent="MainSplit/MapArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="StageListPanel" type="PanelContainer" parent="MainSplit"]
-layout_mode = 2
-size_flags_horizontal = 3
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 80.0
+offset_right = 250.0
+offset_bottom = -10.0
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="VBox" type="VBoxContainer" parent="MainSplit/StageListPanel"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 6
 
 [node name="HeaderLabel" type="Label" parent="MainSplit/StageListPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
-theme_override_font_sizes/font_size = 18
-text = "[러우전 전선 작전구역 선택 (SECTOR 01~05)]"
+theme_override_font_sizes/font_size = 15
+text = "[작전 구역 목록 (1~5)]"
 
 [node name="SatReconLabel" type="Label" parent="MainSplit/StageListPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.82, 0.35, 0.95)
-theme_override_font_sizes/font_size = 13
-text = "[위성 정찰] KH-12 실시간 궤도 탐지 / 최전방 참호선 좌표"
+theme_override_font_sizes/font_size = 12
+text = "[위성 정찰] KH-12 실시간 궤도"
 
 [node name="HSeparator" type="HSeparator" parent="MainSplit/StageListPanel/VBox"]
 layout_mode = 2
@@ -167,11 +247,20 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 6
 
 [node name="BriefingPanel" type="PanelContainer" parent="MainSplit"]
-layout_mode = 2
-size_flags_horizontal = 3
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -460.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_briefing_panel")
 
 [node name="BriefingBoardBg" type="TextureRect" parent="MainSplit/BriefingPanel"]
@@ -191,6 +280,22 @@ layout_mode = 2
 theme_override_constants/separation = 7
 alignment = 1
 
+[node name="TopBar" type="HBoxContainer" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+
+[node name="FloatingTag" type="Label" parent="MainSplit/BriefingPanel/VBox/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "[플로팅 작전 상황판 / FLOATING INTEL]"
+
+[node name="CloseBriefingBtn" type="Button" parent="MainSplit/BriefingPanel/VBox/TopBar"]
+custom_minimum_size = Vector2(70, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "닫기 [X]"
+
 [node name="BoardHeaderLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.85, 1, 1)
@@ -200,20 +305,20 @@ text = "[C4ISR DIGITAL TACTICAL BRIEFING SYSTEM / 전자 전술 상황판]"
 [node name="TitleLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.95, 0.6, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 19
 text = "[작전 브리핑] 제1작전: 전초 경계선 방어"
 
 [node name="DiffLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 text = "위험 등급: 보통 (EASY)"
 
 [node name="WavesLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 15
-text = "작전 규모: 10개 연속 제파 웨이브 (Wave 1 ~ 10)"
+theme_override_font_sizes/font_size = 14
+text = "위성 작전 좌표: 러우전 최전방 (10 웨이브)"
 
 [node name="HSeparator1" type="HSeparator" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
@@ -221,32 +326,50 @@ layout_mode = 2
 [node name="DescLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
-theme_override_font_sizes/font_size = 15
-text = "작전 요도: SECTOR 01 전초 방어선
+theme_override_font_sizes/font_size = 14
+text = "작전 목표:
 침투하는 적 수색대와 경보병 격퇴 및 진지 사수."
 autowrap_mode = 3
 
 [node name="ThreatsLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.55, 0.45, 1)
-theme_override_font_sizes/font_size = 15
-text = "예상 적 병력: 기본 보병, 정찰 드론"
+theme_override_font_sizes/font_size = 14
+text = "식별 적 병력: 기본 보병, 정찰 드론"
 autowrap_mode = 3
 
 [node name="RewardLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 text = "완수 보상: 전공 점수 +1500 P 지급"
+
+[node name="NavRow" type="HBoxContainer" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PrevSectorBtn" type="Button" parent="MainSplit/BriefingPanel/VBox/NavRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 34)
+theme_override_font_sizes/font_size = 13
+text = "< 이전 구역"
+
+[node name="NextSectorBtn" type="Button" parent="MainSplit/BriefingPanel/VBox/NavRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 34)
+theme_override_font_sizes/font_size = 13
+text = "다음 구역 >"
 
 [node name="HSeparator2" type="HSeparator" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
 
 [node name="DeployButton" type="Button" parent="MainSplit/BriefingPanel/VBox"]
-custom_minimum_size = Vector2(0, 56)
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 1, 0.6, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 17
 text = "[제1작전 출격 (START OPERATION)]"
 
 [node name="Footer" type="PanelContainer" parent="."]

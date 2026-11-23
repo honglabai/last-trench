@@ -6,6 +6,7 @@ extends Control
 @onready var progress_label: Label = $Header/HBox/VBox/ProgressRow/ProgressLabel
 
 @onready var stage_container: VBoxContainer = $MainSplit/StageListPanel/VBox/Scroll/StageList
+@onready var briefing_panel: PanelContainer = $MainSplit/BriefingPanel
 @onready var briefing_title: Label = $MainSplit/BriefingPanel/VBox/TitleLabel
 @onready var briefing_diff_label: Label = $MainSplit/BriefingPanel/VBox/DiffLabel
 @onready var briefing_waves_label: Label = $MainSplit/BriefingPanel/VBox/WavesLabel
@@ -13,6 +14,12 @@ extends Control
 @onready var briefing_threats_label: Label = $MainSplit/BriefingPanel/VBox/ThreatsLabel
 @onready var briefing_reward_label: Label = $MainSplit/BriefingPanel/VBox/RewardLabel
 @onready var deploy_button: Button = $MainSplit/BriefingPanel/VBox/DeployButton
+
+@onready var close_briefing_btn: Button = get_node_or_null("MainSplit/BriefingPanel/VBox/TopBar/CloseBriefingBtn") as Button
+@onready var open_briefing_btn: Button = get_node_or_null("MainSplit/MapArea/OpenBriefingBtn") as Button
+@onready var prev_sector_btn: Button = get_node_or_null("MainSplit/BriefingPanel/VBox/NavRow/PrevSectorBtn") as Button
+@onready var next_sector_btn: Button = get_node_or_null("MainSplit/BriefingPanel/VBox/NavRow/NextSectorBtn") as Button
+@onready var pins_container: Control = get_node_or_null("MainSplit/MapArea/PinsContainer") as Control
 
 @onready var shop_button: Button = $Footer/HBox/ShopButton
 @onready var guide_button: Button = $Footer/HBox/GuideButton
@@ -29,6 +36,35 @@ var wave_plan_data: Dictionary = {}
 var stages_data: Array = []
 var selected_stage_id: int = 1
 var stage_card_buttons: Dictionary = {}
+var map_pin_nodes: Dictionary = {}
+var map_pin_arrows: Dictionary = {}
+var map_pin_buttons: Dictionary = {}
+var anim_time: float = 0.0
+
+const SECTOR_NAMES: Dictionary = {
+	1: "SECTOR 01: 전초 경계선 (Alpha)",
+	2: "SECTOR 02: 험준 협곡 통로 (Bravo)",
+	3: "SECTOR 03: 도심 폐허 지구 (Charlie)",
+	4: "SECTOR 04: 야간 기습 구역 (Delta)",
+	5: "SECTOR 05: 사령부 중앙 결전지 (Omega)"
+}
+
+const SECTOR_LOCATION_DESCS: Dictionary = {
+	1: "러우전 동부 전선 14호 구역 (바흐무트 외곽 참호 지대)",
+	2: "러우전 남부 전선 28호 구역 (자포리자 험준 협곡 협착로)",
+	3: "러우전 시가전 폐허 구역 (아우디이우카 공업 단지 인근)",
+	4: "러우전 드니프로강 하천 축선 (크린키 야간 침투로)",
+	5: "러우전 사령부 최후 방어선 (사령부 중앙 요새 참호)"
+}
+
+# Downward-pointing arrow pin coordinates on the theater satellite map
+const SECTOR_COORDINATES: Dictionary = {
+	1: Vector2(620, 160), # 바흐무트 외곽
+	2: Vector2(380, 370), # 자포리자 남부 협곡
+	3: Vector2(720, 300), # 아우디이우카 공업 단지
+	4: Vector2(240, 410), # 드니프로강 크린키
+	5: Vector2(480, 180)  # 사령부 중앙 요새
+}
 
 func _ready() -> void:
 	AudioManager.ensure_instance(self)
@@ -50,6 +86,15 @@ func _ready() -> void:
 	if title_button and not title_button.pressed.is_connected(_on_title_pressed):
 		title_button.pressed.connect(_on_title_pressed)
 		
+	if close_briefing_btn and not close_briefing_btn.pressed.is_connected(_on_close_briefing_pressed):
+		close_briefing_btn.pressed.connect(_on_close_briefing_pressed)
+	if open_briefing_btn and not open_briefing_btn.pressed.is_connected(_on_open_briefing_pressed):
+		open_briefing_btn.pressed.connect(_on_open_briefing_pressed)
+	if prev_sector_btn and not prev_sector_btn.pressed.is_connected(_on_prev_sector_pressed):
+		prev_sector_btn.pressed.connect(_on_prev_sector_pressed)
+	if next_sector_btn and not next_sector_btn.pressed.is_connected(_on_next_sector_pressed):
+		next_sector_btn.pressed.connect(_on_next_sector_pressed)
+		
 	var close_guide := get_node_or_null("GuideDialog/VBox/CloseButton") as BaseButton
 	if close_guide and not close_guide.pressed.is_connected(_on_guide_close_pressed):
 		close_guide.pressed.connect(_on_guide_close_pressed)
@@ -61,23 +106,18 @@ func _ready() -> void:
 		armory_shop.closed.connect(refresh_hq_ui)
 		
 	_build_stage_cards()
+	_build_map_pins()
 	refresh_hq_ui()
 
-const SECTOR_NAMES: Dictionary = {
-	1: "SECTOR 01: 전초 경계선 (Alpha)",
-	2: "SECTOR 02: 험준 협곡 통로 (Bravo)",
-	3: "SECTOR 03: 도심 폐허 지구 (Charlie)",
-	4: "SECTOR 04: 야간 기습 구역 (Delta)",
-	5: "SECTOR 05: 사령부 중앙 결전지 (Omega)"
-}
-
-const SECTOR_LOCATION_DESCS: Dictionary = {
-	1: "러우전 동부 전선 14호 구역 (바흐무트 외곽 참호 지대)",
-	2: "러우전 남부 전선 28호 구역 (자포리자 험준 협곡 협착로)",
-	3: "러우전 시가전 폐허 구역 (아우디이우카 공업 단지 인근)",
-	4: "러우전 드니프로강 하천 축선 (크린키 야간 침투로)",
-	5: "러우전 사령부 최후 방어선 (사령부 중앙 요새 참호)"
-}
+func _process(delta: float) -> void:
+	anim_time += delta
+	for st_id in map_pin_arrows.keys():
+		var arrow: TextureRect = map_pin_arrows[st_id]
+		if arrow and is_instance_valid(arrow):
+			if st_id == selected_stage_id:
+				arrow.position.y = sin(anim_time * 6.0) * 4.0
+			else:
+				arrow.position.y = 0.0
 
 func _load_wave_plan() -> void:
 	var path := "res://data/wave_plan.json"
@@ -97,6 +137,110 @@ func get_stage_info(st_id: int) -> Dictionary:
 			return st
 	return {}
 
+func _build_map_pins() -> void:
+	if not pins_container:
+		return
+	for c in pins_container.get_children():
+		c.queue_free()
+	map_pin_nodes.clear()
+	map_pin_arrows.clear()
+	map_pin_buttons.clear()
+	
+	var arrow_tex: Texture2D = null
+	if ResourceLoader.exists("res://assets/ui/pin_arrow_down.png"):
+		arrow_tex = load("res://assets/ui/pin_arrow_down.png") as Texture2D
+	
+	for i in range(1, 6):
+		var st_id := i
+		var pin_root := Control.new()
+		pin_root.name = "SectorPin_%d" % st_id
+		pin_root.custom_minimum_size = Vector2(160, 84)
+		var coord: Vector2 = SECTOR_COORDINATES.get(st_id, Vector2(400, 250))
+		pin_root.position = coord - Vector2(80, 84)
+		
+		var vbox := VBoxContainer.new()
+		vbox.custom_minimum_size = Vector2(160, 84)
+		vbox.add_theme_constant_override("separation", 2)
+		vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+		
+		# Badge Button
+		var btn := Button.new()
+		btn.name = "PinBtn"
+		btn.custom_minimum_size = Vector2(150, 48)
+		btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		btn.add_theme_font_size_override("font_size", 12)
+		
+		var on_pin_click = func():
+			_on_pin_selected(st_id)
+		btn.pressed.connect(on_pin_click)
+		
+		# Downward Arrow Box
+		var arrow_box := Control.new()
+		arrow_box.custom_minimum_size = Vector2(160, 32)
+		var arrow_rect := TextureRect.new()
+		arrow_rect.name = "Arrow"
+		arrow_rect.texture = arrow_tex
+		arrow_rect.custom_minimum_size = Vector2(30, 30)
+		arrow_rect.size = Vector2(30, 30)
+		arrow_rect.position = Vector2(65, 0)
+		arrow_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		arrow_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		arrow_rect.mouse_filter = Control.MOUSE_FILTER_PASS
+		arrow_box.add_child(arrow_rect)
+		
+		vbox.add_child(btn)
+		vbox.add_child(arrow_box)
+		pin_root.add_child(vbox)
+		pins_container.add_child(pin_root)
+		
+		map_pin_nodes[st_id] = pin_root
+		map_pin_arrows[st_id] = arrow_rect
+		map_pin_buttons[st_id] = btn
+
+func _on_pin_selected(st_id: int) -> void:
+	if not GameSession.is_stage_unlocked(st_id):
+		AudioManager.play_sound("click", 0.05, -4.0)
+		return
+	AudioManager.play_sound("click")
+	selected_stage_id = st_id
+	GameSession.select_stage(st_id)
+	show_floating_briefing(true)
+	refresh_hq_ui()
+
+func show_floating_briefing(p_visible: bool) -> void:
+	if briefing_panel:
+		briefing_panel.visible = p_visible
+	if open_briefing_btn:
+		open_briefing_btn.visible = not p_visible
+
+func _on_close_briefing_pressed() -> void:
+	AudioManager.play_sound("click")
+	show_floating_briefing(false)
+
+func _on_open_briefing_pressed() -> void:
+	AudioManager.play_sound("click")
+	show_floating_briefing(true)
+
+func _on_prev_sector_pressed() -> void:
+	var prev_id := selected_stage_id - 1
+	if prev_id < 1: prev_id = 5
+	while prev_id != selected_stage_id:
+		if GameSession.is_stage_unlocked(prev_id):
+			_on_pin_selected(prev_id)
+			break
+		prev_id -= 1
+		if prev_id < 1: prev_id = 5
+
+func _on_next_sector_pressed() -> void:
+	var next_id := selected_stage_id + 1
+	if next_id > 5: next_id = 1
+	while next_id != selected_stage_id:
+		if GameSession.is_stage_unlocked(next_id):
+			_on_pin_selected(next_id)
+			break
+		next_id += 1
+		if next_id > 5: next_id = 1
+
 func _build_stage_cards() -> void:
 	if not stage_container:
 		return
@@ -111,16 +255,17 @@ func _build_stage_cards() -> void:
 		var st_diff: String = st_info.get("difficulty", "보통")
 		
 		var card := Button.new()
-		card.custom_minimum_size = Vector2(0, 88)
+		card.custom_minimum_size = Vector2(0, 72)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		card.add_theme_font_size_override("font_size", 15)
+		card.add_theme_font_size_override("font_size", 14)
 		
 		var do_select = func():
 			if GameSession.is_stage_unlocked(st_id):
 				AudioManager.play_sound("click")
 				selected_stage_id = st_id
 				GameSession.select_stage(st_id)
+				show_floating_briefing(true)
 				refresh_hq_ui()
 			else:
 				AudioManager.play_sound("click", 0.05, -4.0)
@@ -183,7 +328,41 @@ func refresh_hq_ui() -> void:
 		else:
 			card.modulate = Color(0.5, 0.5, 0.5)
 			
-	# Refresh Selected Stage Briefing
+	# Refresh Map Pins (Downward Arrow Markers on Satellite Map)
+	for st_id in range(1, 6):
+		if not map_pin_buttons.has(st_id):
+			continue
+		var p_btn: Button = map_pin_buttons[st_id]
+		var arrow: TextureRect = map_pin_arrows.get(st_id)
+		var is_unlocked := GameSession.is_stage_unlocked(st_id)
+		var is_cleared := GameSession.is_stage_cleared(st_id)
+		var is_selected := (st_id == selected_stage_id)
+		
+		var status_str := "[잠김]"
+		if is_cleared:
+			status_str = "[완수]"
+		elif is_unlocked:
+			status_str = "[출격 가능]"
+			
+		var sector_full: String = SECTOR_NAMES.get(st_id, "SECTOR %02d" % st_id)
+		var sector_parts := sector_full.split(":")
+		var sector_name_part := sector_parts[1].strip_edges() if sector_parts.size() > 1 else sector_full
+		p_btn.text = "SECTOR 0%d %s\n%s" % [st_id, status_str, sector_name_part]
+		p_btn.disabled = not is_unlocked
+		
+		var pin_col := Color(0.5, 0.5, 0.5)
+		if is_selected:
+			pin_col = Color(0.2, 1.0, 0.6)
+		elif is_cleared:
+			pin_col = Color(0.4, 0.9, 1.0)
+		elif is_unlocked:
+			pin_col = Color(1.0, 0.88, 0.3)
+			
+		p_btn.modulate = pin_col
+		if arrow:
+			arrow.modulate = pin_col
+			
+	# Refresh Selected Stage Briefing in Floating Box
 	var cur_st := get_stage_info(selected_stage_id)
 	var sector_tag: String = SECTOR_NAMES.get(selected_stage_id, "SECTOR %02d" % selected_stage_id)
 	var sector_loc: String = SECTOR_LOCATION_DESCS.get(selected_stage_id, "러우전 최전방 작전 구역")
@@ -264,6 +443,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				AudioManager.play_sound("click")
 				selected_stage_id = target_id
 				GameSession.select_stage(target_id)
+				show_floating_briefing(true)
 				refresh_hq_ui()
 				_consume_input()
 		elif event.keycode == KEY_ENTER or event.keycode == KEY_SPACE:
@@ -279,8 +459,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			_on_settings_pressed()
 			_consume_input()
 		elif event.keycode == KEY_ESCAPE or event.keycode == KEY_X:
-			_on_title_pressed()
-			_consume_input()
+			if briefing_panel and briefing_panel.visible:
+				_on_close_briefing_pressed()
+				_consume_input()
+			else:
+				_on_title_pressed()
+				_consume_input()
 
 func _consume_input() -> void:
 	var vp := get_viewport()

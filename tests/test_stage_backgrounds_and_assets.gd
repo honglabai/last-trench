@@ -31,6 +31,14 @@ func _init() -> void:
 	assert(bb_img.get_width() >= 1280 and bb_img.get_height() >= 720, "Briefing board dimensions too small: %s" % str(bb_img.get_size()))
 	print("[PASS] Electronic combat situation briefing board verified: %s (%dx%d)" % [briefing_board_path, bb_img.get_width(), bb_img.get_height()])
 	
+	var arrow_pin_path := "res://assets/ui/pin_arrow_down.png"
+	assert(ResourceLoader.exists(arrow_pin_path), "Missing downward arrow pin texture: %s" % arrow_pin_path)
+	var arrow_tex := load(arrow_pin_path) as Texture2D
+	assert(arrow_tex != null, "Failed to load downward arrow pin texture")
+	var arrow_img := arrow_tex.get_image()
+	assert(arrow_img.get_width() >= 64 and arrow_img.get_height() >= 64, "Arrow pin texture dimensions too small: %s" % str(arrow_img.get_size()))
+	print("[PASS] Downward arrow map pin texture verified: %s (%dx%d)" % [arrow_pin_path, arrow_img.get_width(), arrow_img.get_height()])
+	
 	# 3. Verify Operations HQ Scene uses Satellite Map & Electronic Briefing Board
 	var hq_scene := load("res://scenes/ui/operations_hq.tscn") as PackedScene
 	assert(hq_scene != null, "Failed to load operations_hq.tscn")

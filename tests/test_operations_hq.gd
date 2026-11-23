@@ -81,7 +81,40 @@ func _init() -> void:
 	assert("100%" in hq.progress_label.text, "Progress label should show 100%")
 	print("[PASS] Full 5-stage progression to 100% campaign completion verified")
 	
-	# 6. Test Font & Glyph Safety (No boxed tofu or unsupported symbols)
+	# 6. Test Map Pins with Downward Arrows & Floating Briefing Box
+	assert(hq.map_pin_buttons.size() == 5, "Must have 5 map pins on the satellite map")
+	assert(hq.map_pin_arrows.size() == 5, "Must have 5 downward arrow icons on the satellite map")
+	for i in range(1, 6):
+		var arrow: TextureRect = hq.map_pin_arrows[i]
+		assert(arrow != null and arrow.texture != null, "Arrow for Sector %d must have valid texture" % i)
+		assert(arrow.texture.resource_path.contains("pin_arrow_down"), "Arrow must use pin_arrow_down.png")
+	print("[PASS] All 5 satellite map pins verified with downward arrow textures")
+	
+	# Test Pin Selection & Floating Box Behavior
+	hq.map_pin_buttons[3].pressed.emit()
+	assert(hq.selected_stage_id == 3, "Clicking Sector 3 map pin must select Stage 3")
+	assert("제3작전" in hq.briefing_title.text, "Floating briefing box must update to Stage 3")
+	assert(hq.briefing_panel.visible == true, "Floating briefing box must be visible")
+	
+	# Test Closing and Reopening Floating Box
+	hq.close_briefing_btn.pressed.emit()
+	assert(hq.briefing_panel.visible == false, "Floating briefing box must close on close button press")
+	assert(hq.open_briefing_btn.visible == true, "Open briefing button must be visible when closed")
+	
+	# Clicking any map pin must reopen floating briefing box with that stage's details
+	hq.map_pin_buttons[4].pressed.emit()
+	assert(hq.selected_stage_id == 4, "Clicking Sector 4 map pin must select Stage 4")
+	assert(hq.briefing_panel.visible == true, "Clicking map pin must reopen floating briefing box")
+	assert("제4작전" in hq.briefing_title.text, "Floating briefing box must update to Stage 4")
+	
+	# Test Sector Navigation buttons
+	hq.prev_sector_btn.pressed.emit()
+	assert(hq.selected_stage_id == 3, "Prev sector button must navigate to Stage 3")
+	hq.next_sector_btn.pressed.emit()
+	assert(hq.selected_stage_id == 4, "Next sector button must navigate to Stage 4")
+	print("[PASS] Satellite map downward arrow pins and floating briefing box interactions verified")
+	
+	# 7. Test Font & Glyph Safety (No boxed tofu or unsupported symbols)
 	var forbidden_glyphs := ["✓", "★", "·", "■", "▲", "▼", "◆", "※"]
 	var check_strings := [
 		hq.briefing_title.text,
@@ -96,6 +129,8 @@ func _init() -> void:
 	]
 	for c_btn in hq.stage_card_buttons.values():
 		check_strings.append(c_btn.text)
+	for p_btn in hq.map_pin_buttons.values():
+		check_strings.append(p_btn.text)
 		
 	for s in check_strings:
 		for fg in forbidden_glyphs:
