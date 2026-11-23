@@ -1,12 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://opshq987x"]
+[gd_scene load_steps=8 format=3 uid="uid://opshq987x"]
 
 [ext_resource type="Script" path="res://scripts/ui/operations_hq.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/ui/bg_tactical_map.png" id="2_bg"]
-[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="3_thm"]
-[ext_resource type="PackedScene" uid="uid://armoryshop91x" path="res://scenes/ui/armory_shop.tscn" id="4_shop"]
+[ext_resource type="Texture2D" path="res://assets/ui/bg_sat_frontline_map.png" id="2_sat"]
+[ext_resource type="Texture2D" path="res://assets/ui/bg_briefing_board.png" id="3_brf"]
+[ext_resource type="Theme" path="res://assets/ui/theme_trench.tres" id="4_thm"]
+[ext_resource type="PackedScene" uid="uid://armoryshop91x" path="res://scenes/ui/armory_shop.tscn" id="5_shop"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.04, 0.07, 0.11, 0.88)
+bg_color = Color(0.03, 0.06, 0.1, 0.85)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -21,6 +22,22 @@ content_margin_top = 10.0
 content_margin_right = 16.0
 content_margin_bottom = 10.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_briefing_panel"]
+bg_color = Color(0.02, 0.04, 0.07, 0.45)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.85, 1, 0.85)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 18.0
+content_margin_top = 12.0
+content_margin_right = 18.0
+content_margin_bottom = 12.0
+
 [node name="OperationsHQ" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -28,7 +45,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_thm")
+theme = ExtResource("4_thm")
 script = ExtResource("1_script")
 
 [node name="Background" type="TextureRect" parent="."]
@@ -39,7 +56,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_bg")
+texture = ExtResource("2_sat")
 expand_mode = 1
 stretch_mode = 6
 
@@ -51,7 +68,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.02, 0.04, 0.08, 0.55)
+color = Color(0.01, 0.03, 0.06, 0.45)
 
 [node name="Header" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -130,7 +147,13 @@ theme_override_constants/separation = 8
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "[작전 구역 선택 (1~5 스테이지)]"
+text = "[러우전 전선 작전구역 선택 (SECTOR 01~05)]"
+
+[node name="SatReconLabel" type="Label" parent="MainSplit/StageListPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.35, 0.95)
+theme_override_font_sizes/font_size = 13
+text = "[위성 정찰] KH-12 실시간 궤도 탐지 / 최전방 참호선 좌표"
 
 [node name="HSeparator" type="HSeparator" parent="MainSplit/StageListPanel/VBox"]
 layout_mode = 2
@@ -149,12 +172,30 @@ theme_override_constants/separation = 8
 [node name="BriefingPanel" type="PanelContainer" parent="MainSplit"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxFlat_briefing_panel")
+
+[node name="BriefingBoardBg" type="TextureRect" parent="MainSplit/BriefingPanel"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_brf")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BriefingBoardTint" type="ColorRect" parent="MainSplit/BriefingPanel"]
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.01, 0.03, 0.07, 0.6)
 
 [node name="VBox" type="VBoxContainer" parent="MainSplit/BriefingPanel"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 7
 alignment = 1
+
+[node name="BoardHeaderLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "[C4ISR DIGITAL TACTICAL BRIEFING SYSTEM / 전자 전술 상황판]"
 
 [node name="TitleLabel" type="Label" parent="MainSplit/BriefingPanel/VBox"]
 layout_mode = 2
@@ -254,5 +295,5 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 15
 text = "타이틀 화면 [ESC]"
 
-[node name="ArmoryShop" parent="." instance=ExtResource("4_shop")]
+[node name="ArmoryShop" parent="." instance=ExtResource("5_shop")]
 visible = false

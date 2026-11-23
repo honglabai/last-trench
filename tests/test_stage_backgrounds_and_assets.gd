@@ -14,16 +14,24 @@ func _init() -> void:
 		assert(img.get_width() >= 1024 and img.get_height() >= 512, "Stage %d sky dimensions too small: %s" % [st_id, str(img.get_size())])
 		print("[PASS] Stage %d skybox panorama verified: %s (%dx%d)" % [st_id, sky_path, img.get_width(), img.get_height()])
 		
-	# 2. Verify Tactical Operational Map Background
-	var map_path := "res://assets/ui/bg_tactical_map.png"
-	assert(ResourceLoader.exists(map_path), "Missing tactical map background: %s" % map_path)
-	var map_tex := load(map_path) as Texture2D
-	assert(map_tex != null, "Failed to load tactical map texture")
-	var map_img := map_tex.get_image()
-	assert(map_img.get_width() >= 1280 and map_img.get_height() >= 720, "Tactical map dimensions too small: %s" % str(map_img.get_size()))
-	print("[PASS] Operations HQ tactical map background verified: %s (%dx%d)" % [map_path, map_img.get_width(), map_img.get_height()])
+	# 2. Verify Russia-Ukraine Frontline Satellite Map & Briefing Board Backgrounds
+	var sat_map_path := "res://assets/ui/bg_sat_frontline_map.png"
+	assert(ResourceLoader.exists(sat_map_path), "Missing satellite frontline map background: %s" % sat_map_path)
+	var sat_map_tex := load(sat_map_path) as Texture2D
+	assert(sat_map_tex != null, "Failed to load satellite map texture")
+	var sat_img := sat_map_tex.get_image()
+	assert(sat_img.get_width() >= 1280 and sat_img.get_height() >= 720, "Satellite map dimensions too small: %s" % str(sat_img.get_size()))
+	print("[PASS] Russia-Ukraine frontline satellite map verified: %s (%dx%d)" % [sat_map_path, sat_img.get_width(), sat_img.get_height()])
 	
-	# 3. Verify Operations HQ Scene uses Tactical Map & Scaled Fonts
+	var briefing_board_path := "res://assets/ui/bg_briefing_board.png"
+	assert(ResourceLoader.exists(briefing_board_path), "Missing briefing board background: %s" % briefing_board_path)
+	var bb_tex := load(briefing_board_path) as Texture2D
+	assert(bb_tex != null, "Failed to load briefing board texture")
+	var bb_img := bb_tex.get_image()
+	assert(bb_img.get_width() >= 1280 and bb_img.get_height() >= 720, "Briefing board dimensions too small: %s" % str(bb_img.get_size()))
+	print("[PASS] Electronic combat situation briefing board verified: %s (%dx%d)" % [briefing_board_path, bb_img.get_width(), bb_img.get_height()])
+	
+	# 3. Verify Operations HQ Scene uses Satellite Map & Electronic Briefing Board
 	var hq_scene := load("res://scenes/ui/operations_hq.tscn") as PackedScene
 	assert(hq_scene != null, "Failed to load operations_hq.tscn")
 	var hq := hq_scene.instantiate() as OperationsHQ
@@ -31,7 +39,11 @@ func _init() -> void:
 	
 	var bg_rect := hq.get_node_or_null("Background") as TextureRect
 	assert(bg_rect != null and bg_rect.texture != null, "OperationsHQ Background must have valid texture assigned")
-	assert(bg_rect.texture.resource_path.contains("bg_tactical_map"), "OperationsHQ Background must use bg_tactical_map.png, got: %s" % bg_rect.texture.resource_path)
+	assert(bg_rect.texture.resource_path.contains("bg_sat_frontline_map"), "OperationsHQ Background must use bg_sat_frontline_map.png, got: %s" % bg_rect.texture.resource_path)
+	
+	var board_bg := hq.get_node_or_null("MainSplit/BriefingPanel/BriefingBoardBg") as TextureRect
+	assert(board_bg != null and board_bg.texture != null, "BriefingBoardBg must have valid texture assigned")
+	assert(board_bg.texture.resource_path.contains("bg_briefing_board"), "BriefingBoardBg must use bg_briefing_board.png, got: %s" % board_bg.texture.resource_path)
 	
 	# Verify Briefing Text is Concise & Non-Empty
 	var desc_lbl := hq.get_node_or_null("MainSplit/BriefingPanel/VBox/DescLabel") as Label
@@ -39,7 +51,7 @@ func _init() -> void:
 	var threats_lbl := hq.get_node_or_null("MainSplit/BriefingPanel/VBox/ThreatsLabel") as Label
 	assert(threats_lbl != null and not threats_lbl.text.is_empty(), "Briefing ThreatsLabel must have text")
 	
-	print("[PASS] OperationsHQ tactical map background and concise briefing labels verified")
+	print("[PASS] OperationsHQ satellite map background and electronic briefing board verified")
 	hq.queue_free()
 	
 	# 4. Verify RPG-7 & Shotgun Textures

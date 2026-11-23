@@ -96,7 +96,7 @@ func _init() -> void:
 	hq.stage_card_buttons[2].pressed.emit()
 	assert(hq.selected_stage_id == 2, "Selected stage should be 2")
 	assert("제2작전" in hq.briefing_title.text, "Briefing should update to Stage 2")
-	assert("10개" in hq.briefing_waves_label.text, "Briefing should mention 10 waves")
+	assert("10 웨이브" in hq.briefing_waves_label.text or "10" in hq.briefing_waves_label.text, "Briefing should mention 10 waves")
 	
 	# Complete remaining stages up to Stage 5
 	GameSession.on_stage_completed(2, 2500)

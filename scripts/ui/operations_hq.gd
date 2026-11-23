@@ -71,6 +71,14 @@ const SECTOR_NAMES: Dictionary = {
 	5: "SECTOR 05: 사령부 중앙 결전지 (Omega)"
 }
 
+const SECTOR_LOCATION_DESCS: Dictionary = {
+	1: "러우전 동부 전선 14호 구역 (바흐무트 외곽 참호 지대)",
+	2: "러우전 남부 전선 28호 구역 (자포리자 험준 협곡 협착로)",
+	3: "러우전 시가전 폐허 구역 (아우디이우카 공업 단지 인근)",
+	4: "러우전 드니프로강 하천 축선 (크린키 야간 침투로)",
+	5: "러우전 사령부 최후 방어선 (사령부 중앙 요새 참호)"
+}
+
 func _load_wave_plan() -> void:
 	var path := "res://data/wave_plan.json"
 	if not FileAccess.file_exists(path):
@@ -160,8 +168,9 @@ func refresh_hq_ui() -> void:
 			status_str = "[작전 가능]"
 			
 		var select_marker := " >> 선택됨 <<" if is_selected else ""
-		card.text = " [%d] %s%s\n  난이도: %s | 10웨이브 | 상태: %s" % [
-			st_id, st_name, select_marker, st_diff, status_str
+		var sector_short: String = SECTOR_NAMES.get(st_id, "SECTOR %02d" % st_id)
+		card.text = " [%d] %s%s\n  %s | %s | 상태: %s" % [
+			st_id, st_name, select_marker, sector_short, st_diff, status_str
 		]
 		
 		card.disabled = not is_unlocked
@@ -177,16 +186,17 @@ func refresh_hq_ui() -> void:
 	# Refresh Selected Stage Briefing
 	var cur_st := get_stage_info(selected_stage_id)
 	var sector_tag: String = SECTOR_NAMES.get(selected_stage_id, "SECTOR %02d" % selected_stage_id)
+	var sector_loc: String = SECTOR_LOCATION_DESCS.get(selected_stage_id, "러우전 최전방 작전 구역")
 	if briefing_title:
-		briefing_title.text = "[작전 브리핑] %s" % cur_st.get("stage_name", "제%d작전" % selected_stage_id)
+		briefing_title.text = "[전투상황 브리핑] %s" % cur_st.get("stage_name", "제%d작전" % selected_stage_id)
 	if briefing_diff_label:
 		briefing_diff_label.text = "위험 등급: %s  |  %s" % [cur_st.get("difficulty", "보통"), sector_tag]
 	if briefing_waves_label:
-		briefing_waves_label.text = "작전 규모: 10개 연속 제파 웨이브 (Wave 1 ~ 10)"
+		briefing_waves_label.text = "위성 작전 좌표: %s (10 웨이브)" % sector_loc
 	if briefing_desc_label:
-		briefing_desc_label.text = "작전 요도 목표:\n%s" % cur_st.get("briefing", "적 침투를 저지하고 최후의 참호를 사수하십시오.")
+		briefing_desc_label.text = "작전 목표:\n%s" % cur_st.get("briefing", "적 침투를 저지하고 최후의 참호를 사수하십시오.")
 	if briefing_threats_label:
-		briefing_threats_label.text = "예상 적 병력: %s" % cur_st.get("expected_enemies", "적 보병 및 무인 드론 편대")
+		briefing_threats_label.text = "식별 적 병력: %s" % cur_st.get("expected_enemies", "적 보병 및 무인 드론 편대")
 	if briefing_reward_label:
 		briefing_reward_label.text = "완수 보상: 전공 점수 +%d P 지급" % int(cur_st.get("reward_credits", 1500))
 		
