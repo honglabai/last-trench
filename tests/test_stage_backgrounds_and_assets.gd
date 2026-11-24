@@ -75,23 +75,25 @@ func _init() -> void:
 		assert(tl.a == 0.0, "Top-left of %s must be transparent (got alpha=%f)" % [p, tl.a])
 	print("[PASS] RPG-7 and Shotgun 1280x720 transparent viewmodels verified")
 	
-	# 5. Verify MainMenu Button Width is 90% (265px)
+	# 5. Verify MainMenu Button Width is 70% (186px)
 	var menu_scene := load("res://scenes/app/main_menu.tscn") as PackedScene
 	var menu := menu_scene.instantiate() as Control
 	root.add_child(menu)
 	var start_btn := menu.get_node_or_null("CenterContainer/VBoxContainer/StartButton") as TextureButton
 	assert(start_btn != null, "StartButton missing in MainMenu")
-	assert(start_btn.custom_minimum_size == Vector2(265, 76), "MainMenu StartButton size must be 265x76, got: %s" % str(start_btn.custom_minimum_size))
-	print("[PASS] MainMenu button 90%% width (265x76) verified")
+	assert(start_btn.custom_minimum_size == Vector2(186, 76), "MainMenu StartButton size must be 186x76, got: %s" % str(start_btn.custom_minimum_size))
+	print("[PASS] MainMenu button 70%% width (186x76) verified")
 	menu.queue_free()
 	
 	# 6. Verify Environment Switch in GameRoot for All 5 Stages
+	GameSession.highest_unlocked_stage = 5
 	var root_scene := load("res://scenes/app/game_root.tscn") as PackedScene
 	var game := root_scene.instantiate() as GameRoot
 	root.add_child(game)
 	
 	for s in range(1, 6):
-		GameSession.select_stage(s)
+		GameSession.highest_unlocked_stage = 5
+		GameSession.selected_stage = s
 		game._setup_stage_environment()
 		var we := game.get_node_or_null("WorldEnvironment") as WorldEnvironment
 		assert(we != null and we.environment != null and we.environment.sky != null, "WorldEnvironment must be valid")

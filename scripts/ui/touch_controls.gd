@@ -136,7 +136,7 @@ func _ready() -> void:
 
 func update_grenade_count(count: int) -> void:
 	if grenade_button:
-		grenade_button.text = "%d" % count
+		grenade_button.text = ""
 		if count <= 0:
 			grenade_button.modulate = Color(0.5, 0.5, 0.5, 0.7)
 		else:

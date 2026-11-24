@@ -62,13 +62,13 @@ func _init() -> void:
 	touch._ready()
 	
 	touch.update_grenade_count(6)
-	assert(touch.grenade_button.text == "6", "Grenade button text should be '6'")
+	assert(touch.grenade_button.text == "", "Grenade button center text must be empty (number only on badge)")
 	assert(touch.grenade_count_badge != null and touch.grenade_count_badge.text == "6", "Count badge should show '6'")
 	assert(touch.grenade_button.modulate == Color(1, 1, 1, 1), "Button should be full brightness when count > 0")
 	print("[PASS] TouchControls count badge and full brightness verified for count=6")
 	
 	touch.update_grenade_count(0)
-	assert(touch.grenade_button.text == "0", "Grenade button text should be '0'")
+	assert(touch.grenade_button.text == "", "Grenade button center text must be empty (number only on badge)")
 	assert(touch.grenade_count_badge.text == "0", "Count badge should show '0'")
 	assert(touch.grenade_button.modulate.a < 0.9, "Button should be dimmed when count == 0")
 	print("[PASS] TouchControls count badge and dimming verified for count=0")
@@ -109,7 +109,8 @@ func _init() -> void:
 	game_root._on_quick_grenade_requested()
 	assert(GameSession.get_grenade_count() == 1, "Grenade count should decrement to 1 after throw")
 	if game_root.touch_controls:
-		assert(game_root.touch_controls.grenade_button.text == "1", "Touch grenade button should reflect 1")
+		assert(game_root.touch_controls.grenade_button.text == "", "Touch grenade button center text should be empty")
+		assert(game_root.touch_controls.grenade_count_badge.text == "1", "Count badge should reflect 1")
 	if game_root.battle_hud and game_root.battle_hud.grenade_label:
 		assert("1" in game_root.battle_hud.grenade_label.text, "BattleHUD label should reflect 1")
 	print("[PASS] GameRoot quick grenade throw successfully decremented count to 1 and synchronized HUD")

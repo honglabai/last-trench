@@ -31,7 +31,7 @@ func _init() -> void:
 		assert(btn.texture_pressed != null, "Button %s pressed texture must be assigned" % button_names[i])
 		assert(btn.stretch_mode == TextureButton.STRETCH_SCALE or btn.stretch_mode == TextureButton.STRETCH_KEEP_ASPECT_CENTERED, "Button %s must have valid stretch_mode" % button_names[i])
 	
-	assert(expected_size == Vector2(265, 76), "MainMenu buttons must be 90%% of previous width (265x76), got %s" % str(expected_size))
+	assert(expected_size == Vector2(186, 76), "MainMenu buttons must be 70%% width (186x76), got %s" % str(expected_size))
 	print("[PASS] All 5 MainMenu buttons verified with exact identical size: %s" % str(expected_size))
 	menu.queue_free()
 	
@@ -45,25 +45,46 @@ func _init() -> void:
 	
 	var aim_btn: Button = touch.get_node_or_null("LeftZone/AimButton")
 	assert(aim_btn != null and aim_btn.icon != null, "AimButton icon must exist")
+	var a_w = aim_btn.offset_right - aim_btn.offset_left
+	var a_h = aim_btn.offset_bottom - aim_btn.offset_top
+	assert(a_w == 96.0 and a_h == 96.0, "AimButton must be 96x96 (+30%%), got %fx%f" % [a_w, a_h])
+	print("[PASS] AimButton 96x96 size (+30%) verified")
 	
 	var fire_btn: Button = touch.get_node_or_null("RightZone/ActionButtons/FireButton")
 	assert(fire_btn != null and fire_btn.icon != null, "FireButton icon must exist")
+	var f_w = fire_btn.offset_right - fire_btn.offset_left
+	var f_h = fire_btn.offset_bottom - fire_btn.offset_top
+	assert(f_w == 148.0 and f_h == 148.0, "FireButton must remain 148x148 anchor, got %fx%f" % [f_w, f_h])
+	print("[PASS] FireButton anchor size (148x148) verified")
 	
 	var grenade_btn: Button = touch.get_node_or_null("RightZone/ActionButtons/GrenadeButton")
 	assert(grenade_btn != null and grenade_btn.icon != null, "GrenadeButton icon must exist")
 	var g_width = grenade_btn.offset_right - grenade_btn.offset_left
 	var g_height = grenade_btn.offset_bottom - grenade_btn.offset_top
-	assert(g_width == 148.0 and g_height == 148.0, "GrenadeButton must be 2x size (148x148), got %fx%f" % [g_width, g_height])
-	print("[PASS] GrenadeButton 2x size verified: 148x148")
+	assert(g_width == 96.0 and g_height == 96.0, "GrenadeButton must be same size as other buttons (96x96), got %fx%f" % [g_width, g_height])
+	assert(grenade_btn.text == "", "GrenadeButton center text must be empty (number only on badge)")
+	var count_badge: Label = grenade_btn.get_node_or_null("CountBadge")
+	assert(count_badge != null, "CountBadge must exist at bottom-right of GrenadeButton")
+	print("[PASS] GrenadeButton 96x96 size and bottom-right badge verified")
 	
 	var reload_btn: Button = touch.get_node_or_null("RightZone/ActionButtons/ReloadButton")
 	assert(reload_btn != null and reload_btn.icon != null, "ReloadButton icon must exist")
+	var r_w = reload_btn.offset_right - reload_btn.offset_left
+	var r_h = reload_btn.offset_bottom - reload_btn.offset_top
+	assert(r_w == 96.0 and r_h == 96.0, "ReloadButton must be 96x96 (+30%%), got %fx%f" % [r_w, r_h])
 	
 	var switch_btn: Button = touch.get_node_or_null("RightZone/ActionButtons/SwitchButton")
 	assert(switch_btn != null and switch_btn.icon != null, "SwitchButton icon must exist")
+	var s_w = switch_btn.offset_right - switch_btn.offset_left
+	var s_h = switch_btn.offset_bottom - switch_btn.offset_top
+	assert(s_w == 96.0 and s_h == 96.0, "SwitchButton must be 96x96 (+30%%), got %fx%f" % [s_w, s_h])
 	
 	var interact_btn: Button = touch.get_node_or_null("RightZone/ActionButtons/InteractButton")
 	assert(interact_btn != null and interact_btn.icon != null, "InteractButton icon must exist")
+	var i_w = interact_btn.offset_right - interact_btn.offset_left
+	var i_h = interact_btn.offset_bottom - interact_btn.offset_top
+	assert(i_w == 96.0 and i_h == 96.0, "InteractButton must be 96x96 (+30%%), got %fx%f" % [i_w, i_h])
+	print("[PASS] Reload, Switch, and Interact buttons 96x96 (+30%) verified")
 	
 	# Verify no overlap among right zone action buttons
 	var rect_map: Dictionary = {

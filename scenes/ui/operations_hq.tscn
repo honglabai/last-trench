@@ -7,12 +7,12 @@
 [ext_resource type="PackedScene" uid="uid://armoryshop91x" path="res://scenes/ui/armory_shop.tscn" id="5_shop"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.03, 0.06, 0.1, 0.85)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.2, 0.6, 0.85, 0.75)
+bg_color = Color(0.02, 0.04, 0.08, 0.3)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.6, 0.85, 0.6)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -23,12 +23,12 @@ content_margin_right = 16.0
 content_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_map_hud"]
-bg_color = Color(0.02, 0.05, 0.1, 0.78)
+bg_color = Color(0.02, 0.04, 0.08, 0.25)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.2, 0.6, 0.85, 0.6)
+border_color = Color(0.2, 0.6, 0.85, 0.5)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -39,18 +39,18 @@ content_margin_right = 12.0
 content_margin_bottom = 6.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_briefing_panel"]
-bg_color = Color(0.02, 0.04, 0.08, 0.92)
+bg_color = Color(0.02, 0.04, 0.08, 0.3)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.2, 0.85, 1, 0.9)
+border_color = Color(0.2, 0.85, 1, 0.8)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-shadow_color = Color(0, 0, 0, 0.65)
-shadow_size = 8
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 6
 content_margin_left = 18.0
 content_margin_top = 12.0
 content_margin_right = 18.0
@@ -86,7 +86,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.01, 0.03, 0.06, 0.45)
+color = Color(0.01, 0.02, 0.05, 0.15)
 
 [node name="Header" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -264,6 +264,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_briefing_panel")
 
 [node name="BriefingBoardBg" type="TextureRect" parent="MainSplit/BriefingPanel"]
+modulate = Color(1, 1, 1, 0.35)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("3_brf")
@@ -273,7 +274,7 @@ stretch_mode = 6
 [node name="BriefingBoardTint" type="ColorRect" parent="MainSplit/BriefingPanel"]
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.01, 0.03, 0.07, 0.6)
+color = Color(0.01, 0.02, 0.05, 0.2)
 
 [node name="VBox" type="VBoxContainer" parent="MainSplit/BriefingPanel"]
 layout_mode = 2
