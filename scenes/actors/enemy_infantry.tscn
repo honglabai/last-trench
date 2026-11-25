@@ -47,12 +47,20 @@ texture_filter = 5
 texture = ExtResource("4_realistic_soldier")
 
 [node name="WeaponSprite" type="Sprite3D" parent="VisualMesh"]
+visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, 0.88, 0.25)
 pixel_size = 0.0016
 billboard = 2
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("5_wpn_ak12")
+
+[node name="MuzzleLight" type="OmniLight3D" parent="VisualMesh"]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 1.15, 0.45)
+light_color = Color(1, 0.58, 0.15, 1)
+light_energy = 2.8
+omni_range = 4.5
 
 [node name="BodyMesh" type="MeshInstance3D" parent="VisualMesh"]
 visible = false

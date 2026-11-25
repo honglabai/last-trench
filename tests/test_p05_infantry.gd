@@ -87,6 +87,42 @@ func _init() -> void:
 		return
 	print("[PASS] Base objective damaged successfully: HP reduced from 500 to ", dummy_base.current_health)
 	
+	# 4b. Verify Blender-rendered pose transitions & attack telegraph/flash
+	if infantry.soldier_sprite == null or infantry.soldier_sprite.texture != infantry._tex_fire:
+		push_error("Infantry SoldierSprite must switch to Blender fire texture on attack")
+		infantry.queue_free()
+		dummy_base.queue_free()
+		quit(1)
+		return
+	if infantry.muzzle_light == null or not infantry.muzzle_light.visible:
+		push_error("Infantry MuzzleLight must be visible during fire")
+		infantry.queue_free()
+		dummy_base.queue_free()
+		quit(1)
+		return
+	if infantry.recoil_kick <= 0.0:
+		push_error("Infantry recoil_kick must be active after fire")
+		infantry.queue_free()
+		dummy_base.queue_free()
+		quit(1)
+		return
+	# Advance past fire_pose_timer and into aim telegraph window
+	infantry.attack_timer = infantry.attack_cooldown * 0.6
+	infantry._physics_process(0.25)
+	if infantry.soldier_sprite.texture != infantry._tex_aim:
+		push_error("Infantry SoldierSprite must switch to Blender aim texture during telegraph")
+		infantry.queue_free()
+		dummy_base.queue_free()
+		quit(1)
+		return
+	if infantry._aim_laser == null or not infantry._aim_laser.visible:
+		push_error("Infantry 3D aim laser telegraph must be visible before firing")
+		infantry.queue_free()
+		dummy_base.queue_free()
+		quit(1)
+		return
+	print("[PASS] Blender soldier poses (advance/aim/fire), 3D aim laser & muzzle flash verified")
+	
 	# 5. Damage, Death & Single Death Event
 	var death_event_count := [0]
 	infantry.enemy_died.connect(func(e): death_event_count[0] += 1)
