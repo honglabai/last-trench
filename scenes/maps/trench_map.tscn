@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dp6b83f4e1h5w"]
+[gd_scene load_steps=32 format=3 uid="uid://dp6b83f4e1h5w"]
 
 [ext_resource type="Script" path="res://scripts/maps/trench_map.gd" id="1_map"]
 [ext_resource type="Script" path="res://scripts/combat/base_objective.gd" id="2_base"]
@@ -15,6 +15,8 @@
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_ground_roughness.png" id="13_dirt_rgh"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_sandbag_stacked_normal.png" id="14_sandbag_nrm"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_wall_gabion_normal.png" id="15_gabion_nrm"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_trench_duckboard.png" id="16_duckboard"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_trench_duckboard_normal.png" id="17_duckboard_nrm"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_front_ground"]
 size = Vector3(50, 1, 40)
@@ -43,14 +45,13 @@ size = Vector3(50, 1, 30)
 size = Vector3(20, 1, 5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mud"]
-albedo_color = Color(0.92, 0.9, 0.88, 1)
-albedo_texture = ExtResource("5_dirt")
-roughness = 0.9
-roughness_texture = ExtResource("13_dirt_rgh")
+albedo_color = Color(0.96, 0.94, 0.92, 1)
+albedo_texture = ExtResource("16_duckboard")
+roughness = 0.85
 normal_enabled = true
-normal_scale = 1.2
-normal_texture = ExtResource("12_dirt_nrm")
-uv1_scale = Vector3(4, 2, 1)
+normal_scale = 1.25
+normal_texture = ExtResource("17_duckboard_nrm")
+uv1_scale = Vector3(8, 2, 1)
 texture_filter = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trench_floor"]

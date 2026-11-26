@@ -81,8 +81,8 @@ func _init() -> void:
 	root.add_child(menu)
 	var start_btn := menu.get_node_or_null("CenterContainer/VBoxContainer/StartButton") as TextureButton
 	assert(start_btn != null, "StartButton missing in MainMenu")
-	assert(start_btn.custom_minimum_size == Vector2(186, 76), "MainMenu StartButton size must be 186x76, got: %s" % str(start_btn.custom_minimum_size))
-	print("[PASS] MainMenu button 70%% width (186x76) verified")
+	assert(start_btn.custom_minimum_size == Vector2(300, 67), "MainMenu StartButton size must be 300x67, got: %s" % str(start_btn.custom_minimum_size))
+	print("[PASS] MainMenu button +20%% height (300x67) verified")
 	menu.queue_free()
 	
 	# 6. Verify Environment Switch in GameRoot for All 5 Stages
