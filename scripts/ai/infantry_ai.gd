@@ -3,13 +3,21 @@ extends EnemyBase
 
 signal bullet_fired(start_pos: Vector3, target_pos: Vector3)
 
+const PATH_SOLDIER_RUN := [
+	"res://assets/textures/tex_enemy_soldier_run_0.png",
+	"res://assets/textures/tex_enemy_soldier_run_1.png",
+	"res://assets/textures/tex_enemy_soldier_run_2.png",
+	"res://assets/textures/tex_enemy_soldier_run_3.png",
+]
 const PATH_SOLDIER_ADVANCE: String = "res://assets/textures/tex_enemy_soldier_realistic.png"
 const PATH_SOLDIER_AIM: String = "res://assets/textures/tex_enemy_soldier_aim.png"
 const PATH_SOLDIER_FIRE: String = "res://assets/textures/tex_enemy_soldier_fire.png"
 
+var _tex_run_frames: Array[Texture2D] = []
 var _tex_advance: Texture2D = null
 var _tex_aim: Texture2D = null
 var _tex_fire: Texture2D = null
+var run_anim_timer: float = 0.0
 
 enum MovementPattern {
 	DIRECT,
@@ -68,6 +76,12 @@ func _ready() -> void:
 func _load_pose_textures() -> void:
 	if self is RPGInfantryAI:
 		return
+	_tex_run_frames.clear()
+	for p in PATH_SOLDIER_RUN:
+		if ResourceLoader.exists(p):
+			var t := load(p) as Texture2D
+			if t:
+				_tex_run_frames.append(t)
 	if ResourceLoader.exists(PATH_SOLDIER_ADVANCE):
 		_tex_advance = load(PATH_SOLDIER_ADVANCE) as Texture2D
 	if ResourceLoader.exists(PATH_SOLDIER_AIM):
@@ -119,7 +133,7 @@ func _physics_process(delta: float) -> void:
 		State.HIT:
 			_process_hit(delta)
 			
-	_update_soldier_pose()
+	_update_soldier_pose(delta)
 
 func _update_attack_feedback(delta: float) -> void:
 	if fire_pose_timer > 0.0:
@@ -133,7 +147,7 @@ func _update_attack_feedback(delta: float) -> void:
 		if visual_mesh and current_state == State.ATTACK:
 			visual_mesh.rotation.x = -recoil_kick
 
-func _update_soldier_pose() -> void:
+func _update_soldier_pose(delta: float = 0.0) -> void:
 	if self is RPGInfantryAI or not soldier_sprite:
 		return
 	if fire_pose_timer > 0.0 and _tex_fire:
@@ -142,6 +156,11 @@ func _update_soldier_pose() -> void:
 	elif (current_state == State.ATTACK or is_sprint_pausing) and _tex_aim:
 		if soldier_sprite.texture != _tex_aim:
 			soldier_sprite.texture = _tex_aim
+	elif not _tex_run_frames.is_empty():
+		run_anim_timer += delta * 9.5
+		var frame_idx := int(floor(run_anim_timer)) % _tex_run_frames.size()
+		if soldier_sprite.texture != _tex_run_frames[frame_idx]:
+			soldier_sprite.texture = _tex_run_frames[frame_idx]
 	elif _tex_advance:
 		if soldier_sprite.texture != _tex_advance:
 			soldier_sprite.texture = _tex_advance

@@ -114,9 +114,9 @@ func can_fire() -> bool:
 func try_fire(origin: Vector3, direction: Vector3, space_state: PhysicsDirectSpaceState3D = null, exclude: Array[RID] = []) -> bool:
 	if not can_fire():
 		if current_ammo <= 0 and not is_reloading:
-			if time_since_last_shot >= fire_rate:
+			if time_since_last_shot >= maxf(fire_rate, 0.20):
 				time_since_last_shot = 0.0
-				AudioManager.play_sound("dry_fire", 0.08, 0.0)
+				AudioManager.play_sound("dry_fire", 0.06, 4.0)
 				ammo_depleted.emit()
 		return false
 		

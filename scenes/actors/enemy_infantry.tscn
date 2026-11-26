@@ -40,7 +40,7 @@ shape = SubResource("CapsuleShape3D_infantry")
 
 [node name="SoldierSprite" type="Sprite3D" parent="VisualMesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
-pixel_size = 0.0019
+pixel_size = 0.0025
 billboard = 2
 alpha_cut = 1
 texture_filter = 5

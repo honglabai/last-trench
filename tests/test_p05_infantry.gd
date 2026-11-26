@@ -163,6 +163,23 @@ func _init() -> void:
 	print("[PASS] Verified 0 duplicate death events upon overkill")
 	
 	infantry.queue_free()
+	
+	# 6. Verify RPG-7 Standoff Range (32m) & Realistic Poses
+	var rpg_scene = load("res://scenes/actors/enemy_rpg.tscn")
+	var rpg := rpg_scene.instantiate() as RPGInfantryAI
+	assert(rpg != null and rpg.attack_range >= 30.0, "RPGInfantryAI must have standoff attack_range >= 30m")
+	root.add_child(rpg)
+	rpg._ready()
+	rpg.position = Vector3(0.0, 0.0, -24.0) # 30m from base at Z=6.0 -> within 32m standoff range!
+	rpg.set_target(dummy_base)
+	rpg._physics_process(0.05)
+	assert(rpg.current_state == EnemyBase.State.ATTACK, "RPG soldier must stop and attack at 30m standoff distance")
+	assert(rpg.soldier_sprite.texture == rpg._tex_rpg_aim, "RPG soldier must switch to aiming pose at standoff range")
+	rpg._physics_process(rpg.attack_cooldown + 0.1)
+	assert(rpg.soldier_sprite.texture == rpg._tex_rpg_fire, "RPG soldier must switch to fire pose when launching RPG-7")
+	print("[PASS] RPG-7 standoff range (32m) and realistic aim/fire poses verified")
+	
+	rpg.queue_free()
 	dummy_base.queue_free()
 	print("[TEST COMPLETE] P05 infantry tests passed with 0 errors!")
 	quit(0)
