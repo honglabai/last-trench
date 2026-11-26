@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dp6b83f4e1h5w"]
+[gd_scene load_steps=29 format=3 uid="uid://dp6b83f4e1h5w"]
 
 [ext_resource type="Script" path="res://scripts/maps/trench_map.gd" id="1_map"]
 [ext_resource type="Script" path="res://scripts/combat/base_objective.gd" id="2_base"]
@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://bvy8n3w5612kq" path="res://scenes/defenses/czech_hedgehog.tscn" id="11_hedgehog"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_ground_normal.png" id="12_dirt_nrm"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_ground_roughness.png" id="13_dirt_rgh"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_sandbag_stacked_normal.png" id="14_sandbag_nrm"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_trench_wall_gabion_normal.png" id="15_gabion_nrm"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_front_ground"]
 size = Vector3(50, 1, 40)
@@ -60,7 +62,10 @@ size = Vector3(4.5, 0.5, 0.8)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sandbag"]
 albedo_color = Color(1, 1, 1, 1)
 albedo_texture = ExtResource("6_sandbag")
-roughness = 0.75
+roughness = 0.85
+normal_enabled = true
+normal_scale = 1.25
+normal_texture = ExtResource("14_sandbag_nrm")
 uv1_scale = Vector3(3, 1, 1)
 texture_filter = 5
 
@@ -94,9 +99,12 @@ radius = 1.0
 size = Vector3(20, 1.2, 0.4)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gabion"]
-albedo_color = Color(0.9, 0.85, 0.8, 1)
+albedo_color = Color(0.92, 0.88, 0.84, 1)
 albedo_texture = ExtResource("8_gabion")
-roughness = 0.85
+roughness = 0.88
+normal_enabled = true
+normal_scale = 1.2
+normal_texture = ExtResource("15_gabion_nrm")
 uv1_scale = Vector3(8, 1, 1)
 texture_filter = 5
 
@@ -104,9 +112,12 @@ texture_filter = 5
 size = Vector3(0.4, 1.2, 5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gabion_side"]
-albedo_color = Color(0.9, 0.85, 0.8, 1)
+albedo_color = Color(0.92, 0.88, 0.84, 1)
 albedo_texture = ExtResource("8_gabion")
-roughness = 0.85
+roughness = 0.88
+normal_enabled = true
+normal_scale = 1.2
+normal_texture = ExtResource("15_gabion_nrm")
 uv1_scale = Vector3(2, 1, 1)
 texture_filter = 5
 

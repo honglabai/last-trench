@@ -5,9 +5,9 @@ import os
 from mathutils import Vector, Matrix
 
 OUT_DIR = "/Users/kobujang/Desktop/cording/LAST_TRENCH/assets/textures"
-MODEL_DIR = "/Users/kobujang/Desktop/cording/LAST_TRENCH/assets/models"
+MODEL_DIR = "/Users/kobujang/Desktop/cording/LAST_TRENCH/scratch"
+MS_MUD_DIR = "/Users/kobujang/Desktop/cording/LAST_TRENCH/scratch/megascans/trampled_mud_ground"
 os.makedirs(OUT_DIR, exist_ok=True)
-os.makedirs(MODEL_DIR, exist_ok=True)
 
 
 def clear_scene():
@@ -21,7 +21,15 @@ def set_hide_recursive(obj, hide):
         set_hide_recursive(ch, hide)
 
 
-def make_camo_material(name):
+def load_ms_image(filename, non_color=False):
+    path = os.path.join(MS_MUD_DIR, filename)
+    img = bpy.data.images.load(path, check_existing=True)
+    if non_color:
+        img.colorspace_settings.name = 'Non-Color'
+    return img
+
+
+def make_camo_material(name, mud_amount=0.35):
     mat = bpy.data.materials.new(name=name)
     mat.use_nodes = True
     nt = mat.node_tree
@@ -29,7 +37,6 @@ def make_camo_material(name):
 
     out = nt.nodes.new("ShaderNodeOutputMaterial")
     bsdf = nt.nodes.new("ShaderNodeBsdfPrincipled")
-    bsdf.inputs["Roughness"].default_value = 0.85
 
     tex_coord = nt.nodes.new("ShaderNodeTexCoord")
     noise = nt.nodes.new("ShaderNodeTexNoise")
@@ -48,7 +55,55 @@ def make_camo_material(name):
 
     nt.links.new(tex_coord.outputs["Object"], noise.inputs["Vector"])
     nt.links.new(noise.outputs["Fac"], ramp.inputs["Fac"])
-    nt.links.new(ramp.outputs["Color"], bsdf.inputs["Base Color"])
+
+    # Mix Quixel Megascans Trampled Mud Ground weathering!
+    mud_col_img = load_ms_image("Trampled_Mud_Ground_vbokfcjlw_2K_BaseColor.jpg", non_color=False)
+    mud_rgh_img = load_ms_image("Trampled_Mud_Ground_vbokfcjlw_2K_Roughness.jpg", non_color=True)
+    mud_nrm_img = load_ms_image("Trampled_Mud_Ground_vbokfcjlw_2K_Normal.jpg", non_color=True)
+
+    mapping = nt.nodes.new("ShaderNodeMapping")
+    mapping.inputs["Scale"].default_value = (1.8, 1.8, 1.8)
+    nt.links.new(tex_coord.outputs["Object"], mapping.inputs["Vector"])
+
+    tex_mud_col = nt.nodes.new("ShaderNodeTexImage")
+    tex_mud_col.image = mud_col_img
+    tex_mud_col.projection = 'BOX'
+    tex_mud_col.projection_blend = 0.25
+    nt.links.new(mapping.outputs["Vector"], tex_mud_col.inputs["Vector"])
+
+    tex_mud_rgh = nt.nodes.new("ShaderNodeTexImage")
+    tex_mud_rgh.image = mud_rgh_img
+    tex_mud_rgh.projection = 'BOX'
+    tex_mud_rgh.projection_blend = 0.25
+    nt.links.new(mapping.outputs["Vector"], tex_mud_rgh.inputs["Vector"])
+
+    tex_mud_nrm = nt.nodes.new("ShaderNodeTexImage")
+    tex_mud_nrm.image = mud_nrm_img
+    tex_mud_nrm.projection = 'BOX'
+    tex_mud_nrm.projection_blend = 0.25
+    nt.links.new(mapping.outputs["Vector"], tex_mud_nrm.inputs["Vector"])
+
+    mix_col = nt.nodes.new("ShaderNodeMix")
+    mix_col.data_type = 'RGBA'
+    mix_col.inputs["Factor"].default_value = mud_amount
+    nt.links.new(ramp.outputs["Color"], mix_col.inputs[6])
+    nt.links.new(tex_mud_col.outputs["Color"], mix_col.inputs[7])
+    nt.links.new(mix_col.outputs[2], bsdf.inputs["Base Color"])
+
+    # Roughness from Megascans
+    mix_rgh = nt.nodes.new("ShaderNodeMix")
+    mix_rgh.data_type = 'FLOAT'
+    mix_rgh.inputs["Factor"].default_value = 0.65
+    mix_rgh.inputs[2].default_value = 0.85
+    nt.links.new(tex_mud_rgh.outputs["Color"], mix_rgh.inputs[3])
+    nt.links.new(mix_rgh.outputs[0], bsdf.inputs["Roughness"])
+
+    # Subtle fabric/mud normal micro-detail
+    nrm_map = nt.nodes.new("ShaderNodeNormalMap")
+    nrm_map.inputs["Strength"].default_value = 0.25
+    nt.links.new(tex_mud_nrm.outputs["Color"], nrm_map.inputs["Color"])
+    nt.links.new(nrm_map.outputs["Normal"], bsdf.inputs["Normal"])
+
     nt.links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
     return mat
 
@@ -149,18 +204,14 @@ def add_sphere(name, radius, scale=(1, 1, 1), loc=(0, 0, 0), rot=(0, 0, 0), mat=
 
 
 def aim_limb_segment(segment_obj, start_world, end_world):
-    """Positions and orients a limb segment (local -Z axis) from start_world to end_world."""
     vec = end_world - start_world
-    length = vec.length
-    if length < 0.001:
+    if vec.length < 0.001:
         return
-    # Compute rotation so local -Z points along vec
     quat = vec.normalized().to_track_quat('-Z', 'Y')
     segment_obj.matrix_world = Matrix.Translation(start_world) @ quat.to_matrix().to_4x4()
 
 
 def solve_two_bone_ik(shoulder_pos, hand_target, upper_len, lower_len, elbow_hint_dir):
-    """Returns elbow world position for a 2-bone arm chain."""
     to_hand = hand_target - shoulder_pos
     dist = to_hand.length
     max_reach = upper_len + lower_len - 0.01
@@ -175,21 +226,20 @@ def solve_two_bone_ik(shoulder_pos, hand_target, upper_len, lower_len, elbow_hin
     sin_a = math.sqrt(max(0.0, 1.0 - cos_a**2))
 
     fwd = to_hand.normalized()
-    # Orthogonalize hint direction
     ortho_hint = (elbow_hint_dir - fwd * elbow_hint_dir.dot(fwd))
     if ortho_hint.length < 0.001:
         ortho_hint = Vector((0, 0, -1))
     else:
         ortho_hint.normalize()
 
-    elbow_pos = shoulder_pos + fwd * (upper_len * cos_a) + ortho_hint * (upper_len * sin_a)
-    return elbow_pos
+    return shoulder_pos + fwd * (upper_len * cos_a) + ortho_hint * (upper_len * sin_a)
 
 
 def build_soldier():
     clear_scene()
 
-    mat_camo = make_camo_material("Mat_Camo")
+    mat_camo = make_camo_material("Mat_Camo", mud_amount=0.30)
+    mat_camo_muddy = make_camo_material("Mat_Camo_Muddy", mud_amount=0.58)
     mat_vest = make_pbr_material("Mat_Vest", (0.10, 0.11, 0.09), roughness=0.78)
     mat_pouch = make_pbr_material("Mat_Pouch", (0.14, 0.15, 0.11), roughness=0.72)
     mat_helmet = make_pbr_material("Mat_Helmet", (0.15, 0.17, 0.14), roughness=0.48, metallic=0.12)
@@ -198,51 +248,38 @@ def build_soldier():
     mat_gear = make_pbr_material("Mat_Gear", (0.04, 0.04, 0.045), roughness=0.58)
     mat_gun_metal = make_pbr_material("Mat_GunMetal", (0.05, 0.055, 0.06), roughness=0.32, metallic=0.88)
     mat_gun_poly = make_pbr_material("Mat_GunPoly", (0.035, 0.035, 0.04), roughness=0.65)
+    mat_rpg_wood = make_pbr_material("Mat_RpgWood", (0.28, 0.14, 0.06), roughness=0.55)
+    mat_rpg_warhead = make_pbr_material("Mat_RpgWarhead", (0.14, 0.19, 0.10), roughness=0.45, metallic=0.25)
     mat_flash_outer = make_pbr_material(
-        "Mat_MuzzleFlashOuter",
-        (1.0, 0.42, 0.05),
-        roughness=0.2,
-        emission=(1.0, 0.38, 0.04),
-        emission_strength=14.0,
+        "Mat_MuzzleFlashOuter", (1.0, 0.42, 0.05), roughness=0.2, emission=(1.0, 0.38, 0.04), emission_strength=14.0
     )
     mat_flash_core = make_pbr_material(
-        "Mat_MuzzleFlashCore",
-        (1.0, 0.88, 0.35),
-        roughness=0.1,
-        emission=(1.0, 0.86, 0.30),
-        emission_strength=26.0,
+        "Mat_MuzzleFlashCore", (1.0, 0.88, 0.35), roughness=0.1, emission=(1.0, 0.86, 0.30), emission_strength=26.0
     )
     mat_laser = make_pbr_material(
-        "Mat_Laser",
-        (1.0, 0.05, 0.05),
-        roughness=0.1,
-        emission=(1.0, 0.06, 0.04),
-        emission_strength=16.0,
+        "Mat_Laser", (1.0, 0.05, 0.05), roughness=0.1, emission=(1.0, 0.06, 0.04), emission_strength=16.0
     )
 
     root = create_empty("SoldierRoot", (0, 0, 0))
 
-    # Pelvis
     pelvis = create_empty("Pelvis", (0, 0, 0.93), root)
     add_box("PelvisBase", (0.33, 0.21, 0.17), (0, 0, 0), mat=mat_camo, parent=pelvis, bevel=0.03)
     add_box("TacticalBelt", (0.35, 0.23, 0.065), (0, 0, 0.045), mat=mat_gear, parent=pelvis, bevel=0.01)
     add_box("BeltBuckle", (0.07, 0.04, 0.065), (0, -0.115, 0.045), mat=mat_gun_metal, parent=pelvis, bevel=0.005)
     add_box("DropHolster", (0.06, 0.12, 0.18), (0.185, -0.02, -0.11), mat=mat_gear, parent=pelvis, bevel=0.01)
 
-    # Legs
     def build_leg(side_name, x_sign):
         hip = create_empty(f"{side_name}Hip", (x_sign * 0.105, 0, -0.04), pelvis)
         add_tapered_limb(f"{side_name}Thigh", 0.095, 0.078, 0.44, 16, (0, 0, -0.22), mat=mat_camo, parent=hip)
         knee = create_empty(f"{side_name}Knee", (0, 0, -0.44), hip)
         add_box(f"{side_name}KneePad", (0.115, 0.11, 0.11), (0, -0.055, 0), mat=mat_gear, parent=knee, bevel=0.022)
-        add_tapered_limb(f"{side_name}Shin", 0.082, 0.064, 0.40, 16, (0, 0, -0.20), mat=mat_camo, parent=knee)
+        add_tapered_limb(f"{side_name}Shin", 0.082, 0.064, 0.40, 16, (0, 0, -0.20), mat=mat_camo_muddy, parent=knee)
         add_box(f"{side_name}Boot", (0.11, 0.24, 0.125), (0, -0.045, -0.40), mat=mat_gear, parent=knee, bevel=0.025)
         return hip, knee
 
     l_hip, l_knee = build_leg("Left", -1.0)
     r_hip, r_knee = build_leg("Right", 1.0)
 
-    # Torso
     torso = create_empty("Torso", (0, 0, 0.08), pelvis)
     add_box("TorsoBase", (0.35, 0.21, 0.48), (0, 0, 0.24), mat=mat_camo, parent=torso, bevel=0.04)
     add_box("PlateCarrier", (0.33, 0.25, 0.39), (0, -0.01, 0.25), mat=mat_vest, parent=torso, bevel=0.025)
@@ -255,7 +292,6 @@ def build_soldier():
     add_box("Backpack", (0.26, 0.14, 0.34), (0, 0.16, 0.26), mat=mat_pouch, parent=torso, bevel=0.02)
     add_tapered_limb("RadioAntenna", 0.004, 0.007, 0.38, 8, (-0.11, 0.18, 0.56), (0.08, -0.05, 0), mat=mat_gun_metal, parent=torso)
 
-    # Head & Helmet (lowered cleanly into collar)
     head = create_empty("HeadGroup", (0, 0, 0.46), torso)
     add_tapered_limb("Neck", 0.064, 0.074, 0.12, 14, (0, 0, 0.04), mat=mat_balaclava, parent=head)
     add_sphere("HeadBalaclava", 0.102, (0.92, 1.02, 1.12), (0, -0.01, 0.13), mat=mat_balaclava, parent=head)
@@ -267,11 +303,9 @@ def build_soldier():
     add_tapered_limb("EarCupL", 0.042, 0.042, 0.035, 12, (-0.115, 0.0, 0.11), (0, math.pi / 2, 0), mat=mat_gear, parent=head)
     add_tapered_limb("EarCupR", 0.042, 0.042, 0.035, 12, (0.115, 0.0, 0.11), (0, math.pi / 2, 0), mat=mat_gear, parent=head)
 
-    # Shoulder socket markers (parented to torso so we know exact world coords)
     l_sh_socket = create_empty("L_Sh_Socket", (-0.21, 0.0, 0.41), torso)
     r_sh_socket = create_empty("R_Sh_Socket", (0.21, 0.0, 0.41), torso)
 
-    # Arms as world-space IK segments (upper + lower + glove)
     def make_arm_meshes(side_name):
         upper = create_empty(f"{side_name}_UpperRoot", (0, 0, 0), root)
         add_sphere(f"{side_name}_Deltoid", 0.068, (1, 1, 1), (0, 0, 0), mat=mat_camo, parent=upper)
@@ -286,7 +320,7 @@ def build_soldier():
     l_upper, l_lower = make_arm_meshes("Left")
     r_upper, r_lower = make_arm_meshes("Right")
 
-    # Weapon (AK-12 Tactical Assault Rifle)
+    # Weapon 1: AK-12
     wpn = create_empty("Weapon_AK12", (0.12, -0.24, 0.34), torso)
     add_box("AK_Receiver", (0.048, 0.30, 0.085), (0, -0.06, 0.0), mat=mat_gun_metal, parent=wpn, bevel=0.005)
     add_box("AK_TopRail", (0.036, 0.28, 0.022), (0, -0.06, 0.05), mat=mat_gun_metal, parent=wpn, bevel=0.003)
@@ -301,31 +335,19 @@ def build_soldier():
     add_box("AK_MagTop", (0.034, 0.072, 0.12), (0, -0.14, -0.09), (0.18, 0, 0), mat=mat_gun_poly, parent=wpn, bevel=0.004)
     add_box("AK_MagBot", (0.034, 0.070, 0.11), (0, -0.17, -0.19), (0.36, 0, 0), mat=mat_gun_poly, parent=wpn, bevel=0.004)
 
-    # Hand grip targets parented to weapon!
     r_grip_target = create_empty("R_Grip_Target", (0.0, 0.04, -0.06), wpn)
     l_grip_target = create_empty("L_Grip_Target", (0.0, -0.32, -0.02), wpn)
 
-    # Tactical Laser Box & Dot
     add_box("AK_LaserBox", (0.028, 0.075, 0.030), (0.038, -0.35, 0.015), mat=mat_gear, parent=wpn, bevel=0.003)
     laser_dot = add_sphere("AK_LaserEmitter", 0.012, (1, 1, 1), (0.038, -0.39, 0.015), mat=mat_laser, parent=wpn)
-    # Thin glowing red laser beam for aim pose
     laser_beam = add_tapered_limb("AK_LaserBeam", 0.003, 0.003, 1.4, 8, (0.038, -1.09, 0.015), (math.pi / 2, 0, 0), mat=mat_laser, parent=wpn)
 
-    # Crisp Starburst Muzzle Flash Group at muzzle tip
     flash_grp = create_empty("MuzzleFlashGroup", (0, -0.72, 0.01), wpn)
     add_tapered_limb("FlashCoreJet", 0.055, 0.008, 0.24, 12, (0, -0.12, 0), (math.pi / 2, 0, 0), mat=mat_flash_core, parent=flash_grp)
     for angle in [0, 45, 90, 135]:
         rad = math.radians(angle)
         add_tapered_limb(
-            f"FlashStarA_{angle}",
-            0.003,
-            0.035,
-            0.22,
-            8,
-            (0, -0.02, 0),
-            (0, rad, 0),
-            mat=mat_flash_outer,
-            parent=flash_grp,
+            f"FlashStarA_{angle}", 0.003, 0.035, 0.22, 8, (0, -0.02, 0), (0, rad, 0), mat=mat_flash_outer, parent=flash_grp
         )
 
     flash_light_data = bpy.data.lights.new(name="MuzzleLight", type='POINT')
@@ -337,7 +359,19 @@ def build_soldier():
     bpy.context.collection.objects.link(flash_light)
     flash_light.parent = flash_grp
 
-    # Camera framed cleanly around 1.8m tall soldier
+    # Weapon 2: RPG-7 Shoulder Launcher
+    rpg_grp = create_empty("Weapon_RPG7", (0.20, -0.08, 0.44), torso)
+    add_tapered_limb("RPG_Tube", 0.026, 0.026, 0.95, 16, (0, 0.08, 0), (math.pi / 2, 0, 0), mat=mat_gun_metal, parent=rpg_grp)
+    add_tapered_limb("RPG_WoodShield", 0.033, 0.033, 0.34, 16, (0, 0.06, 0), (math.pi / 2, 0, 0), mat=mat_rpg_wood, parent=rpg_grp)
+    add_tapered_limb("RPG_ExhaustCone", 0.045, 0.026, 0.16, 16, (0, 0.62, 0), (math.pi / 2, 0, 0), mat=mat_gun_metal, parent=rpg_grp)
+    add_tapered_limb("RPG_WarheadRear", 0.048, 0.022, 0.16, 16, (0, -0.46, 0), (math.pi / 2, 0, 0), mat=mat_rpg_warhead, parent=rpg_grp)
+    add_tapered_limb("RPG_WarheadTip", 0.006, 0.048, 0.18, 16, (0, -0.63, 0), (math.pi / 2, 0, 0), mat=mat_rpg_warhead, parent=rpg_grp)
+    add_box("RPG_Grip1", (0.032, 0.045, 0.11), (0, -0.14, -0.07), (-0.18, 0, 0), mat=mat_gun_poly, parent=rpg_grp, bevel=0.004)
+    add_box("RPG_Grip2", (0.032, 0.045, 0.10), (0, -0.30, -0.07), (0.12, 0, 0), mat=mat_gun_poly, parent=rpg_grp, bevel=0.004)
+    rpg_r_target = create_empty("RPG_R_Target", (0, -0.14, -0.08), rpg_grp)
+    rpg_l_target = create_empty("RPG_L_Target", (0, -0.30, -0.08), rpg_grp)
+
+    # Camera & Studio Lighting
     cam_data = bpy.data.cameras.new(name="RenderCam")
     cam_data.lens = 58.0
     cam_obj = bpy.data.objects.new("RenderCam", cam_data)
@@ -346,7 +380,6 @@ def build_soldier():
     bpy.context.collection.objects.link(cam_obj)
     bpy.context.scene.camera = cam_obj
 
-    # Lighting
     key_data = bpy.data.lights.new("KeyLight", type='AREA')
     key_data.energy = 280.0
     key_data.size = 2.5
@@ -368,7 +401,6 @@ def build_soldier():
     fill_data = bpy.data.lights.new("FillLight", type='AREA')
     fill_data.energy = 100.0
     fill_data.size = 3.0
-    fill_data.color = (0.78, 0.86, 1.0)
     fill_obj = bpy.data.objects.new("FillLight", fill_data)
     fill_obj.location = (2.4, -2.6, 1.1)
     fill_obj.rotation_euler = (math.radians(82), 0, math.radians(40))
@@ -391,41 +423,31 @@ def build_soldier():
     scene.render.image_settings.color_mode = 'RGBA'
 
     return {
-        "pelvis": pelvis,
-        "torso": torso,
-        "head": head,
-        "l_hip": l_hip,
-        "l_knee": l_knee,
-        "r_hip": r_hip,
-        "r_knee": r_knee,
-        "l_sh_socket": l_sh_socket,
-        "r_sh_socket": r_sh_socket,
-        "l_upper": l_upper,
-        "l_lower": l_lower,
-        "r_upper": r_upper,
-        "r_lower": r_lower,
-        "wpn": wpn,
-        "r_grip_target": r_grip_target,
-        "l_grip_target": l_grip_target,
-        "flash_grp": flash_grp,
-        "laser_dot": laser_dot,
-        "laser_beam": laser_beam,
+        "pelvis": pelvis, "torso": torso, "head": head,
+        "l_hip": l_hip, "l_knee": l_knee, "r_hip": r_hip, "r_knee": r_knee,
+        "l_sh_socket": l_sh_socket, "r_sh_socket": r_sh_socket,
+        "l_upper": l_upper, "l_lower": l_lower, "r_upper": r_upper, "r_lower": r_lower,
+        "wpn": wpn, "r_grip_target": r_grip_target, "l_grip_target": l_grip_target,
+        "rpg_grp": rpg_grp, "rpg_r_target": rpg_r_target, "rpg_l_target": rpg_l_target,
+        "flash_grp": flash_grp, "laser_dot": laser_dot, "laser_beam": laser_beam,
     }
 
 
-def apply_arm_ik(parts):
+def apply_arm_ik(parts, use_rpg=False):
     bpy.context.view_layer.update()
-
-    # Right arm (pistol grip)
     r_sh = parts["r_sh_socket"].matrix_world.translation
-    r_hand = parts["r_grip_target"].matrix_world.translation
+    l_sh = parts["l_sh_socket"].matrix_world.translation
+    if use_rpg:
+        r_hand = parts["rpg_r_target"].matrix_world.translation
+        l_hand = parts["rpg_l_target"].matrix_world.translation
+    else:
+        r_hand = parts["r_grip_target"].matrix_world.translation
+        l_hand = parts["l_grip_target"].matrix_world.translation
+
     r_elbow = solve_two_bone_ik(r_sh, r_hand, 0.29, 0.27, Vector((0.35, 0.2, -0.8)))
     aim_limb_segment(parts["r_upper"], r_sh, r_elbow)
     aim_limb_segment(parts["r_lower"], r_elbow, r_hand)
 
-    # Left arm (handguard)
-    l_sh = parts["l_sh_socket"].matrix_world.translation
-    l_hand = parts["l_grip_target"].matrix_world.translation
     l_elbow = solve_two_bone_ik(l_sh, l_hand, 0.29, 0.27, Vector((-0.35, 0.2, -0.8)))
     aim_limb_segment(parts["l_upper"], l_sh, l_elbow)
     aim_limb_segment(parts["l_lower"], l_elbow, l_hand)
@@ -440,24 +462,23 @@ def set_pose(parts, pose_name):
     parts["r_hip"].rotation_euler = (0, 0, 0)
     parts["r_knee"].rotation_euler = (0, 0, 0)
 
+    use_rpg = (pose_name == "rpg")
+    set_hide_recursive(parts["wpn"], use_rpg)
+    set_hide_recursive(parts["rpg_grp"], not use_rpg)
+
     if pose_name == "advance":
-        # Patrol / Advancing stride, rifle diagonally across chest
         parts["torso"].rotation_euler = (math.radians(6), 0, math.radians(-10))
         parts["head"].rotation_euler = (math.radians(-4), 0, math.radians(10))
         parts["l_hip"].rotation_euler = (math.radians(-18), 0, math.radians(-4))
         parts["l_knee"].rotation_euler = (math.radians(22), 0, 0)
         parts["r_hip"].rotation_euler = (math.radians(14), 0, math.radians(4))
         parts["r_knee"].rotation_euler = (math.radians(10), 0, 0)
-
         parts["wpn"].location = (-0.01, -0.22, 0.24)
         parts["wpn"].rotation_euler = (math.radians(-14), math.radians(-8), math.radians(46))
-
         set_hide_recursive(parts["flash_grp"], True)
         set_hide_recursive(parts["laser_dot"], True)
         set_hide_recursive(parts["laser_beam"], True)
-
     elif pose_name == "aim":
-        # Braced combat crouch aiming straight at player with red laser sight
         parts["pelvis"].location = (0, 0, 0.83)
         parts["torso"].rotation_euler = (math.radians(14), 0, math.radians(18))
         parts["head"].rotation_euler = (math.radians(-10), 0, math.radians(-18))
@@ -465,16 +486,12 @@ def set_pose(parts, pose_name):
         parts["l_knee"].rotation_euler = (math.radians(46), 0, 0)
         parts["r_hip"].rotation_euler = (math.radians(22), 0, math.radians(10))
         parts["r_knee"].rotation_euler = (math.radians(24), 0, 0)
-
         parts["wpn"].location = (0.11, -0.23, 0.36)
         parts["wpn"].rotation_euler = (math.radians(-2), 0, math.radians(-18))
-
         set_hide_recursive(parts["flash_grp"], True)
         set_hide_recursive(parts["laser_dot"], False)
         set_hide_recursive(parts["laser_beam"], False)
-
     elif pose_name == "fire":
-        # Firing pose with recoil kick & crisp starburst muzzle flash
         parts["pelvis"].location = (0, 0, 0.84)
         parts["torso"].rotation_euler = (math.radians(8), 0, math.radians(16))
         parts["head"].rotation_euler = (math.radians(-6), 0, math.radians(-16))
@@ -482,20 +499,28 @@ def set_pose(parts, pose_name):
         parts["l_knee"].rotation_euler = (math.radians(42), 0, 0)
         parts["r_hip"].rotation_euler = (math.radians(20), 0, math.radians(10))
         parts["r_knee"].rotation_euler = (math.radians(22), 0, 0)
-
         parts["wpn"].location = (0.11, -0.21, 0.38)
         parts["wpn"].rotation_euler = (math.radians(4), 0, math.radians(-16))
-
         set_hide_recursive(parts["flash_grp"], False)
         set_hide_recursive(parts["laser_dot"], False)
         set_hide_recursive(parts["laser_beam"], True)
+    elif pose_name == "rpg":
+        parts["pelvis"].location = (0, 0, 0.86)
+        parts["torso"].rotation_euler = (math.radians(10), 0, math.radians(12))
+        parts["head"].rotation_euler = (math.radians(-8), 0, math.radians(-12))
+        parts["l_hip"].rotation_euler = (math.radians(-24), 0, math.radians(-8))
+        parts["l_knee"].rotation_euler = (math.radians(32), 0, 0)
+        parts["r_hip"].rotation_euler = (math.radians(18), 0, math.radians(10))
+        parts["r_knee"].rotation_euler = (math.radians(18), 0, 0)
+        set_hide_recursive(parts["flash_grp"], True)
+        set_hide_recursive(parts["laser_dot"], True)
+        set_hide_recursive(parts["laser_beam"], True)
 
-    apply_arm_ik(parts)
+    apply_arm_ik(parts, use_rpg=use_rpg)
 
 
 def main():
     parts = build_soldier()
-
     blend_path = os.path.join(MODEL_DIR, "enemy_soldier.blend")
     set_pose(parts, "aim")
     bpy.ops.wm.save_as_mainfile(filepath=blend_path)
@@ -505,8 +530,8 @@ def main():
         ("advance", os.path.join(OUT_DIR, "tex_enemy_soldier_realistic.png")),
         ("aim", os.path.join(OUT_DIR, "tex_enemy_soldier_aim.png")),
         ("fire", os.path.join(OUT_DIR, "tex_enemy_soldier_fire.png")),
+        ("rpg", os.path.join(OUT_DIR, "tex_enemy_rpg_soldier.png")),
     ]
-
     for pose_name, out_path in poses:
         set_pose(parts, pose_name)
         bpy.context.scene.render.filepath = out_path
