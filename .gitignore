@@ -7,3 +7,4 @@ builds/
 *.keystore
 .DS_Store
 .superpowers/
+scratch/megascans/

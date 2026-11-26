@@ -1,474 +1,187 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-		<title>최후의 참호 (LAST TRENCH) - 모던 워페어 3D 디펜스</title>
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-		<meta name="theme-color" content="#000000">
-		<meta name="apple-mobile-web-app-title" content="최후의참호">
-		<meta name="application-name" content="최후의 참호 - LAST TRENCH">
-		<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-		<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
-		<link id="-gd-engine-icon" rel="icon" type="image/png" href="/index.icon.png">
-		<link rel="apple-touch-icon" href="/index.apple-touch-icon.png">
-		<link rel="manifest" href="/manifest.json">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+		<title>최후의 참호 - LAST TRENCH</title>
 		<style>
-* {
-	box-sizing: border-box;
-	-webkit-tap-highlight-color: transparent;
-	user-select: none;
-	-webkit-user-select: none;
-}
-
 html, body, #canvas {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	width: 100%;
-	height: 100%;
 }
 
 body {
-	color: #ffffff;
-	background-color: #000000;
+	color: white;
+	background-color: black;
 	overflow: hidden;
 	touch-action: none;
-	font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 #canvas {
 	display: block;
-	width: 100%;
-	height: 100%;
 }
 
 #canvas:focus {
 	outline: none;
 }
 
-/* ==========================================================================
-   LANDING VIDEO INTRO - MINIMAL TACTICAL OVERLAY
-   ========================================================================== */
-#landing-overlay {
-	position: fixed;
-	top: 0;
+#status, #status-splash, #status-progress {
+	position: absolute;
 	left: 0;
-	width: 100vw;
-	height: 100vh;
-	z-index: 10000;
-	background-color: #000000;
-	overflow: hidden;
+	right: 0;
+}
+
+#status, #status-splash {
+	top: 0;
+	bottom: 0;
+}
+
+#status {
+	background-color: #242424;
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-end;
+	justify-content: center;
 	align-items: center;
-	transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+	visibility: hidden;
 }
 
-#landing-overlay.fade-out {
-	opacity: 0;
-	pointer-events: none;
+#status-splash {
+	max-height: 100%;
+	max-width: 100%;
+	margin: auto;
 }
 
-#landing-video {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	min-width: 100%;
-	min-height: 100%;
-	width: auto;
-	height: auto;
-	transform: translate(-50%, -50%);
-	object-fit: cover;
+#status-splash.show-image--false {
+	display: none;
+}
+
+#status-splash.fullsize--true {
+	height: 100%;
+	width: 100%;
+	object-fit: contain;
+}
+
+#status-splash.use-filter--false {
+	image-rendering: pixelated;
+}
+
+#status-progress, #status-notice {
+	display: none;
+}
+
+#status-progress {
+	bottom: 10%;
+	width: 50%;
+	margin: 0 auto;
+}
+
+#status-notice {
+	background-color: #5b3943;
+	border-radius: 0.5rem;
+	border: 1px solid #9b3943;
+	color: #e0e0e0;
+	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
+	line-height: 1.3;
+	margin: 0 2rem;
+	overflow: hidden;
+	padding: 1rem;
+	text-align: center;
 	z-index: 1;
 }
-
-#landing-vignette {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 2;
-	pointer-events: none;
-	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0.88) 100%);
-}
-
-#landing-ui {
-	position: relative;
-	z-index: 3;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-	align-items: center;
-	padding: 0 max(24px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
-	pointer-events: none;
-}
-
-/* BOTTOM COMMAND PANEL */
-.landing-bottom-panel {
-	width: 100%;
-	max-width: 480px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 12px;
-	margin-bottom: 12px;
-	pointer-events: auto;
-}
-
-.landing-status-row {
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: 15px;
-	font-weight: 800;
-	color: #00e5ff;
-	letter-spacing: 1px;
-	text-shadow: 0 0 10px rgba(0, 229, 255, 0.7), 0 2px 4px rgba(0, 0, 0, 0.9);
-}
-
-.landing-progress-track {
-	width: 100%;
-	height: 8px;
-	background: rgba(255, 255, 255, 0.15);
-	border: 1px solid rgba(0, 229, 255, 0.4);
-	border-radius: 4px;
-	overflow: hidden;
-	box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
-}
-
-.landing-progress-bar {
-	width: 0%;
-	height: 100%;
-	background: linear-gradient(90deg, #00b0ff, #00e5ff, #ffaa00);
-	border-radius: 4px;
-	transition: width 0.15s ease-out;
-	box-shadow: 0 0 14px #00e5ff;
-}
-
-.btn-deploy-start {
-	width: 100%;
-	min-height: 58px;
-	border: 2px solid rgba(255, 255, 255, 0.25);
-	background: rgba(20, 24, 28, 0.85);
-	color: #888888;
-	font-size: clamp(18px, 4.2vw, 22px);
-	font-weight: 900;
-	letter-spacing: 2px;
-	border-radius: 8px;
-	cursor: not-allowed;
-	position: relative;
-	overflow: hidden;
-	transition: all 0.25s ease;
-	backdrop-filter: blur(8px);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.btn-deploy-start.ready {
-	background: linear-gradient(135deg, rgba(230, 92, 0, 0.95), rgba(255, 140, 0, 0.95));
-	border-color: #ffcc00;
-	color: #ffffff;
-	cursor: pointer;
-	box-shadow: 0 0 28px rgba(255, 140, 0, 0.75), inset 0 0 12px rgba(255, 255, 255, 0.35);
-	animation: deployPulse 2s infinite ease-in-out;
-}
-
-@keyframes deployPulse {
-	0%, 100% {
-		box-shadow: 0 0 20px rgba(255, 140, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.25);
-		transform: scale(1);
-	}
-	50% {
-		box-shadow: 0 0 35px rgba(255, 180, 0, 0.9), inset 0 0 16px rgba(255, 255, 255, 0.5);
-		transform: scale(1.015);
-	}
-}
-
-.btn-deploy-start.ready:active {
-	transform: scale(0.97);
-}
-
-/* ERROR NOTICE */
-#landing-error-box {
-	display: none;
-	background: rgba(120, 20, 30, 0.9);
-	border: 1px solid #ff4444;
-	border-radius: 6px;
-	padding: 12px 18px;
-	font-size: 13px;
-	color: #ffffff;
-	text-align: center;
-	max-width: 500px;
-	margin: 10px auto;
-	box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-}
-
-/* PWA INSTALL & FULLSCREEN HINT */
-.btn-pwa-install {
-	display: none;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	margin: 8px auto 6px auto;
-	padding: 9px 20px;
-	background: linear-gradient(135deg, rgba(0, 180, 216, 0.3), rgba(0, 229, 255, 0.2));
-	border: 1.5px solid #00e5ff;
-	border-radius: 20px;
-	color: #ffffff;
-	font-size: 13px;
-	font-weight: 700;
-	cursor: pointer;
-	backdrop-filter: blur(8px);
-	box-shadow: 0 0 18px rgba(0, 229, 255, 0.45);
-	transition: all 0.2s ease;
-	animation: pwaPulse 2.5s infinite ease-in-out;
-}
-@keyframes pwaPulse {
-	0%, 100% {
-		box-shadow: 0 0 14px rgba(0, 229, 255, 0.4);
-		transform: scale(1);
-	}
-	50% {
-		box-shadow: 0 0 24px rgba(0, 229, 255, 0.75);
-		transform: scale(1.02);
-	}
-}
-.btn-pwa-install:active {
-	transform: scale(0.96);
-	background: rgba(0, 180, 216, 0.55);
-}
-
-.landing-tip {
-	font-size: 11px;
-	color: rgba(0, 229, 255, 0.9);
-	margin-top: 6px;
-	letter-spacing: 0.3px;
-	text-shadow: 0 1px 3px rgba(0,0,0,0.9);
-	font-weight: 600;
-}
 		</style>
-		<script>
-// PWA Service Worker Registration & Install Prompt Handling
-let deferredInstallPrompt = null;
-const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches ||
-                         window.matchMedia('(display-mode: fullscreen)').matches ||
-                         navigator.standalone === true;
-
-function updatePwaButtonVisibility() {
-	var btnPwa = document.getElementById('btn-pwa-install');
-	var tip = document.getElementById('landing-mode-tip');
-	if (!isStandaloneMode) {
-		if (btnPwa) btnPwa.style.display = 'inline-flex';
-		if (tip) tip.textContent = '💡 상단 바 제거: 기존 바로가기 삭제 후 [앱 설치] 시 상단바 없는 100% 전체화면으로 실행됩니다';
-	} else {
-		if (btnPwa) btnPwa.style.display = 'none';
-		if (tip) tip.textContent = '🛡️ 최후의 참호 - 100% 전체화면 작전 모드';
-	}
-}
-
-if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function(reg) {
-		console.log('[PWA] Service Worker registered with scope:', reg.scope);
-	}).catch(function(err) {
-		console.warn('[PWA] Service Worker registration failed:', err);
-	});
-}
-
-window.addEventListener('beforeinstallprompt', function(e) {
-	e.preventDefault();
-	deferredInstallPrompt = e;
-	updatePwaButtonVisibility();
-});
-
-window.addEventListener('DOMContentLoaded', function() {
-	updatePwaButtonVisibility();
-});
-
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000000">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<script>
 function enterFullscreen() {
-	var doc = window.document;
-	var docEl = doc.documentElement;
-	if (doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement) {
-		return;
-	}
-	var req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.webkitRequestFullScreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
-	if (req) {
-		try {
-			var p = req.call(docEl, { navigationUI: 'hide' });
-			if (p && p.then) {
-				p.then(function() {
-					if (screen.orientation && screen.orientation.lock) {
-						screen.orientation.lock('landscape').catch(function(){});
-					}
-				}).catch(function() {
-					try {
-						req.call(docEl);
-					} catch (e2) {}
-				});
-			}
-		} catch (e) {
-			try {
-				req.call(docEl);
-			} catch (e3) {}
-		}
-	}
+  var doc = window.document;
+  var docEl = doc.documentElement;
+  var req = docEl.requestFullscreen || docEl.webkitRequestFullScreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+  if (req && !doc.fullscreenElement && !doc.webkitFullscreenElement) {
+    req.call(docEl).then(function() {
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(function(){});
+      }
+    }).catch(function(){});
+  }
 }
-
-// Immediately trigger immersive fullscreen on any touch/pointer down or click
-['pointerdown', 'touchstart', 'mousedown', 'pointerup', 'touchend', 'click'].forEach(function(evName) {
-	window.addEventListener(evName, function() {
-		enterFullscreen();
-	}, { passive: true });
-});
-		</script>
+window.addEventListener('pointerdown', function() {
+  enterFullscreen();
+}, { passive: true });
+</script>
 	</head>
 	<body>
 		<canvas id="canvas">
-			귀하의 브라우저는 WebGL 및 HTML5 Canvas를 지원하지 않습니다.
+			Your browser does not support the canvas tag.
 		</canvas>
 
 		<noscript>
-			게임 실행을 위해 브라우저에서 JavaScript를 활성화해주세요.
+			Your browser does not support JavaScript.
 		</noscript>
 
-		<!-- ==================================================================
-		     CINEMATIC LANDING VIDEO CONTAINER
-		     ================================================================== -->
-		<div id="landing-overlay">
-			<video id="landing-video" autoplay muted playsinline loop preload="auto" poster="index.png">
-				<source src="assets/video/landing_cinematic_mobile.mp4" media="(max-width: 768px)" type="video/mp4">
-				<source src="assets/video/landing_cinematic.mp4" type="video/mp4">
-			</video>
-			<div id="landing-vignette"></div>
-			<div id="landing-ui">
-				<!-- Bottom Action Panel (Minimal & Clean) -->
-				<div class="landing-bottom-panel">
-					<div class="landing-status-row">
-						<span id="landing-status-label">작전준비 진행율: 0%</span>
-					</div>
-					<div class="landing-progress-track">
-						<div id="landing-progress-bar" class="landing-progress-bar"></div>
-					</div>
-					<div id="landing-error-box"></div>
-					<button id="btn-pwa-install" class="btn-pwa-install" type="button">
-						<span>📲 전체화면 정식 앱 설치</span>
-					</button>
-					<button id="btn-enter" class="btn-deploy-start" type="button" disabled>
-						<span id="btn-enter-text">전투 출격</span>
-					</button>
-					<div id="landing-mode-tip" class="landing-tip">💡 화면 어디든 터치 시 전체화면으로 자동 전환됩니다</div>
-				</div>
-			</div>
+		<div id="status">
+			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="">
+			<progress id="status-progress"></progress>
+			<div id="status-notice"></div>
 		</div>
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":25098888,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":28749040,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
 (function () {
-	const overlay = document.getElementById('landing-overlay');
-	const video = document.getElementById('landing-video');
-	const btnEnter = document.getElementById('btn-enter');
-	const btnEnterText = document.getElementById('btn-enter-text');
-	const statusLabel = document.getElementById('landing-status-label');
-	const progressBar = document.getElementById('landing-progress-bar');
-	const errorBox = document.getElementById('landing-error-box');
-	const canvas = document.getElementById('canvas');
+	const statusOverlay = document.getElementById('status');
+	const statusProgress = document.getElementById('status-progress');
+	const statusNotice = document.getElementById('status-notice');
 
-	let isEngineReady = false;
-	let hasExitedLanding = false;
-	let pendingUserEnter = false;
+	let initializing = true;
+	let statusMode = '';
 
-	// Exit landing overlay smoothly
-	function enterGame() {
-		if (hasExitedLanding) return;
-		if (!isEngineReady) {
-			pendingUserEnter = true;
-			btnEnterText.textContent = '전장 준비 중...';
+	function setStatusMode(mode) {
+		if (statusMode === mode || !initializing) {
 			return;
 		}
-
-		hasExitedLanding = true;
-		enterFullscreen();
-
-		if (video) {
-			video.pause();
+		if (mode === 'hidden') {
+			statusOverlay.remove();
+			initializing = false;
+			return;
 		}
-
-		overlay.classList.add('fade-out');
-		setTimeout(() => {
-			overlay.remove();
-			canvas.focus();
-		}, 550);
+		statusOverlay.style.visibility = 'visible';
+		statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
+		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
+		statusMode = mode;
 	}
 
-	// PWA Install Button
-	var btnPwa = document.getElementById('btn-pwa-install');
-	if (btnPwa) {
-		btnPwa.addEventListener('click', async function (e) {
-			e.stopPropagation();
-			enterFullscreen();
-			if (deferredInstallPrompt) {
-				deferredInstallPrompt.prompt();
-				var choice = await deferredInstallPrompt.userChoice;
-				console.log('[PWA] User choice outcome:', choice.outcome);
-				if (choice.outcome === 'accepted') {
-					btnPwa.style.display = 'none';
-				}
-				deferredInstallPrompt = null;
-			} else {
-				alert("💡 [상단바 없는 100% 전체화면 앱 설치 방법]\n\n1. 우측 상단 브라우저 메뉴(점 3개 ⋮)를 터치하세요.\n2. [앱 설치] (또는 '홈 화면에 추가')를 누르면 상단 주소창이 완전히 사라진 정식 전체화면 앱으로 설치됩니다.\n\n※ 이미 홈 화면에 이전 바로가기(LastTrench)가 있다면, 기존 아이콘을 길게 눌러 [삭제]하신 후 새로 설치해주세요!");
-			}
+	function setStatusNotice(text) {
+		while (statusNotice.lastChild) {
+			statusNotice.removeChild(statusNotice.lastChild);
+		}
+		const lines = text.split('\n');
+		lines.forEach((line) => {
+			statusNotice.appendChild(document.createTextNode(line));
+			statusNotice.appendChild(document.createElement('br'));
 		});
 	}
 
-	// Button Action
-	btnEnter.addEventListener('pointerup', function () {
-		enterFullscreen();
-	}, false);
-	btnEnter.addEventListener('touchend', function () {
-		enterFullscreen();
-	}, false);
-	btnEnter.addEventListener('click', function (e) {
-		enterFullscreen();
-		e.stopPropagation();
-		enterGame();
-	}, false);
-
-	// If player taps ready overlay, enter game
-	overlay.addEventListener('pointerup', function () {
-		enterFullscreen();
-	}, false);
-	overlay.addEventListener('touchend', function () {
-		enterFullscreen();
-	}, false);
-	overlay.addEventListener('click', function () {
-		enterFullscreen();
-		if (isEngineReady) {
-			enterGame();
-		}
-	}, false);
-
 	function displayFailureNotice(err) {
 		console.error(err);
-		errorBox.style.display = 'block';
 		if (err instanceof Error) {
-			errorBox.textContent = '시스템 오류: ' + err.message;
+			setStatusNotice(err.message);
 		} else if (typeof err === 'string') {
-			errorBox.textContent = '시스템 오류: ' + err;
+			setStatusNotice(err);
 		} else {
-			errorBox.textContent = '알 수 없는 오류가 발생했습니다.';
+			setStatusNotice('An unknown error occurred.');
 		}
+		setStatusMode('notice');
+		initializing = false;
 	}
 
 	const missing = Engine.getMissingFeatures({
@@ -483,6 +196,7 @@ const engine = new Engine(GODOT_CONFIG);
 			} catch (err) {
 				serviceWorkerRegistrationPromise = Promise.reject(new Error('Service worker registration failed.'));
 			}
+			// There's a chance that installing the service worker would fix the issue
 			Promise.race([
 				serviceWorkerRegistrationPromise.then((registration) => {
 					if (registration != null) {
@@ -490,38 +204,39 @@ const engine = new Engine(GODOT_CONFIG);
 					}
 					return registration;
 				}).then(() => engine.installServiceWorker()),
-				new Promise((resolve) => setTimeout(resolve, 2000)),
+				// For some reason, `getRegistration()` can stall
+				new Promise((resolve) => {
+					setTimeout(() => resolve(), 2000);
+				}),
 			]).then(() => {
+				// Reload if there was no error.
 				window.location.reload();
 			}).catch((err) => {
 				console.error('Error while registering service worker:', err);
 			});
 		} else {
-			displayFailureNotice('브라우저 사양 미달: ' + missing.join(', '));
+			// Display the message as usual
+			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
+			displayFailureNotice(missingMsg + missing.join('\n'));
 		}
 	} else {
+		setStatusMode('progress');
 		engine.startGame({
 			'onProgress': function (current, total) {
 				if (current > 0 && total > 0) {
-					const pct = Math.min(100, Math.round((current / total) * 100));
-					progressBar.style.width = pct + '%';
-					statusLabel.textContent = `작전준비 진행율: ${pct}%`;
+					statusProgress.value = current;
+					statusProgress.max = total;
+				} else {
+					statusProgress.removeAttribute('value');
+					statusProgress.removeAttribute('max');
 				}
 			},
 		}).then(() => {
-			isEngineReady = true;
-			progressBar.style.width = '100%';
-			statusLabel.textContent = '작전준비 완료 (100%)';
-			btnEnter.disabled = false;
-			btnEnter.classList.add('ready');
-			btnEnterText.textContent = '전투 출격';
-
-			if (pendingUserEnter) {
-				enterGame();
-			}
+			setStatusMode('hidden');
 		}, displayFailureNotice);
 	}
 }());
 		</script>
 	</body>
 </html>
+
