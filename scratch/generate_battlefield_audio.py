@@ -3,7 +3,16 @@ import wave
 import numpy as np
 
 AUDIO_DIR = "/Users/kobujang/Desktop/cording/LAST_TRENCH/assets/audio"
+PCM_DIR = "/Users/kobujang/Desktop/cording/LAST_TRENCH/scratch/megascans/sound_pack_pcm"
 SR = 44100
+
+
+def load_pcm_wav(filename):
+    path = os.path.join(PCM_DIR, filename)
+    with wave.open(path, "rb") as wf:
+        raw = wf.readframes(wf.getnframes())
+    data = np.frombuffer(raw, dtype=np.int16).astype(np.float64) / 32768.0
+    return data
 
 
 def save_wav(filename, samples):
@@ -32,8 +41,7 @@ def lowpass_1pole(x, cutoff_hz):
 
 def bandpass_simple(x, low_hz, high_hz):
     lp = lowpass_1pole(x, high_hz)
-    hp = lp - lowpass_1pole(lp, low_hz)
-    return hp
+    return lp - lowpass_1pole(lp, low_hz)
 
 
 def add_trench_reverb(sig, wet=0.28):
@@ -49,178 +57,152 @@ def add_trench_reverb(sig, wet=0.28):
     return out
 
 
-def gen_rifle_shot():
-    """Sharp supersonic crack + chest-punching gunpowder thump + trench echo."""
-    rng = np.random.default_rng(101)
-    dur = 0.45
-    t = np.linspace(0.0, dur, int(SR * dur), endpoint=False)
-
-    # 1. Supersonic muzzle crack (0-25ms)
-    noise = rng.standard_normal(len(t))
-    crack = bandpass_simple(noise, 1200.0, 7500.0) * np.exp(-t * 85.0) * 1.4
-
-    # 2. Gunpowder low-mid body punch (pitch-dropping sine + sub-thump)
-    freq_env = 190.0 * np.exp(-t * 38.0) + 52.0
-    phase = 2.0 * np.pi * np.cumsum(freq_env) / SR
-    thump = np.sin(phase) * np.exp(-t * 24.0) * 0.95
-
-    # 3. Broad blast roar
-    roar = lowpass_1pole(noise, 1800.0) * np.exp(-t * 14.0) * 0.75
-
-    # 4. Crisp metallic bolt snap at 22ms
-    bolt_t = np.maximum(0.0, t - 0.022)
-    bolt = np.sin(2.0 * np.pi * 2400.0 * bolt_t) * np.exp(-bolt_t * 180.0) * (t >= 0.022) * 0.25
-
-    mix = crack + thump + roar + bolt
-    mix = np.tanh(mix * 1.6) * 0.88
-    mix = add_trench_reverb(mix, wet=0.32)
-    mix /= max(1e-6, np.max(np.abs(mix))) * 1.05
-    save_wav("sfx_rifle_shot.wav", mix)
+def mix_at(dst, src, start_sec, gain=1.0):
+    idx = int(start_sec * SR)
+    end = min(len(dst), idx + len(src))
+    if end > idx:
+        dst[idx:end] += src[:end - idx] * gain
 
 
-def gen_enemy_shot():
-    """Distinct AK-series bark + snappy transient + distant echo."""
-    rng = np.random.default_rng(202)
-    dur = 0.40
-    t = np.linspace(0.0, dur, int(SR * dur), endpoint=False)
-    noise = rng.standard_normal(len(t))
+def gen_ui_click():
+    s = load_pcm_wav("UI_Click_01.wav")
+    s /= max(1e-6, np.max(np.abs(s))) * 1.15
+    save_wav("sfx_ui_click.wav", s)
 
-    crack = bandpass_simple(noise, 900.0, 5800.0) * np.exp(-t * 72.0) * 1.15
-    freq_env = 240.0 * np.exp(-t * 42.0) + 68.0
-    thump = np.sin(2.0 * np.pi * np.cumsum(freq_env) / SR) * np.exp(-t * 26.0) * 0.85
-    roar = lowpass_1pole(noise, 1400.0) * np.exp(-t * 15.0) * 0.70
 
-    # AK metallic clack
-    clack_t = np.maximum(0.0, t - 0.018)
-    clack = bandpass_simple(noise, 2200.0, 5500.0) * np.exp(-clack_t * 140.0) * (t >= 0.018) * 0.35
+def gen_dry_fire():
+    """Real Fab interface/metal click layered with crisp firing-pin snap."""
+    click = load_pcm_wav("UI_Interface_Click_01.wav")
+    metal = load_pcm_wav("Pickaxe_Strike_Metal_Vein_01.wav")[:int(0.08 * SR)]
+    metal *= np.exp(-np.linspace(0.0, 1.0, len(metal)) * 12.0)
 
-    mix = np.tanh((crack + thump + roar + clack) * 1.5) * 0.85
-    mix = add_trench_reverb(mix, wet=0.38)
-    mix /= max(1e-6, np.max(np.abs(mix))) * 1.08
-    save_wav("sfx_enemy_shot.wav", mix)
+    dur = 0.14
+    out = np.zeros(int(SR * dur), dtype=np.float64)
+    mix_at(out, click, 0.0, 0.95)
+    mix_at(out, metal, 0.004, 0.55)
+    out = np.tanh(out * 1.4)
+    out /= max(1e-6, np.max(np.abs(out))) * 1.05
+    save_wav("sfx_dry_fire.wav", out)
 
 
 def gen_reload():
-    """3-stage tactical reload: mag release/slide out -> mag insert clack -> bolt pull & slam."""
+    """3-stage tactical reload using real Fab Slot Insert Click + Armor Plate Foley + bolt slam."""
+    slot_click = load_pcm_wav("UI_Slot_Insert_Click_01.wav")
+    armor = load_pcm_wav("Armor_Plate_Movement_01.wav")[:int(0.35 * SR)]
+    metal = load_pcm_wav("Pickaxe_Strike_Metal_Vein_01.wav")[:int(0.14 * SR)]
+
     rng = np.random.default_rng(303)
     dur = 1.15
     t = np.linspace(0.0, dur, int(SR * dur), endpoint=False)
     noise = rng.standard_normal(len(t))
     out = np.zeros_like(t)
 
-    def metallic_hit(t0, f1, f2, dec, amp):
-        dt = np.maximum(0.0, t - t0)
-        mask = t >= t0
-        body = (np.sin(2.0 * np.pi * f1 * dt) + 0.6 * np.sin(2.0 * np.pi * f2 * dt)) * np.exp(-dt * dec)
-        scrape = bandpass_simple(noise, 1400.0, 5200.0) * np.exp(-dt * (dec * 1.1))
-        return (body * 0.6 + scrape * 0.8) * mask * amp
+    # Stage 1: Mag release & slide out (0.04s)
+    mix_at(out, armor, 0.02, 0.45)
+    mix_at(out, slot_click[:int(0.14 * SR)], 0.05, 0.65)
 
-    # Stage 1: Mag release click (0.04s) + slide out friction (0.08s)
-    out += metallic_hit(0.04, 1850.0, 3200.0, 120.0, 0.55)
-    slide_mask = (t >= 0.08) & (t <= 0.24)
-    out += bandpass_simple(noise, 900.0, 3200.0) * slide_mask * np.sin(np.pi * np.clip((t - 0.08) / 0.16, 0, 1)) * 0.35
+    # Stage 2: Mag insert & lock (0.44s)
+    mix_at(out, slot_click, 0.44, 0.95)
 
-    # Stage 2: Mag insert slide (0.42s) + firm lock-in thunk (0.52s)
-    ins_mask = (t >= 0.42) & (t <= 0.52)
-    out += bandpass_simple(noise, 700.0, 2600.0) * ins_mask * 0.32
-    out += metallic_hit(0.52, 420.0, 1450.0, 55.0, 0.85)
-
-    # Stage 3: Charging handle pull back (0.80s) + forward bolt slam (0.94s)
-    out += metallic_hit(0.80, 1600.0, 3800.0, 95.0, 0.65)
-    out += metallic_hit(0.94, 520.0, 2100.0, 65.0, 0.95)
+    # Stage 3: Bolt pull & forward metallic slam (0.82s)
+    dt = np.maximum(0.0, t - 0.88)
+    bolt = (np.sin(2.0 * np.pi * 540.0 * dt) + 0.7 * bandpass_simple(noise, 1500.0, 5000.0)) * np.exp(-dt * 60.0) * (t >= 0.88)
+    out += bolt * 0.75
+    mix_at(out, metal, 0.88, 0.65)
 
     out = np.tanh(out * 1.35)
     out /= max(1e-6, np.max(np.abs(out))) * 1.08
     save_wav("sfx_reload.wav", out)
 
 
-def gen_dry_fire():
-    """Crisp empty-magazine firing pin 'tic-click!' with hollow receiver resonance."""
-    rng = np.random.default_rng(404)
-    dur = 0.14
-    t = np.linspace(0.0, dur, int(SR * dur), endpoint=False)
-    noise = rng.standard_normal(len(t))
-
-    # Primary hammer strike at 0.005s
-    dt1 = np.maximum(0.0, t - 0.005)
-    m1 = t >= 0.005
-    pin = (
-        np.sin(2.0 * np.pi * 3400.0 * dt1) * 0.6
-        + np.sin(2.0 * np.pi * 1950.0 * dt1) * 0.5
-        + bandpass_simple(noise, 2400.0, 7200.0) * 0.9
-    ) * np.exp(-dt1 * 165.0) * m1
-
-    # Hollow receiver ring
-    ring = np.sin(2.0 * np.pi * 680.0 * dt1) * np.exp(-dt1 * 65.0) * m1 * 0.35
-
-    # Secondary tiny spring rebound at 0.028s
-    dt2 = np.maximum(0.0, t - 0.028)
-    m2 = t >= 0.028
-    rebound = np.sin(2.0 * np.pi * 2800.0 * dt2) * np.exp(-dt2 * 220.0) * m2 * 0.25
-
-    out = np.tanh((pin + ring + rebound) * 1.5)
-    out /= max(1e-6, np.max(np.abs(out))) * 1.05
-    save_wav("sfx_dry_fire.wav", out)
-
-
-def gen_turret_shot():
-    """Heavy twin-autocannon thump + mechanical shell ejection."""
-    rng = np.random.default_rng(505)
-    dur = 0.36
-    t = np.linspace(0.0, dur, int(SR * dur), endpoint=False)
-    noise = rng.standard_normal(len(t))
-
-    freq_env = 140.0 * np.exp(-t * 32.0) + 46.0
-    thump = np.sin(2.0 * np.pi * np.cumsum(freq_env) / SR) * np.exp(-t * 20.0) * 1.1
-    blast = bandpass_simple(noise, 400.0, 4200.0) * np.exp(-t * 45.0) * 0.95
-    mix = add_trench_reverb(np.tanh((thump + blast) * 1.5), wet=0.25)
-    mix /= max(1e-6, np.max(np.abs(mix))) * 1.08
-    save_wav("sfx_turret_shot.wav", mix)
-
-
 def gen_explosion():
-    """Deep warzone explosion: sub-bass shockwave + debris crackle + canyon rumble."""
-    rng = np.random.default_rng(606)
+    """Deep warzone explosion using Fab Fireball + Storm Thunder + sub-bass shockwave."""
+    fireball = load_pcm_wav("Spell_Fireball_01.wav")
+    thunder = load_pcm_wav("Storm_Approaching_Thunder_01.wav")[:int(1.6 * SR)]
+
     dur = 1.65
     t = np.linspace(0.0, dur, int(SR * dur), endpoint=False)
-    noise = rng.standard_normal(len(t))
+    sub = np.sin(2.0 * np.pi * (85.0 * np.exp(-t * 5.0) + 28.0) * t) * np.exp(-t * 3.5) * 0.95
+    out = sub.copy()
+    mix_at(out, fireball, 0.0, 0.85)
+    mix_at(out, thunder, 0.02, 0.65)
+    out *= np.exp(-t * 1.1)
+    out = np.tanh(out * 1.35)
+    out /= max(1e-6, np.max(np.abs(out))) * 1.05
+    save_wav("sfx_explosion.wav", out)
 
-    sub = np.sin(2.0 * np.pi * (85.0 * np.exp(-t * 5.0) + 28.0) * t) * np.exp(-t * 3.5) * 1.2
-    rumble = lowpass_1pole(noise, 340.0) * np.exp(-t * 2.4) * 1.4
-    crackle = bandpass_simple(noise, 1000.0, 5500.0) * np.exp(-t * 9.0) * 0.85
-    mix = np.tanh((sub + rumble + crackle) * 1.5)
+
+def gen_drone_rocket():
+    """Rocket/RPG launch whoosh + ignition blast using Fab Fireball 02."""
+    fb2 = load_pcm_wav("Spell_Fireball_02.wav")[:int(0.95 * SR)]
+    fb2 *= np.exp(-np.linspace(0.0, 1.0, len(fb2)) * 2.5)
+    fb2 /= max(1e-6, np.max(np.abs(fb2))) * 1.08
+    save_wav("sfx_drone_rocket.wav", fb2)
+
+
+def gen_hit_enemy():
+    """Crisp tactical hit confirmation using Fab impact."""
+    gore = load_pcm_wav("Gore_Bone_Crack_01.wav")[:int(0.18 * SR)]
+    gore *= np.exp(-np.linspace(0.0, 1.0, len(gore)) * 6.0)
+    gore /= max(1e-6, np.max(np.abs(gore))) * 1.1
+    save_wav("sfx_hit_enemy.wav", gore)
+
+
+def gen_rifle_shot():
+    rng = np.random.default_rng(101)
+    dur = 0.45
+    t = np.linspace(0.0, dur, int(SR * dur), endpoint=False)
+    noise = rng.standard_normal(len(t))
+    crack = bandpass_simple(noise, 1200.0, 7500.0) * np.exp(-t * 85.0) * 1.4
+    freq_env = 190.0 * np.exp(-t * 38.0) + 52.0
+    thump = np.sin(2.0 * np.pi * np.cumsum(freq_env) / SR) * np.exp(-t * 24.0) * 0.95
+    roar = lowpass_1pole(noise, 1800.0) * np.exp(-t * 14.0) * 0.75
+    bolt_t = np.maximum(0.0, t - 0.022)
+    bolt = np.sin(2.0 * np.pi * 2400.0 * bolt_t) * np.exp(-bolt_t * 180.0) * (t >= 0.022) * 0.25
+    mix = add_trench_reverb(np.tanh((crack + thump + roar + bolt) * 1.6) * 0.88, wet=0.32)
     mix /= max(1e-6, np.max(np.abs(mix))) * 1.05
-    save_wav("sfx_explosion.wav", mix)
+    save_wav("sfx_rifle_shot.wav", mix)
+
+
+def gen_enemy_shot():
+    rng = np.random.default_rng(202)
+    dur = 0.40
+    t = np.linspace(0.0, dur, int(SR * dur), endpoint=False)
+    noise = rng.standard_normal(len(t))
+    crack = bandpass_simple(noise, 900.0, 5800.0) * np.exp(-t * 72.0) * 1.15
+    freq_env = 240.0 * np.exp(-t * 42.0) + 68.0
+    thump = np.sin(2.0 * np.pi * np.cumsum(freq_env) / SR) * np.exp(-t * 26.0) * 0.85
+    roar = lowpass_1pole(noise, 1400.0) * np.exp(-t * 15.0) * 0.70
+    clack_t = np.maximum(0.0, t - 0.018)
+    clack = bandpass_simple(noise, 2200.0, 5500.0) * np.exp(-clack_t * 140.0) * (t >= 0.018) * 0.35
+    mix = add_trench_reverb(np.tanh((crack + thump + roar + clack) * 1.5) * 0.85, wet=0.38)
+    mix /= max(1e-6, np.max(np.abs(mix))) * 1.08
+    save_wav("sfx_enemy_shot.wav", mix)
 
 
 def gen_battlefield_bgm():
-    """Seamless 14-second looping warzone ambience: wind, low tension pulse, distant artillery & skirmishes."""
+    """14-second seamless warzone ambience using Fab Wind & Thunder + distant skirmishes."""
     rng = np.random.default_rng(707)
     dur = 14.0
     n = int(SR * dur)
     t = np.linspace(0.0, dur, n, endpoint=False)
-    noise = rng.standard_normal(n)
 
-    # Low desolate battlefield wind + sub drone
-    wind = lowpass_1pole(noise, 260.0) * 0.25
-    drone = (np.sin(2.0 * np.pi * 55.0 * t) * 0.14 + np.sin(2.0 * np.pi * 82.41 * t) * 0.09)
-    pulse = 0.7 + 0.3 * np.sin(2.0 * np.pi * (t / 3.5))
-    bed = wind + drone * pulse
+    wind = load_pcm_wav("Wind_Howling_Storm_01.wav")[:n]
+    thunder = load_pcm_wav("Storm_Approaching_Thunder_01.wav")[:n]
+    bed = wind * 0.32 + thunder * 0.28
 
-    # Distant artillery rumbles at 2.1s, 6.8s, 11.2s
-    for boom_t in [2.1, 6.8, 11.2]:
-        dt = (t - boom_t) % dur
-        boom_env = np.exp(-dt * 2.2) * (dt < 2.2)
-        boom = lowpass_1pole(rng.standard_normal(n), 140.0) * boom_env * 0.45
-        bed += boom
+    # Crossfade edges for seamless loop
+    fade = int(0.5 * SR)
+    ramp = np.linspace(0.0, 1.0, fade)
+    bed[:fade] = bed[:fade] * ramp + bed[-fade:] * (1.0 - ramp)
 
-    # Far-off muffled rifle bursts
-    for burst_t in [1.0, 4.3, 8.9, 12.6]:
+    # Distant skirmish pops
+    for burst_t in [1.2, 4.8, 9.1, 12.4]:
         for k in range(3):
             bt = burst_t + k * 0.11
             dt = (t - bt) % dur
             env = np.exp(-dt * 28.0) * (dt < 0.25)
-            pop = bandpass_simple(rng.standard_normal(n), 350.0, 1200.0) * env * 0.18
+            pop = bandpass_simple(rng.standard_normal(n), 350.0, 1200.0) * env * 0.16
             bed += pop
 
     bed = np.tanh(bed * 1.2) * 0.72
@@ -228,10 +210,12 @@ def gen_battlefield_bgm():
 
 
 if __name__ == "__main__":
+    gen_ui_click()
+    gen_dry_fire()
+    gen_reload()
+    gen_explosion()
+    gen_drone_rocket()
+    gen_hit_enemy()
     gen_rifle_shot()
     gen_enemy_shot()
-    gen_reload()
-    gen_dry_fire()
-    gen_turret_shot()
-    gen_explosion()
     gen_battlefield_bgm()
