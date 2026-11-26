@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dp6b83f4e1h5w"]
+[gd_scene load_steps=35 format=3 uid="uid://dp6b83f4e1h5w"]
 
 [ext_resource type="Script" path="res://scripts/maps/trench_map.gd" id="1_map"]
 [ext_resource type="Script" path="res://scripts/combat/base_objective.gd" id="2_base"]
@@ -17,6 +17,9 @@
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_wall_gabion_normal.png" id="15_gabion_nrm"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_duckboard.png" id="16_duckboard"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_duckboard_normal.png" id="17_duckboard_nrm"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_trench_wall_wood.png" id="18_wood_wall"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_trench_wall_wood_normal.png" id="19_wood_wall_nrm"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_trench_crate.png" id="20_crate"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_front_ground"]
 size = Vector3(50, 1, 40)
@@ -113,12 +116,12 @@ texture_filter = 5
 size = Vector3(0.4, 1.2, 5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gabion_side"]
-albedo_color = Color(0.92, 0.88, 0.84, 1)
-albedo_texture = ExtResource("8_gabion")
+albedo_color = Color(0.94, 0.92, 0.90, 1)
+albedo_texture = ExtResource("18_wood_wall")
 roughness = 0.88
 normal_enabled = true
-normal_scale = 1.2
-normal_texture = ExtResource("15_gabion_nrm")
+normal_scale = 1.25
+normal_texture = ExtResource("19_wood_wall_nrm")
 uv1_scale = Vector3(2, 1, 1)
 texture_filter = 5
 
@@ -252,6 +255,24 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 
 [node name="Hedgehog4" parent="Environment/Hedgehogs" instance=ExtResource("11_hedgehog")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 12, 0, -8)
+
+[node name="TrenchSupplyCrates" type="Node3D" parent="Environment"]
+
+[node name="CrateLeft" type="Sprite3D" parent="Environment/TrenchSupplyCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, -0.85, 3.2)
+pixel_size = 0.0022
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("20_crate")
+
+[node name="CrateRight" type="Sprite3D" parent="Environment/TrenchSupplyCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, -0.85, 3.2)
+pixel_size = 0.0022
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("20_crate")
 
 [node name="BattlefieldAtmosphere" type="Node3D" parent="Environment"]
 
