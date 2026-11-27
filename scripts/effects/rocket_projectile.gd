@@ -254,9 +254,16 @@ func explode(hit_pos: Vector3) -> void:
 		for h in hits:
 			var col = h.get("collider")
 			if col and col.has_method("apply_damage"):
-				col.apply_damage(damage)
+				if col is EnemyBase:
+					col.apply_damage(damage, "explosive")
+				else:
+					col.apply_damage(damage)
 			elif col and col.get_parent() and col.get_parent().has_method("apply_damage"):
-				col.get_parent().apply_damage(damage)
+				var p_node: Node = col.get_parent()
+				if p_node is EnemyBase:
+					p_node.apply_damage(damage, "explosive")
+				else:
+					p_node.apply_damage(damage)
 	
 	if explosion_scene:
 		var exp_node = explosion_scene.instantiate()

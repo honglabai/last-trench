@@ -223,7 +223,7 @@
       "cost_multiplier": 1100
     },
     "thumbnail": "res://assets/ui/weapons/thumb_atgm.png",
-    "texture": "res://assets/textures/tex_fps_atgm.png"
+    "texture": "res://assets/textures/tex_fps_hyungung_atgm.png"
   },
   "usas12_shotgun": {
     "name": "USAS-12 자동 산탄총",

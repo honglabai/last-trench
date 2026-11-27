@@ -21,12 +21,14 @@ var lateral_phase: float = 0.0
 @onready var beacon_light: OmniLight3D = get_node_or_null("VisualMesh/BeaconLight")
 
 func _ready() -> void:
-	max_health = 35.0
+	max_health = 40.0
 	current_health = max_health
-	move_speed = 4.0
+	armor_rating = 0.15
+	enemy_role = "drone"
+	move_speed = 4.2
 	attack_range = 18.0
-	attack_damage = 6.0
-	attack_cooldown = 1.8
+	attack_damage = 8.0
+	attack_cooldown = 1.5
 	collision_layer = 4 # Enemy
 	collision_mask = 1 # Environment
 	

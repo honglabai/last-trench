@@ -19,10 +19,10 @@ enum WaveState { IDLE, PREPARATION, COMBAT, WAVE_CLEARED, VICTORY, GAME_OVER }
 @export var max_active_enemies: int = 12
 @export var default_spawn_interval: float = 1.0
 @export var preparation_duration: float = 3.0
-@export var max_waves_in_run: int = 20 # 20 waves across 5 stages (2+3+4+5+6)
+@export var max_waves_in_run: int = 100 # 100 waves across 10 stages (10 waves each)
 
 var current_stage_id: int = 1
-var max_stages_in_region: int = 5
+var max_stages_in_region: int = 10
 var current_stage_wave: int = 1
 var total_waves_in_stage: int = 2
 var stage_name: String = "제1스테이지: 전초 경계선 (Outpost Perimeter)"
@@ -52,6 +52,7 @@ var infantry_scene: PackedScene = preload("res://scenes/actors/enemy_infantry.ts
 var drone_scene: PackedScene = preload("res://scenes/actors/enemy_drone.tscn")
 var rpg_scene: PackedScene = preload("res://scenes/actors/enemy_rpg.tscn")
 var robot_scene: PackedScene = preload("res://scenes/actors/enemy_robot.tscn")
+var tank_scene: PackedScene = preload("res://scenes/actors/enemy_tank.tscn")
 var boss_drone_scene: PackedScene = preload("res://scenes/actors/boss_drone_commander.tscn")
 var boss_robot_scene: PackedScene = preload("res://scenes/actors/boss_armored_robot.tscn")
 var boss_final_scene: PackedScene = preload("res://scenes/actors/boss_final_assault.tscn")
@@ -226,6 +227,8 @@ func _spawn_enemy(type_name: String) -> EnemyBase:
 			enemy_instance = rpg_scene.instantiate() as EnemyBase
 		"combat_robot":
 			enemy_instance = robot_scene.instantiate() as EnemyBase
+		"enemy_tank":
+			enemy_instance = tank_scene.instantiate() as EnemyBase
 		"drone_swarm_commander":
 			enemy_instance = boss_drone_scene.instantiate() as EnemyBase
 		"armored_robot_boss":
@@ -237,6 +240,18 @@ func _spawn_enemy(type_name: String) -> EnemyBase:
 		
 	if not enemy_instance:
 		return null
+
+	# Progressive stage difficulty scaling (Stages 1..10)
+	if current_stage_id > 1:
+		var hp_mult: float = 1.0 + float(current_stage_id - 1) * 0.12
+		var dmg_mult: float = 1.0 + float(current_stage_id - 1) * 0.07
+		enemy_instance.max_health *= hp_mult
+		enemy_instance.current_health = enemy_instance.max_health
+		enemy_instance.attack_damage *= dmg_mult
+		var dmg_comp := enemy_instance.get_node_or_null("DamageableComponent") as DamageableComponent
+		if dmg_comp:
+			dmg_comp.max_health = enemy_instance.max_health
+			dmg_comp.current_health = enemy_instance.current_health
 		
 	# Wire boss specific events and health reporting
 	if enemy_instance.get("is_boss") == true:

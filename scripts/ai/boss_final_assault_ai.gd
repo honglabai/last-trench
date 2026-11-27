@@ -18,11 +18,13 @@ var walk_cycle: float = 0.0
 
 func _ready() -> void:
 	super._ready()
-	max_health = 2000.0
+	max_health = 2400.0
 	current_health = max_health
-	move_speed = 2.0
+	armor_rating = 0.65
+	enemy_role = "boss_final"
+	move_speed = 1.9
 	attack_range = 24.0
-	attack_damage = 45.0
+	attack_damage = 52.0
 	attack_cooldown = 2.2
 	
 	var dmg_comp := get_node_or_null("DamageableComponent") as DamageableComponent
@@ -30,8 +32,8 @@ func _ready() -> void:
 		dmg_comp.max_health = max_health
 		dmg_comp.current_health = max_health
 
-func apply_damage(amount: float) -> void:
-	super.apply_damage(amount)
+func apply_damage(amount: float, damage_type: String = "ballistic") -> void:
+	super.apply_damage(amount, damage_type)
 	boss_damaged.emit(current_health, max_health)
 	
 	var ratio := current_health / max_health

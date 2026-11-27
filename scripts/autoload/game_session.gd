@@ -12,6 +12,7 @@ signal grenade_count_changed(count: int)
 enum Result { NONE, VICTORY, DEFEAT }
 
 const SAVE_FILE := "user://player_profile.cfg"
+const MAX_STAGES := 10
 
 # Persistent across runs
 static var credits: int = 5000
@@ -67,7 +68,7 @@ static func _ensure_profile_loaded() -> void:
 		equipped_weapon_id = cfg.get_value("armory", "equipped_weapon_id", "k2c1_rifle")
 		if equipped_weapon_id == "k413_grenade":
 			equipped_weapon_id = "k2c1_rifle"
-		highest_unlocked_stage = clampi(int(cfg.get_value("campaign", "highest_unlocked_stage", 1)), 1, 5)
+		highest_unlocked_stage = clampi(int(cfg.get_value("campaign", "highest_unlocked_stage", 1)), 1, MAX_STAGES)
 		selected_stage = clampi(int(cfg.get_value("campaign", "selected_stage", 1)), 1, highest_unlocked_stage)
 		cleared_stages = cfg.get_value("campaign", "cleared_stages", {})
 	else:
@@ -104,7 +105,7 @@ static func is_stage_cleared(stage_id: int) -> bool:
 static func select_stage(stage_id: int) -> bool:
 	_ensure_profile_loaded()
 	if is_stage_unlocked(stage_id):
-		selected_stage = clampi(stage_id, 1, 5)
+		selected_stage = clampi(stage_id, 1, MAX_STAGES)
 		save_profile()
 		return true
 	return false
@@ -112,7 +113,7 @@ static func select_stage(stage_id: int) -> bool:
 static func on_stage_completed(stage_id: int, reward: int = 0) -> void:
 	_ensure_profile_loaded()
 	cleared_stages[str(stage_id)] = true
-	highest_unlocked_stage = clampi(maxi(highest_unlocked_stage, stage_id + 1), 1, 5)
+	highest_unlocked_stage = clampi(maxi(highest_unlocked_stage, stage_id + 1), 1, MAX_STAGES)
 	if reward > 0:
 		credits += reward
 	save_profile()

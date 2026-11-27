@@ -9,6 +9,8 @@ signal projectile_launched(p_type: int, start_pos: Vector3, target_pos: Vector3,
 enum State { SPAWN, APPROACH, ATTACK, HIT, DEAD }
 
 @export var max_health: float = 60.0
+@export var armor_rating: float = 0.0 # 0.0 (unarmored) .. 0.70 (heavy armor)
+@export var enemy_role: String = "infantry"
 @export var move_speed: float = 3.0
 @export var attack_range: float = 14.0
 @export var attack_damage: float = 8.0
@@ -67,14 +69,23 @@ func change_state(new_state: State) -> void:
 		return
 	current_state = new_state
 
-func apply_damage(amount: float) -> void:
+func apply_damage(amount: float, damage_type: String = "ballistic") -> void:
 	if is_dead:
 		return
-	current_health = maxf(0.0, current_health - amount)
+	var final_damage: float = amount
+	if armor_rating > 0.0:
+		if damage_type == "explosive" or damage_type == "atgm" or damage_type == "rpg":
+			var pen_armor: float = armor_rating * 0.25
+			final_damage = amount * (1.0 - pen_armor)
+			if armor_rating >= 0.45:
+				final_damage *= 1.30 # Anti-armor bonus against heavy mechs & tanks
+		else:
+			final_damage = amount * maxf(0.20, 1.0 - armor_rating)
+	current_health = maxf(0.0, current_health - final_damage)
 	var dmg_comp := get_node_or_null("DamageableComponent") as DamageableComponent
 	if dmg_comp:
 		dmg_comp.current_health = current_health
-	enemy_damaged.emit(amount, current_health, max_health)
+	enemy_damaged.emit(final_damage, current_health, max_health)
 	
 	if current_health <= 0.0:
 		die()

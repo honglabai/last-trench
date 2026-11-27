@@ -12,21 +12,23 @@ var has_summoned_30: bool = false
 
 func _ready() -> void:
 	super._ready()
-	max_health = 650.0
+	max_health = 780.0
 	current_health = max_health
+	armor_rating = 0.40
+	enemy_role = "boss_drone"
 	cruise_altitude = 11.0
-	move_speed = 3.2
+	move_speed = 3.0
 	attack_range = 25.0
-	attack_damage = 18.0
-	attack_cooldown = 2.4
+	attack_damage = 22.0
+	attack_cooldown = 2.2
 	
 	var dmg_comp := get_node_or_null("DamageableComponent") as DamageableComponent
 	if dmg_comp:
 		dmg_comp.max_health = max_health
 		dmg_comp.current_health = max_health
 
-func apply_damage(amount: float) -> void:
-	super.apply_damage(amount)
+func apply_damage(amount: float, damage_type: String = "ballistic") -> void:
+	super.apply_damage(amount, damage_type)
 	boss_damaged.emit(current_health, max_health)
 	
 	# Reinforcement summoning threshold checks

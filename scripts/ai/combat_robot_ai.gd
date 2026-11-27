@@ -12,12 +12,14 @@ var death_sink_timer: float = 0.0
 
 func _ready() -> void:
 	super._ready()
-	max_health = 140.0
+	max_health = 180.0
 	current_health = max_health
-	move_speed = 3.6
+	armor_rating = 0.35
+	enemy_role = "combat_robot"
+	move_speed = 3.2
 	attack_range = 16.0
-	attack_damage = 12.0
-	attack_cooldown = 1.3
+	attack_damage = 11.0
+	attack_cooldown = 1.4
 	
 	var dmg_comp := get_node_or_null("DamageableComponent") as DamageableComponent
 	if dmg_comp:

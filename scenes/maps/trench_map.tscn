@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://dp6b83f4e1h5w"]
+[gd_scene load_steps=38 format=3 uid="uid://dp6b83f4e1h5w"]
 
 [ext_resource type="Script" path="res://scripts/maps/trench_map.gd" id="1_map"]
 [ext_resource type="Script" path="res://scripts/combat/base_objective.gd" id="2_base"]
@@ -20,6 +20,9 @@
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_wall_wood.png" id="18_wood_wall"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_wall_wood_normal.png" id="19_wood_wall_nrm"]
 [ext_resource type="Texture2D" path="res://assets/textures/tex_trench_crate.png" id="20_crate"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_trench_ladder.png" id="21_ladder"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_trench_barrel.png" id="22_barrel"]
+[ext_resource type="Texture2D" path="res://assets/textures/tex_trench_strut.png" id="23_strut"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_front_ground"]
 size = Vector3(50, 1, 40)
@@ -273,6 +276,52 @@ billboard = 2
 alpha_cut = 1
 texture_filter = 5
 texture = ExtResource("20_crate")
+
+[node name="LadderRight1" type="Sprite3D" parent="Environment/TrenchSupplyCrates"]
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 9.35, -0.35, 1.6)
+pixel_size = 0.0038
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("21_ladder")
+
+[node name="RustedBarrelRight" type="Sprite3D" parent="Environment/TrenchSupplyCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.85, -0.95, 2.3)
+pixel_size = 0.0036
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("22_barrel")
+
+[node name="TimberStrutLeft1" type="Sprite3D" parent="Environment/TrenchSupplyCrates"]
+transform = Transform3D(0.951057, -0.309017, 0, 0.309017, 0.951057, 0, 0, 0, 1, -9.35, -0.32, 1.2)
+pixel_size = 0.0040
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("23_strut")
+
+[node name="TimberStrutLeft2" type="Sprite3D" parent="Environment/TrenchSupplyCrates"]
+transform = Transform3D(0.951057, -0.309017, 0, 0.309017, 0.951057, 0, 0, 0, 1, -9.35, -0.32, 3.4)
+pixel_size = 0.0040
+billboard = 2
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("23_strut")
+
+[node name="ParapetWireLeft" type="Sprite3D" parent="Environment/TrenchSupplyCrates"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -9.8, 0.52, 2.0)
+pixel_size = 0.0045
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("9_wire")
+
+[node name="ParapetWireRight" type="Sprite3D" parent="Environment/TrenchSupplyCrates"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9.8, 0.52, 2.0)
+pixel_size = 0.0045
+alpha_cut = 1
+texture_filter = 5
+texture = ExtResource("9_wire")
 
 [node name="BattlefieldAtmosphere" type="Node3D" parent="Environment"]
 

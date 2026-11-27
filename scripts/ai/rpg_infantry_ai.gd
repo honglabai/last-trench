@@ -13,11 +13,13 @@ var _tex_rpg_fire: Texture2D = null
 
 func _ready() -> void:
 	super._ready()
-	max_health = 85.0
+	max_health = 75.0
 	current_health = max_health
-	move_speed = 2.8
+	armor_rating = 0.10
+	enemy_role = "rpg_infantry"
+	move_speed = 3.0
 	attack_range = 32.0
-	attack_damage = 25.0
+	attack_damage = 28.0
 	attack_cooldown = 3.2
 	
 	if ResourceLoader.exists(PATH_RPG_RUN):

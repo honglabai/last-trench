@@ -283,8 +283,9 @@ func _ready() -> void:
 		wave_director.start_stage(GameSession.selected_stage)
 
 func _setup_stage_environment() -> void:
-	var st_id: int = clampi(GameSession.selected_stage, 1, 5)
-	var sky_path := "res://assets/environment/sky_stage_%d.png" % st_id
+	var st_id: int = clampi(GameSession.selected_stage, 1, 10)
+	var sky_idx: int = ((st_id - 1) % 5) + 1
+	var sky_path := "res://assets/environment/sky_stage_%d.png" % sky_idx
 	if not ResourceLoader.exists(sky_path):
 		sky_path = "res://assets/environment/sky_battlefield_panorama.png"
 		
@@ -302,14 +303,14 @@ func _setup_stage_environment() -> void:
 					
 		# Stage-specific atmospheric lighting and fog adjustments
 		var sun: DirectionalLight3D = get_node_or_null("DirectionalLight3D")
-		match st_id:
-			1: # Outpost (Daylight)
-				we.environment.ambient_light_color = Color(0.8, 0.72, 0.62, 1.0)
-				we.environment.fog_light_color = Color(0.52, 0.42, 0.32, 1.0)
-				we.environment.fog_density = 0.0075
+		match sky_idx:
+			1: # Outpost (Golden-hour sunset trench atmosphere)
+				we.environment.ambient_light_color = Color(0.88, 0.72, 0.54, 1.0)
+				we.environment.fog_light_color = Color(0.68, 0.52, 0.36, 1.0)
+				we.environment.fog_density = 0.0085
 				if sun:
-					sun.light_color = Color(1.0, 0.95, 0.85, 1.0)
-					sun.light_energy = 1.2
+					sun.light_color = Color(1.0, 0.85, 0.62, 1.0)
+					sun.light_energy = 1.35
 			2: # Canyon (Desert Dust Storm)
 				we.environment.ambient_light_color = Color(0.85, 0.70, 0.45, 1.0)
 				we.environment.fog_light_color = Color(0.65, 0.50, 0.32, 1.0)

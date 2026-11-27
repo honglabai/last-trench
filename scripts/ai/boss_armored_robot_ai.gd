@@ -13,20 +13,22 @@ var death_sink_timer: float = 0.0
 
 func _ready() -> void:
 	super._ready()
-	max_health = 1200.0
+	max_health = 1400.0
 	current_health = max_health
-	move_speed = 2.2
+	armor_rating = 0.55
+	enemy_role = "boss_robot"
+	move_speed = 2.1
 	attack_range = 20.0
-	attack_damage = 38.0
-	attack_cooldown = 2.8
+	attack_damage = 40.0
+	attack_cooldown = 2.5
 	
 	var dmg_comp := get_node_or_null("DamageableComponent") as DamageableComponent
 	if dmg_comp:
 		dmg_comp.max_health = max_health
 		dmg_comp.current_health = max_health
 
-func apply_damage(amount: float) -> void:
-	super.apply_damage(amount)
+func apply_damage(amount: float, damage_type: String = "ballistic") -> void:
+	super.apply_damage(amount, damage_type)
 	boss_damaged.emit(current_health, max_health)
 
 func _physics_process(delta: float) -> void:

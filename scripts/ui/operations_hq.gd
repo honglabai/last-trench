@@ -44,26 +44,41 @@ var anim_time: float = 0.0
 const SECTOR_NAMES: Dictionary = {
 	1: "SECTOR 01: 전초 경계선 (Alpha)",
 	2: "SECTOR 02: 험준 협곡 통로 (Bravo)",
-	3: "SECTOR 03: 도심 폐허 지구 (Charlie)",
-	4: "SECTOR 04: 야간 기습 구역 (Delta)",
-	5: "SECTOR 05: 사령부 중앙 결전지 (Omega)"
+	3: "SECTOR 03: 외곽 보급로 (Charlie)",
+	4: "SECTOR 04: 공업 폐허 지구 (Delta)",
+	5: "SECTOR 05: 포격 초토화 지대 (Echo)",
+	6: "SECTOR 06: 강변 야간 침투로 (Foxtrot)",
+	7: "SECTOR 07: 철갑 전차 돌파선 (Golf)",
+	8: "SECTOR 08: 중장갑 기계화 요새 (Hotel)",
+	9: "SECTOR 09: 사령부 외곽 방벽 (India)",
+	10: "SECTOR 10: 사령부 중앙 결전지 (Omega)"
 }
 
 const SECTOR_LOCATION_DESCS: Dictionary = {
-	1: "러우전 동부 전선 14호 구역 (바흐무트 외곽 참호 지대)",
-	2: "러우전 남부 전선 28호 구역 (자포리자 험준 협곡 협착로)",
-	3: "러우전 시가전 폐허 구역 (아우디이우카 공업 단지 인근)",
-	4: "러우전 드니프로강 하천 축선 (크린키 야간 침투로)",
-	5: "러우전 사령부 최후 방어선 (사령부 중앙 요새 참호)"
+	1: "동부 전선 14호 구역 (외곽 참호 지대)",
+	2: "남부 전선 28호 구역 (협준 협곡 협착로)",
+	3: "서부 보급 축선 07호 (전방 탄약 보급로)",
+	4: "시가전 폐허 구역 (공업 단지 인근)",
+	5: "중부 포격 지대 (파괴된 교량 전선)",
+	6: "하천 야간 침투 축선 (도하 저지선)",
+	7: "기갑 돌파 평원 (적 전차 주력 진격로)",
+	8: "기계화 요새 지대 (전투로봇 집결지)",
+	9: "사령부 1차 방벽 (고위험 합동 공세선)",
+	10: "사령부 최후 방어선 (최종 결전 참호)"
 }
 
 # Downward-pointing arrow pin coordinates on the theater satellite map
 const SECTOR_COORDINATES: Dictionary = {
-	1: Vector2(620, 160), # 바흐무트 외곽
-	2: Vector2(380, 370), # 자포리자 남부 협곡
-	3: Vector2(720, 300), # 아우디이우카 공업 단지
-	4: Vector2(240, 410), # 드니프로강 크린키
-	5: Vector2(480, 180)  # 사령부 중앙 요새
+	1: Vector2(640, 150),
+	2: Vector2(520, 210),
+	3: Vector2(390, 260),
+	4: Vector2(720, 280),
+	5: Vector2(590, 340),
+	6: Vector2(260, 390),
+	7: Vector2(410, 400),
+	8: Vector2(680, 420),
+	9: Vector2(310, 175),
+	10: Vector2(480, 145)
 }
 
 func _ready() -> void:
@@ -71,7 +86,7 @@ func _ready() -> void:
 	_load_wave_plan()
 	GameSession._ensure_profile_loaded()
 	
-	selected_stage_id = clampi(GameSession.selected_stage, 1, 5)
+	selected_stage_id = clampi(GameSession.selected_stage, 1, 10)
 	if not GameSession.is_stage_unlocked(selected_stage_id):
 		selected_stage_id = 1
 		
@@ -223,23 +238,23 @@ func _on_open_briefing_pressed() -> void:
 
 func _on_prev_sector_pressed() -> void:
 	var prev_id := selected_stage_id - 1
-	if prev_id < 1: prev_id = 5
+	if prev_id < 1: prev_id = 10
 	while prev_id != selected_stage_id:
 		if GameSession.is_stage_unlocked(prev_id):
 			_on_pin_selected(prev_id)
 			break
 		prev_id -= 1
-		if prev_id < 1: prev_id = 5
+		if prev_id < 1: prev_id = 10
 
 func _on_next_sector_pressed() -> void:
 	var next_id := selected_stage_id + 1
-	if next_id > 5: next_id = 1
+	if next_id > 10: next_id = 1
 	while next_id != selected_stage_id:
 		if GameSession.is_stage_unlocked(next_id):
 			_on_pin_selected(next_id)
 			break
 		next_id += 1
-		if next_id > 5: next_id = 1
+		if next_id > 10: next_id = 1
 
 func _build_stage_cards() -> void:
 	if not stage_container:
@@ -248,7 +263,7 @@ func _build_stage_cards() -> void:
 		c.queue_free()
 	stage_card_buttons.clear()
 	
-	for i in range(1, 6):
+	for i in range(1, 11):
 		var st_id := i
 		var st_info := get_stage_info(st_id)
 		var st_name: String = st_info.get("stage_name", "제%d작전" % st_id)
@@ -282,19 +297,19 @@ func refresh_hq_ui() -> void:
 		credits_label.text = "보유 전공 점수: %s P" % str(GameSession.credits)
 		
 	var cleared_count: int = 0
-	for i in range(1, 6):
+	for i in range(1, 11):
 		if GameSession.is_stage_cleared(i):
 			cleared_count += 1
 			
 	if progress_bar:
-		progress_bar.max_value = 5
+		progress_bar.max_value = 10
 		progress_bar.value = cleared_count
 	if progress_label:
-		var pct := cleared_count * 20
-		progress_label.text = "작전 총괄 진행도: %d / 5 개 구역 완수 (%d%%)" % [cleared_count, pct]
+		var pct := cleared_count * 10
+		progress_label.text = "작전 총괄 진행도: %d / 10 개 구역 완수 (%d%%)" % [cleared_count, pct]
 		
 	# Refresh Stage Cards
-	for st_id in range(1, 6):
+	for st_id in range(1, 11):
 		if not stage_card_buttons.has(st_id):
 			continue
 		var card: Button = stage_card_buttons[st_id]
@@ -329,7 +344,7 @@ func refresh_hq_ui() -> void:
 			card.modulate = Color(0.5, 0.5, 0.5)
 			
 	# Refresh Map Pins (Downward Arrow Markers on Satellite Map)
-	for st_id in range(1, 6):
+	for st_id in range(1, 11):
 		if not map_pin_buttons.has(st_id):
 			continue
 		var p_btn: Button = map_pin_buttons[st_id]
@@ -347,7 +362,7 @@ func refresh_hq_ui() -> void:
 		var sector_full: String = SECTOR_NAMES.get(st_id, "SECTOR %02d" % st_id)
 		var sector_parts := sector_full.split(":")
 		var sector_name_part := sector_parts[1].strip_edges() if sector_parts.size() > 1 else sector_full
-		p_btn.text = "SECTOR 0%d %s\n%s" % [st_id, status_str, sector_name_part]
+		p_btn.text = "SECTOR %02d %s\n%s" % [st_id, status_str, sector_name_part]
 		p_btn.disabled = not is_unlocked
 		
 		var pin_col := Color(0.5, 0.5, 0.5)

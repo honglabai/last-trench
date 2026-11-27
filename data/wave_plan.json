@@ -1,33 +1,30 @@
 {
-  "_notice": "5개 작전 스테이지 (각 스테이지당 1~10 웨이브 구성, 5번 스테이지가 최고 난이도). 동시 활성 적 수 cap 12.",
-  "schema_version": 3,
+  "_notice": "10개 작전 스테이지 (각 스테이지당 1~10 웨이브, 총 100 웨이브, 10번 스테이지가 최고 난이도). 동시 활성 적 수 cap 12.",
+  "schema_version": 4,
   "region_id": "sector_alpha",
-  "region_name": "제1작전구역: 서부 최전방 참호선 (Sector Alpha)",
-  "total_stages": 5,
+  "region_name": "최전방 전선 통합 작전구역 (10개 섹터)",
+  "total_stages": 10,
   "max_active_enemies": 12,
   "spawn_policy": "front_focused_only",
-  "boss_waves": [
-    20,
-    25,
-    30,
-    35,
-    40,
-    45,
-    50
-  ],
   "stages": [
     {
       "stage_id": 1,
       "stage_name": "제1작전: 전초 경계선 방어",
-      "difficulty": "보통 (EASY)",
+      "difficulty": "매우 쉬움 (VERY EASY)",
       "total_waves": 10,
-      "reward_credits": 1500,
-      "briefing": "전초 방어선 사수. 침투하는 수색 정찰대와 경보병을 신속히 격퇴하십시오.",
+      "reward_credits": 1200,
+      "briefing": "전초 방어선 사수. 침투하는 수색 정찰대와 경보병을 격퇴하십시오.",
       "expected_enemies": "기본 보병, 정찰 드론",
       "waves": [
         {
+          "id": 1,
+          "stage_id": 1,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
           "wave_index": 1,
-          "label_ko": "적 수색 정찰대",
+          "label_ko": "제1웨이브 공세",
           "enemy_total": {
             "infantry_basic": 4
           },
@@ -38,8 +35,14 @@
           ]
         },
         {
+          "id": 2,
+          "stage_id": 1,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
           "wave_index": 2,
-          "label_ko": "전방 경계 분대 + 경량 드론",
+          "label_ko": "제2웨이브 공세",
           "enemy_total": {
             "infantry_basic": 5,
             "drone_attack": 2
@@ -52,8 +55,34 @@
           ]
         },
         {
+          "id": 3,
+          "stage_id": 1,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
           "wave_index": 3,
-          "label_ko": "수색 정찰대",
+          "label_ko": "제3웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 5,
+            "drone_attack": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 4,
+          "stage_id": 1,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
+          "wave_index": 4,
+          "label_ko": "제4웨이브 공세",
           "enemy_total": {
             "infantry_basic": 6,
             "drone_attack": 2
@@ -66,25 +95,17 @@
           ]
         },
         {
-          "wave_index": 4,
-          "label_ko": "보병 돌격 분대",
-          "enemy_total": {
-            "infantry_basic": 8,
-            "drone_attack": 2
-          },
-          "boss": false,
-          "events": [],
-          "spawn_zones": [
-            "front_ground",
-            "front_air"
-          ]
-        },
-        {
+          "id": 5,
+          "stage_id": 1,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
           "wave_index": 5,
-          "label_ko": "중간 분대 협공",
+          "label_ko": "중간 집중 공세",
           "enemy_total": {
-            "infantry_basic": 8,
-            "drone_attack": 4
+            "infantry_basic": 6,
+            "drone_attack": 3
           },
           "boss": false,
           "events": [
@@ -96,11 +117,80 @@
           ]
         },
         {
+          "id": 6,
+          "stage_id": 1,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
           "wave_index": 6,
-          "label_ko": "고속 침투 제대",
+          "label_ko": "제6웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 7,
+            "drone_attack": 3
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 7,
+          "stage_id": 1,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
+          "wave_index": 7,
+          "label_ko": "제7웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 8,
+            "drone_attack": 3,
+            "rpg_infantry": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 8,
+          "stage_id": 1,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
+          "wave_index": 8,
+          "label_ko": "제8웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 8,
+            "drone_attack": 3,
+            "rpg_infantry": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 9,
+          "stage_id": 1,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
+          "wave_index": 9,
+          "label_ko": "제9웨이브 공세",
           "enemy_total": {
             "infantry_basic": 9,
-            "drone_attack": 3
+            "drone_attack": 4,
+            "rpg_infantry": 2
           },
           "boss": false,
           "events": [],
@@ -110,62 +200,22 @@
           ]
         },
         {
-          "wave_index": 7,
-          "label_ko": "RPG 선발대 기습",
-          "enemy_total": {
-            "infantry_basic": 8,
-            "rpg_infantry": 1,
-            "drone_attack": 3
-          },
-          "boss": false,
-          "events": [
-            "heavy_artillery_incoming"
-          ],
-          "spawn_zones": [
-            "front_ground",
-            "front_air"
-          ]
-        },
-        {
-          "wave_index": 8,
-          "label_ko": "드론 정찰 편대",
-          "enemy_total": {
-            "infantry_basic": 8,
-            "drone_attack": 5
-          },
-          "boss": false,
-          "events": [],
-          "spawn_zones": [
-            "front_ground",
-            "front_air"
-          ]
-        },
-        {
-          "wave_index": 9,
-          "label_ko": "적 제파 돌격",
-          "enemy_total": {
-            "infantry_basic": 10,
-            "rpg_infantry": 2,
-            "drone_attack": 3
-          },
-          "boss": false,
-          "events": [],
-          "spawn_zones": [
-            "front_ground",
-            "front_air"
-          ]
-        },
-        {
+          "id": 10,
+          "stage_id": 1,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제1작전: 전초 경계선 방어",
+          "difficulty": "매우 쉬움 (VERY EASY)",
           "wave_index": 10,
-          "label_ko": "제1작전 총공세",
+          "label_ko": "최종 보스 총공세",
           "enemy_total": {
-            "infantry_basic": 12,
-            "rpg_infantry": 2,
-            "drone_attack": 5
+            "infantry_basic": 9,
+            "drone_attack": 4,
+            "rpg_infantry": 2
           },
-          "boss": false,
+          "boss": true,
           "events": [
-            "stage_climax_wave"
+            "boss_wave"
           ],
           "spawn_zones": [
             "front_ground",
@@ -176,19 +226,25 @@
     },
     {
       "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "difficulty": "숙련 (NORMAL)",
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
       "total_waves": 10,
-      "reward_credits": 2500,
-      "briefing": "험준 협곡 통로 차단. 돌파를 시도하는 RPG 분대와 고속 드론을 저지하십시오.",
-      "expected_enemies": "RPG 대전차 보병, 공격 드론, 전투 로봇 선봉",
+      "reward_credits": 1600,
+      "briefing": "협곡 통로를 따라 침투하는 보병 및 RPG 분대를 저지하십시오.",
+      "expected_enemies": "보병, 정찰 드론, RPG 보병",
       "waves": [
         {
+          "id": 11,
+          "stage_id": 2,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
           "wave_index": 1,
-          "label_ko": "협곡 침투 제대",
+          "label_ko": "제1웨이브 공세",
           "enemy_total": {
-            "infantry_basic": 7,
-            "drone_attack": 3
+            "infantry_basic": 5,
+            "drone_attack": 2
           },
           "boss": false,
           "events": [],
@@ -198,26 +254,17 @@
           ]
         },
         {
+          "id": 12,
+          "stage_id": 2,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
           "wave_index": 2,
-          "label_ko": "RPG 대전차 분대 지원",
-          "enemy_total": {
-            "infantry_basic": 7,
-            "rpg_infantry": 2,
-            "drone_attack": 3
-          },
-          "boss": false,
-          "events": [],
-          "spawn_zones": [
-            "front_ground",
-            "front_air"
-          ]
-        },
-        {
-          "wave_index": 3,
-          "label_ko": "공중 침투 편대",
+          "label_ko": "제2웨이브 공세",
           "enemy_total": {
             "infantry_basic": 6,
-            "drone_attack": 6
+            "drone_attack": 2
           },
           "boss": false,
           "events": [],
@@ -227,12 +274,39 @@
           ]
         },
         {
+          "id": 13,
+          "stage_id": 2,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
+          "wave_index": 3,
+          "label_ko": "제3웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 6,
+            "drone_attack": 2,
+            "rpg_infantry": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 14,
+          "stage_id": 2,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
           "wave_index": 4,
-          "label_ko": "혼성 기습 제대",
+          "label_ko": "제4웨이브 공세",
           "enemy_total": {
-            "infantry_basic": 8,
-            "rpg_infantry": 3,
-            "drone_attack": 4
+            "infantry_basic": 7,
+            "drone_attack": 3,
+            "rpg_infantry": 1
           },
           "boss": false,
           "events": [],
@@ -242,16 +316,22 @@
           ]
         },
         {
+          "id": 15,
+          "stage_id": 2,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
           "wave_index": 5,
-          "label_ko": "전투 로봇 선봉대",
+          "label_ko": "중간 집중 공세",
           "enemy_total": {
-            "infantry_basic": 8,
-            "combat_robot": 2,
-            "drone_attack": 4
+            "infantry_basic": 7,
+            "drone_attack": 3,
+            "rpg_infantry": 2
           },
           "boss": false,
           "events": [
-            "robot_vanguard"
+            "reinforcements_incoming"
           ],
           "spawn_zones": [
             "front_ground",
@@ -259,12 +339,18 @@
           ]
         },
         {
+          "id": 16,
+          "stage_id": 2,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
           "wave_index": 6,
-          "label_ko": "RPG 화력 지원대",
+          "label_ko": "제6웨이브 공세",
           "enemy_total": {
             "infantry_basic": 8,
-            "rpg_infantry": 4,
-            "drone_attack": 4
+            "drone_attack": 3,
+            "rpg_infantry": 2
           },
           "boss": false,
           "events": [],
@@ -274,12 +360,18 @@
           ]
         },
         {
+          "id": 17,
+          "stage_id": 2,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
           "wave_index": 7,
-          "label_ko": "고속 기동 분대",
+          "label_ko": "제7웨이브 공세",
           "enemy_total": {
-            "infantry_basic": 10,
-            "combat_robot": 2,
-            "drone_attack": 5
+            "infantry_basic": 9,
+            "drone_attack": 4,
+            "rpg_infantry": 2
           },
           "boss": false,
           "events": [],
@@ -289,12 +381,18 @@
           ]
         },
         {
+          "id": 18,
+          "stage_id": 2,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
           "wave_index": 8,
-          "label_ko": "공중 폭격 편대",
+          "label_ko": "제8웨이브 공세",
           "enemy_total": {
-            "infantry_basic": 8,
-            "rpg_infantry": 3,
-            "drone_attack": 7
+            "infantry_basic": 9,
+            "drone_attack": 4,
+            "rpg_infantry": 2
           },
           "boss": false,
           "events": [],
@@ -304,13 +402,18 @@
           ]
         },
         {
+          "id": 19,
+          "stage_id": 2,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
           "wave_index": 9,
-          "label_ko": "로봇 돌격 제대",
+          "label_ko": "제9웨이브 공세",
           "enemy_total": {
             "infantry_basic": 10,
-            "combat_robot": 3,
-            "rpg_infantry": 3,
-            "drone_attack": 4
+            "drone_attack": 4,
+            "rpg_infantry": 3
           },
           "boss": false,
           "events": [],
@@ -320,17 +423,22 @@
           ]
         },
         {
+          "id": 20,
+          "stage_id": 2,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제2작전: 험준 협곡 저지선",
+          "difficulty": "쉬움 (EASY)",
           "wave_index": 10,
-          "label_ko": "협곡 돌파 총공격 (드론 편대장)",
+          "label_ko": "최종 보스 총공세",
           "enemy_total": {
-            "drone_swarm_commander": 1,
             "infantry_basic": 10,
-            "rpg_infantry": 3,
-            "drone_attack": 6
+            "drone_attack": 5,
+            "rpg_infantry": 3
           },
           "boss": true,
           "events": [
-            "boss_drone_incoming"
+            "boss_wave"
           ],
           "spawn_zones": [
             "front_ground",
@@ -341,20 +449,25 @@
     },
     {
       "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "difficulty": "정예 (HARD)",
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
       "total_waves": 10,
-      "reward_credits": 3500,
-      "briefing": "도심 폐허 거점 고수. 중장갑 로봇과 RPG 저격 분대의 맹공을 분쇄하십시오.",
-      "expected_enemies": "중장갑 로봇, RPG 보병, 드론 편대장",
+      "reward_credits": 2000,
+      "briefing": "적 드론 편대와 RPG 대전차 병력의 협공을 막아내십시오.",
+      "expected_enemies": "보병, 정찰 드론, RPG 보병, 드론 사령관",
       "waves": [
         {
+          "id": 21,
+          "stage_id": 3,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
           "wave_index": 1,
-          "label_ko": "시가지 선발대",
+          "label_ko": "제1웨이브 공세",
           "enemy_total": {
-            "infantry_basic": 8,
-            "combat_robot": 3,
-            "drone_attack": 4
+            "infantry_basic": 6,
+            "drone_attack": 2
           },
           "boss": false,
           "events": [],
@@ -364,26 +477,17 @@
           ]
         },
         {
+          "id": 22,
+          "stage_id": 3,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
           "wave_index": 2,
-          "label_ko": "대전차 로켓 분대",
+          "label_ko": "제2웨이브 공세",
           "enemy_total": {
-            "infantry_basic": 8,
-            "rpg_infantry": 4,
-            "combat_robot": 2
-          },
-          "boss": false,
-          "events": [],
-          "spawn_zones": [
-            "front_ground"
-          ]
-        },
-        {
-          "wave_index": 3,
-          "label_ko": "공중 요격 편대",
-          "enemy_total": {
-            "combat_robot": 3,
-            "drone_attack": 7,
-            "infantry_basic": 6
+            "infantry_basic": 6,
+            "drone_attack": 3
           },
           "boss": false,
           "events": [],
@@ -393,30 +497,64 @@
           ]
         },
         {
-          "wave_index": 4,
-          "label_ko": "로봇 화력 제대",
+          "id": 23,
+          "stage_id": 3,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
+          "wave_index": 3,
+          "label_ko": "제3웨이브 공세",
           "enemy_total": {
-            "combat_robot": 4,
-            "rpg_infantry": 4,
-            "infantry_basic": 8
+            "infantry_basic": 7,
+            "drone_attack": 3,
+            "rpg_infantry": 1
           },
           "boss": false,
           "events": [],
           "spawn_zones": [
-            "front_ground"
+            "front_ground",
+            "front_air"
           ]
         },
         {
-          "wave_index": 5,
-          "label_ko": "드론 스웜 편대장 급습",
+          "id": 24,
+          "stage_id": 3,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
+          "wave_index": 4,
+          "label_ko": "제4웨이브 공세",
           "enemy_total": {
-            "drone_swarm_commander": 1,
-            "combat_robot": 3,
-            "drone_attack": 6
+            "infantry_basic": 8,
+            "drone_attack": 3,
+            "rpg_infantry": 2
           },
-          "boss": true,
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 25,
+          "stage_id": 3,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
+          "wave_index": 5,
+          "label_ko": "중간 집중 공세",
+          "enemy_total": {
+            "infantry_basic": 8,
+            "drone_attack": 4,
+            "rpg_infantry": 2
+          },
+          "boss": false,
           "events": [
-            "boss_drone_incoming"
+            "reinforcements_incoming"
           ],
           "spawn_zones": [
             "front_ground",
@@ -424,26 +562,60 @@
           ]
         },
         {
+          "id": 26,
+          "stage_id": 3,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
           "wave_index": 6,
-          "label_ko": "시가지 돌파대",
+          "label_ko": "제6웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 9,
+            "drone_attack": 4,
+            "rpg_infantry": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 27,
+          "stage_id": 3,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
+          "wave_index": 7,
+          "label_ko": "제7웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 9,
+            "drone_attack": 4,
+            "rpg_infantry": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 28,
+          "stage_id": 3,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
+          "wave_index": 8,
+          "label_ko": "제8웨이브 공세",
           "enemy_total": {
             "infantry_basic": 10,
-            "combat_robot": 4,
-            "rpg_infantry": 4
-          },
-          "boss": false,
-          "events": [],
-          "spawn_zones": [
-            "front_ground"
-          ]
-        },
-        {
-          "wave_index": 7,
-          "label_ko": "복합 화력 편대",
-          "enemy_total": {
-            "combat_robot": 5,
-            "rpg_infantry": 4,
-            "drone_attack": 6
+            "drone_attack": 4,
+            "rpg_infantry": 3
           },
           "boss": false,
           "events": [],
@@ -453,26 +625,18 @@
           ]
         },
         {
-          "wave_index": 8,
-          "label_ko": "정예 특수 보병",
-          "enemy_total": {
-            "infantry_basic": 12,
-            "combat_robot": 4,
-            "rpg_infantry": 5
-          },
-          "boss": false,
-          "events": [],
-          "spawn_zones": [
-            "front_ground"
-          ]
-        },
-        {
+          "id": 29,
+          "stage_id": 3,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
           "wave_index": 9,
-          "label_ko": "집중 포화 제대",
+          "label_ko": "제9웨이브 공세",
           "enemy_total": {
-            "combat_robot": 5,
-            "rpg_infantry": 5,
-            "drone_attack": 8
+            "infantry_basic": 11,
+            "drone_attack": 5,
+            "rpg_infantry": 3
           },
           "boss": false,
           "events": [],
@@ -482,17 +646,23 @@
           ]
         },
         {
+          "id": 30,
+          "stage_id": 3,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제3작전: 외곽 보급로 사수",
+          "difficulty": "보통 (NORMAL)",
           "wave_index": 10,
-          "label_ko": "시가지 결전 (장갑 로봇 보스)",
+          "label_ko": "최종 보스 총공세",
           "enemy_total": {
-            "armored_robot_boss": 1,
-            "combat_robot": 4,
-            "rpg_infantry": 4,
-            "drone_attack": 6
+            "infantry_basic": 11,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "drone_swarm_commander": 1
           },
           "boss": true,
           "events": [
-            "boss_robot_incoming"
+            "boss_wave"
           ],
           "spawn_zones": [
             "front_ground",
@@ -503,21 +673,25 @@
     },
     {
       "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
-      "difficulty": "특수작전 (VERY HARD)",
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
       "total_waves": 10,
-      "reward_credits": 5000,
-      "briefing": "야간 기습 제대 요격. 탐조등 시야를 확보하고 드론 스웜 편대를 격추하십시오.",
-      "expected_enemies": "특수 돌격대, 드론 스웜 편대, 장갑 로봇 보스",
+      "reward_credits": 2400,
+      "briefing": "폐허 지대를 돌파하는 전투로봇 선봉대를 집중 화력으로 제압하십시오.",
+      "expected_enemies": "보병, RPG 보병, 전투로봇, 드론",
       "waves": [
         {
+          "id": 31,
+          "stage_id": 4,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
           "wave_index": 1,
-          "label_ko": "야간 침투 제대",
+          "label_ko": "제1웨이브 공세",
           "enemy_total": {
-            "combat_robot": 4,
-            "rpg_infantry": 4,
-            "drone_attack": 6,
-            "infantry_basic": 8
+            "infantry_basic": 7,
+            "drone_attack": 3
           },
           "boss": false,
           "events": [],
@@ -527,12 +701,17 @@
           ]
         },
         {
+          "id": 32,
+          "stage_id": 4,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
           "wave_index": 2,
-          "label_ko": "고속 기습 편대",
+          "label_ko": "제2웨이브 공세",
           "enemy_total": {
-            "combat_robot": 5,
-            "drone_attack": 8,
-            "rpg_infantry": 4
+            "infantry_basic": 7,
+            "drone_attack": 3
           },
           "boss": false,
           "events": [],
@@ -542,26 +721,19 @@
           ]
         },
         {
+          "id": 33,
+          "stage_id": 4,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
           "wave_index": 3,
-          "label_ko": "특수 제파 공격",
+          "label_ko": "제3웨이브 공세",
           "enemy_total": {
-            "combat_robot": 5,
-            "rpg_infantry": 5,
-            "infantry_basic": 10
-          },
-          "boss": false,
-          "events": [],
-          "spawn_zones": [
-            "front_ground"
-          ]
-        },
-        {
-          "wave_index": 4,
-          "label_ko": "암야의 폭격대",
-          "enemy_total": {
-            "drone_attack": 10,
-            "combat_robot": 5,
-            "rpg_infantry": 4
+            "infantry_basic": 8,
+            "drone_attack": 3,
+            "rpg_infantry": 2,
+            "combat_robot": 1
           },
           "boss": false,
           "events": [],
@@ -571,28 +743,65 @@
           ]
         },
         {
-          "wave_index": 5,
-          "label_ko": "장갑 로봇 보스 기습",
+          "id": 34,
+          "stage_id": 4,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
+          "wave_index": 4,
+          "label_ko": "제4웨이브 공세",
           "enemy_total": {
-            "armored_robot_boss": 1,
-            "combat_robot": 4,
-            "rpg_infantry": 5
+            "infantry_basic": 9,
+            "drone_attack": 4,
+            "rpg_infantry": 2,
+            "combat_robot": 1
           },
-          "boss": true,
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 35,
+          "stage_id": 4,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
+          "wave_index": 5,
+          "label_ko": "중간 집중 공세",
+          "enemy_total": {
+            "infantry_basic": 9,
+            "drone_attack": 4,
+            "rpg_infantry": 2,
+            "combat_robot": 2
+          },
+          "boss": false,
           "events": [
-            "boss_robot_incoming"
+            "reinforcements_incoming"
           ],
           "spawn_zones": [
-            "front_ground"
+            "front_ground",
+            "front_air"
           ]
         },
         {
+          "id": 36,
+          "stage_id": 4,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
           "wave_index": 6,
-          "label_ko": "특수 강습 제대",
+          "label_ko": "제6웨이브 공세",
           "enemy_total": {
-            "combat_robot": 6,
-            "rpg_infantry": 5,
-            "drone_attack": 6
+            "infantry_basic": 10,
+            "drone_attack": 4,
+            "rpg_infantry": 3,
+            "combat_robot": 2
           },
           "boss": false,
           "events": [],
@@ -602,26 +811,41 @@
           ]
         },
         {
+          "id": 37,
+          "stage_id": 4,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
           "wave_index": 7,
-          "label_ko": "전방위 포위망",
+          "label_ko": "제7웨이브 공세",
           "enemy_total": {
-            "combat_robot": 6,
-            "rpg_infantry": 6,
-            "infantry_basic": 12
+            "infantry_basic": 10,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 2
           },
           "boss": false,
           "events": [],
           "spawn_zones": [
-            "front_ground"
+            "front_ground",
+            "front_air"
           ]
         },
         {
+          "id": 38,
+          "stage_id": 4,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
           "wave_index": 8,
-          "label_ko": "공중 드론 스웜",
+          "label_ko": "제8웨이브 공세",
           "enemy_total": {
-            "drone_attack": 12,
-            "combat_robot": 6,
-            "rpg_infantry": 5
+            "infantry_basic": 11,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 2
           },
           "boss": false,
           "events": [],
@@ -631,13 +855,19 @@
           ]
         },
         {
+          "id": 39,
+          "stage_id": 4,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
           "wave_index": 9,
-          "label_ko": "결전 직전 총공세",
+          "label_ko": "제9웨이브 공세",
           "enemy_total": {
-            "combat_robot": 7,
-            "rpg_infantry": 6,
-            "drone_attack": 8,
-            "infantry_basic": 10
+            "infantry_basic": 12,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 2
           },
           "boss": false,
           "events": [],
@@ -647,17 +877,23 @@
           ]
         },
         {
+          "id": 40,
+          "stage_id": 4,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제4작전: 공업 폐허 시가전",
+          "difficulty": "보통+ (NORMAL+)",
           "wave_index": 10,
-          "label_ko": "야간 총력전 (드론 편대장 + 정예 로봇)",
+          "label_ko": "최종 보스 총공세",
           "enemy_total": {
-            "drone_swarm_commander": 1,
-            "combat_robot": 6,
-            "rpg_infantry": 6,
-            "drone_attack": 8
+            "infantry_basic": 12,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3
           },
           "boss": true,
           "events": [
-            "boss_drone_incoming"
+            "boss_wave"
           ],
           "spawn_zones": [
             "front_ground",
@@ -668,21 +904,25 @@
     },
     {
       "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
-      "difficulty": "최종 결전 (EXTREME)",
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
       "total_waves": 10,
-      "reward_credits": 8000,
-      "briefing": "전 전선 결사 총공세! 사령부 총력전으로 최후의 참호와 조국을 수호하십시오!",
-      "expected_enemies": "최종 결전 보스, 장갑 로봇, 드론 편대장, 전 군단 총출동",
+      "reward_credits": 3000,
+      "briefing": "중장갑 전투로봇 보스와 호위 부대의 포격을 견디고 격파하십시오.",
+      "expected_enemies": "전투로봇, RPG 보병, 중장갑 전투로봇 보스",
       "waves": [
         {
+          "id": 41,
+          "stage_id": 5,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 1,
-          "label_ko": "총력전 서막",
+          "label_ko": "제1웨이브 공세",
           "enemy_total": {
-            "combat_robot": 6,
-            "rpg_infantry": 6,
-            "drone_attack": 8,
-            "infantry_basic": 10
+            "infantry_basic": 8,
+            "drone_attack": 3
           },
           "boss": false,
           "events": [],
@@ -692,26 +932,39 @@
           ]
         },
         {
+          "id": 42,
+          "stage_id": 5,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 2,
-          "label_ko": "지상 돌파 군단",
+          "label_ko": "제2웨이브 공세",
           "enemy_total": {
-            "combat_robot": 8,
-            "rpg_infantry": 6,
-            "infantry_basic": 12
+            "infantry_basic": 8,
+            "drone_attack": 4
           },
           "boss": false,
           "events": [],
           "spawn_zones": [
-            "front_ground"
+            "front_ground",
+            "front_air"
           ]
         },
         {
+          "id": 43,
+          "stage_id": 5,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 3,
-          "label_ko": "하늘을 뒤덮은 드론",
+          "label_ko": "제3웨이브 공세",
           "enemy_total": {
-            "drone_attack": 14,
-            "combat_robot": 6,
-            "rpg_infantry": 6
+            "infantry_basic": 9,
+            "drone_attack": 4,
+            "rpg_infantry": 2,
+            "combat_robot": 2
           },
           "boss": false,
           "events": [],
@@ -721,12 +974,19 @@
           ]
         },
         {
+          "id": 44,
+          "stage_id": 5,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 4,
-          "label_ko": "정예 강습 제파",
+          "label_ko": "제4웨이브 공세",
           "enemy_total": {
-            "combat_robot": 8,
-            "rpg_infantry": 8,
-            "drone_attack": 8
+            "infantry_basic": 9,
+            "drone_attack": 4,
+            "rpg_infantry": 3,
+            "combat_robot": 2
           },
           "boss": false,
           "events": [],
@@ -736,29 +996,43 @@
           ]
         },
         {
+          "id": 45,
+          "stage_id": 5,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 5,
-          "label_ko": "장갑 로봇 보스 결전",
+          "label_ko": "중간 집중 공세",
           "enemy_total": {
-            "armored_robot_boss": 1,
-            "combat_robot": 6,
-            "rpg_infantry": 6
+            "infantry_basic": 10,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 2
           },
-          "boss": true,
+          "boss": false,
           "events": [
-            "boss_robot_incoming"
+            "reinforcements_incoming"
           ],
           "spawn_zones": [
-            "front_ground"
+            "front_ground",
+            "front_air"
           ]
         },
         {
+          "id": 46,
+          "stage_id": 5,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 6,
-          "label_ko": "쉴 새 없는 포격",
+          "label_ko": "제6웨이브 공세",
           "enemy_total": {
-            "combat_robot": 8,
-            "rpg_infantry": 8,
-            "drone_attack": 10,
-            "infantry_basic": 12
+            "infantry_basic": 11,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 2
           },
           "boss": false,
           "events": [],
@@ -768,12 +1042,19 @@
           ]
         },
         {
+          "id": 47,
+          "stage_id": 5,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 7,
-          "label_ko": "기계화 군단 공세",
+          "label_ko": "제7웨이브 공세",
           "enemy_total": {
-            "combat_robot": 10,
-            "rpg_infantry": 8,
-            "drone_attack": 10
+            "infantry_basic": 11,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 2
           },
           "boss": false,
           "events": [],
@@ -783,13 +1064,19 @@
           ]
         },
         {
+          "id": 48,
+          "stage_id": 5,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 8,
-          "label_ko": "무한 제파 돌격",
+          "label_ko": "제8웨이브 공세",
           "enemy_total": {
-            "combat_robot": 10,
-            "rpg_infantry": 9,
-            "drone_attack": 12,
-            "infantry_basic": 14
+            "infantry_basic": 12,
+            "drone_attack": 5,
+            "rpg_infantry": 4,
+            "combat_robot": 3
           },
           "boss": false,
           "events": [],
@@ -799,12 +1086,19 @@
           ]
         },
         {
+          "id": 49,
+          "stage_id": 5,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 9,
-          "label_ko": "결전의 전야",
+          "label_ko": "제9웨이브 공세",
           "enemy_total": {
-            "combat_robot": 12,
-            "rpg_infantry": 10,
-            "drone_attack": 12
+            "infantry_basic": 12,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3
           },
           "boss": false,
           "events": [],
@@ -814,17 +1108,1222 @@
           ]
         },
         {
+          "id": 50,
+          "stage_id": 5,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제5작전: 포격 초토화 지대",
+          "difficulty": "어려움 (HARD)",
           "wave_index": 10,
-          "label_ko": "최후의 결전 (최종 돌격 결전 보스)",
+          "label_ko": "최종 보스 총공세",
           "enemy_total": {
-            "final_assault_boss": 1,
-            "combat_robot": 8,
-            "rpg_infantry": 8,
-            "drone_attack": 10
+            "infantry_basic": 13,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3,
+            "armored_robot_boss": 1
           },
           "boss": true,
           "events": [
-            "final_boss_incoming"
+            "boss_wave"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        }
+      ]
+    },
+    {
+      "stage_id": 6,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "total_waves": 10,
+      "reward_credits": 3600,
+      "briefing": "야간 침투하는 드론 군단과 선봉 전차를 대전차 화기로 격파하십시오.",
+      "expected_enemies": "전투로봇, 적 전차, 드론 사령관",
+      "waves": [
+        {
+          "id": 51,
+          "stage_id": 6,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 1,
+          "label_ko": "제1웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 9,
+            "drone_attack": 4
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 52,
+          "stage_id": 6,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 2,
+          "label_ko": "제2웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 9,
+            "drone_attack": 4
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 53,
+          "stage_id": 6,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 3,
+          "label_ko": "제3웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 10,
+            "drone_attack": 4,
+            "rpg_infantry": 3,
+            "combat_robot": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 54,
+          "stage_id": 6,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 4,
+          "label_ko": "제4웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 10,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 2,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 55,
+          "stage_id": 6,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 5,
+          "label_ko": "중간 집중 공세",
+          "enemy_total": {
+            "infantry_basic": 11,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 3,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [
+            "reinforcements_incoming"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 56,
+          "stage_id": 6,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 6,
+          "label_ko": "제6웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 12,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 3,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 57,
+          "stage_id": 6,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 7,
+          "label_ko": "제7웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 12,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 58,
+          "stage_id": 6,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 8,
+          "label_ko": "제8웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 13,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 59,
+          "stage_id": 6,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 9,
+          "label_ko": "제9웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 13,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 60,
+          "stage_id": 6,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제6작전: 강변 야간 침투로",
+          "difficulty": "어려움+ (HARD+)",
+          "wave_index": 10,
+          "label_ko": "최종 보스 총공세",
+          "enemy_total": {
+            "infantry_basic": 14,
+            "drone_attack": 7,
+            "rpg_infantry": 4,
+            "combat_robot": 4,
+            "enemy_tank": 1,
+            "drone_swarm_commander": 1
+          },
+          "boss": true,
+          "events": [
+            "boss_wave"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        }
+      ]
+    },
+    {
+      "stage_id": 7,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "total_waves": 10,
+      "reward_credits": 4200,
+      "briefing": "주력 전차 편대의 포격을 돌파하고 현궁·RPG로 기갑을 분쇄하십시오.",
+      "expected_enemies": "적 전차, 전투로봇, RPG 보병",
+      "waves": [
+        {
+          "id": 61,
+          "stage_id": 7,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 1,
+          "label_ko": "제1웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 9,
+            "drone_attack": 4
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 62,
+          "stage_id": 7,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 2,
+          "label_ko": "제2웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 10,
+            "drone_attack": 5
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 63,
+          "stage_id": 7,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 3,
+          "label_ko": "제3웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 11,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 3
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 64,
+          "stage_id": 7,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 4,
+          "label_ko": "제4웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 11,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 3,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 65,
+          "stage_id": 7,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 5,
+          "label_ko": "중간 집중 공세",
+          "enemy_total": {
+            "infantry_basic": 12,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3,
+            "enemy_tank": 1,
+            "drone_swarm_commander": 1
+          },
+          "boss": true,
+          "events": [
+            "boss_wave"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 66,
+          "stage_id": 7,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 6,
+          "label_ko": "제6웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 12,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 67,
+          "stage_id": 7,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 7,
+          "label_ko": "제7웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 13,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 68,
+          "stage_id": 7,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 8,
+          "label_ko": "제8웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 14,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 4,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 69,
+          "stage_id": 7,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 9,
+          "label_ko": "제9웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 14,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 4,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 70,
+          "stage_id": 7,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제7작전: 철갑 전차 돌파선",
+          "difficulty": "매우 어려움 (VERY HARD)",
+          "wave_index": 10,
+          "label_ko": "최종 보스 총공세",
+          "enemy_total": {
+            "infantry_basic": 15,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 4,
+            "enemy_tank": 3
+          },
+          "boss": true,
+          "events": [
+            "boss_wave"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        }
+      ]
+    },
+    {
+      "stage_id": 8,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "total_waves": 10,
+      "reward_credits": 5000,
+      "briefing": "중전차와 중장갑 전투로봇의 합동 공세를 저지하십시오.",
+      "expected_enemies": "적 전차, 전투로봇, 중장갑 전투로봇 보스",
+      "waves": [
+        {
+          "id": 71,
+          "stage_id": 8,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 1,
+          "label_ko": "제1웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 10,
+            "drone_attack": 5
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 72,
+          "stage_id": 8,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 2,
+          "label_ko": "제2웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 11,
+            "drone_attack": 5
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 73,
+          "stage_id": 8,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 3,
+          "label_ko": "제3웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 12,
+            "drone_attack": 5,
+            "rpg_infantry": 3,
+            "combat_robot": 3
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 74,
+          "stage_id": 8,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 4,
+          "label_ko": "제4웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 12,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 3,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 75,
+          "stage_id": 8,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 5,
+          "label_ko": "중간 집중 공세",
+          "enemy_total": {
+            "infantry_basic": 13,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 4,
+            "enemy_tank": 1,
+            "drone_swarm_commander": 1
+          },
+          "boss": true,
+          "events": [
+            "boss_wave"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 76,
+          "stage_id": 8,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 6,
+          "label_ko": "제6웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 13,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 4,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 77,
+          "stage_id": 8,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 7,
+          "label_ko": "제7웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 14,
+            "drone_attack": 7,
+            "rpg_infantry": 4,
+            "combat_robot": 4,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 78,
+          "stage_id": 8,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 8,
+          "label_ko": "제8웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 15,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 4,
+            "enemy_tank": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 79,
+          "stage_id": 8,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 9,
+          "label_ko": "제9웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 15,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 4,
+            "enemy_tank": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 80,
+          "stage_id": 8,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제8작전: 기계화 요새 공방전",
+          "difficulty": "매우 어려움+ (VERY HARD+)",
+          "wave_index": 10,
+          "label_ko": "최종 보스 총공세",
+          "enemy_total": {
+            "infantry_basic": 16,
+            "drone_attack": 8,
+            "rpg_infantry": 5,
+            "combat_robot": 5,
+            "enemy_tank": 2,
+            "armored_robot_boss": 1
+          },
+          "boss": true,
+          "events": [
+            "boss_wave"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        }
+      ]
+    },
+    {
+      "stage_id": 9,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "total_waves": 10,
+      "reward_credits": 6000,
+      "briefing": "사령부 직전 최후의 방벽에서 대규모 기갑·드론 총공세를 막아내십시오.",
+      "expected_enemies": "적 전차, 전투로봇, 드론 사령관, 중장갑 보스",
+      "waves": [
+        {
+          "id": 81,
+          "stage_id": 9,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 1,
+          "label_ko": "제1웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 11,
+            "drone_attack": 5
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 82,
+          "stage_id": 9,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 2,
+          "label_ko": "제2웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 12,
+            "drone_attack": 6
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 83,
+          "stage_id": 9,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 3,
+          "label_ko": "제3웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 12,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 4
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 84,
+          "stage_id": 9,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 4,
+          "label_ko": "제4웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 13,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 4,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 85,
+          "stage_id": 9,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 5,
+          "label_ko": "중간 집중 공세",
+          "enemy_total": {
+            "infantry_basic": 14,
+            "drone_attack": 7,
+            "rpg_infantry": 4,
+            "combat_robot": 4,
+            "enemy_tank": 1,
+            "drone_swarm_commander": 1
+          },
+          "boss": true,
+          "events": [
+            "boss_wave"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 86,
+          "stage_id": 9,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 6,
+          "label_ko": "제6웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 14,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 4,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 87,
+          "stage_id": 9,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 7,
+          "label_ko": "제7웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 15,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 4,
+            "enemy_tank": 1
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 88,
+          "stage_id": 9,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 8,
+          "label_ko": "제8웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 15,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 5,
+            "enemy_tank": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 89,
+          "stage_id": 9,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 9,
+          "label_ko": "제9웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 16,
+            "drone_attack": 8,
+            "rpg_infantry": 5,
+            "combat_robot": 5,
+            "enemy_tank": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 90,
+          "stage_id": 9,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제9작전: 사령부 외곽 방벽",
+          "difficulty": "극한 (EXTREME)",
+          "wave_index": 10,
+          "label_ko": "최종 보스 총공세",
+          "enemy_total": {
+            "infantry_basic": 17,
+            "drone_attack": 8,
+            "rpg_infantry": 6,
+            "combat_robot": 5,
+            "enemy_tank": 2,
+            "armored_robot_boss": 1
+          },
+          "boss": true,
+          "events": [
+            "boss_wave"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        }
+      ]
+    },
+    {
+      "stage_id": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "total_waves": 10,
+      "reward_credits": 8000,
+      "briefing": "모든 적 병력이 총동원되는 최후의 결전! 최후의 참호를 사수하십시오.",
+      "expected_enemies": "적 전차, 전투로봇, 드론 사령관, 최종 결전 보스",
+      "waves": [
+        {
+          "id": 91,
+          "stage_id": 10,
+          "stage_wave_index": 1,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 1,
+          "label_ko": "제1웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 12,
+            "drone_attack": 6
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 92,
+          "stage_id": 10,
+          "stage_wave_index": 2,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 2,
+          "label_ko": "제2웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 13,
+            "drone_attack": 6
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 93,
+          "stage_id": 10,
+          "stage_wave_index": 3,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 3,
+          "label_ko": "제3웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 13,
+            "drone_attack": 6,
+            "rpg_infantry": 4,
+            "combat_robot": 4
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 94,
+          "stage_id": 10,
+          "stage_wave_index": 4,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 4,
+          "label_ko": "제4웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 14,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 4,
+            "enemy_tank": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 95,
+          "stage_id": 10,
+          "stage_wave_index": 5,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 5,
+          "label_ko": "중간 집중 공세",
+          "enemy_total": {
+            "infantry_basic": 15,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 5,
+            "enemy_tank": 2,
+            "drone_swarm_commander": 1
+          },
+          "boss": true,
+          "events": [
+            "boss_wave"
+          ],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 96,
+          "stage_id": 10,
+          "stage_wave_index": 6,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 6,
+          "label_ko": "제6웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 15,
+            "drone_attack": 7,
+            "rpg_infantry": 5,
+            "combat_robot": 5,
+            "enemy_tank": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 97,
+          "stage_id": 10,
+          "stage_wave_index": 7,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 7,
+          "label_ko": "제7웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 16,
+            "drone_attack": 8,
+            "rpg_infantry": 5,
+            "combat_robot": 5,
+            "enemy_tank": 2
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 98,
+          "stage_id": 10,
+          "stage_wave_index": 8,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 8,
+          "label_ko": "제8웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 16,
+            "drone_attack": 8,
+            "rpg_infantry": 6,
+            "combat_robot": 5,
+            "enemy_tank": 3
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 99,
+          "stage_id": 10,
+          "stage_wave_index": 9,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 9,
+          "label_ko": "제9웨이브 공세",
+          "enemy_total": {
+            "infantry_basic": 17,
+            "drone_attack": 8,
+            "rpg_infantry": 6,
+            "combat_robot": 5,
+            "enemy_tank": 3
+          },
+          "boss": false,
+          "events": [],
+          "spawn_zones": [
+            "front_ground",
+            "front_air"
+          ]
+        },
+        {
+          "id": 100,
+          "stage_id": 10,
+          "stage_wave_index": 10,
+          "total_stage_waves": 10,
+          "stage_name": "제10작전: 사령부 중앙 결전지",
+          "difficulty": "지옥 (NIGHTMARE)",
+          "wave_index": 10,
+          "label_ko": "최종 보스 총공세",
+          "enemy_total": {
+            "infantry_basic": 18,
+            "drone_attack": 9,
+            "rpg_infantry": 6,
+            "combat_robot": 6,
+            "enemy_tank": 3,
+            "final_assault_boss": 1
+          },
+          "boss": true,
+          "events": [
+            "boss_wave"
           ],
           "spawn_zones": [
             "front_ground",
@@ -836,8 +2335,14 @@
   ],
   "waves": [
     {
+      "id": 1,
+      "stage_id": 1,
+      "stage_wave_index": 1,
+      "total_stage_waves": 10,
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
       "wave_index": 1,
-      "label_ko": "적 수색 정찰대",
+      "label_ko": "제1웨이브 공세",
       "enemy_total": {
         "infantry_basic": 4
       },
@@ -845,17 +2350,17 @@
       "events": [],
       "spawn_zones": [
         "front_ground"
-      ],
-      "id": 1,
-      "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
-      "stage_wave_index": 1,
-      "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
+      ]
     },
     {
+      "id": 2,
+      "stage_id": 1,
+      "stage_wave_index": 2,
+      "total_stage_waves": 10,
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
       "wave_index": 2,
-      "label_ko": "전방 경계 분대 + 경량 드론",
+      "label_ko": "제2웨이브 공세",
       "enemy_total": {
         "infantry_basic": 5,
         "drone_attack": 2
@@ -865,17 +2370,37 @@
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
-      "id": 2,
-      "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
-      "stage_wave_index": 2,
-      "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
+      ]
     },
     {
+      "id": 3,
+      "stage_id": 1,
+      "stage_wave_index": 3,
+      "total_stage_waves": 10,
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
       "wave_index": 3,
-      "label_ko": "수색 정찰대",
+      "label_ko": "제3웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 5,
+        "drone_attack": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 4,
+      "stage_id": 1,
+      "stage_wave_index": 4,
+      "total_stage_waves": 10,
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
       "enemy_total": {
         "infantry_basic": 6,
         "drone_attack": 2
@@ -885,40 +2410,20 @@
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
-      "id": 3,
-      "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
-      "stage_wave_index": 3,
-      "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
+      ]
     },
     {
-      "wave_index": 4,
-      "label_ko": "보병 돌격 분대",
-      "enemy_total": {
-        "infantry_basic": 8,
-        "drone_attack": 2
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 4,
+      "id": 5,
       "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
-      "stage_wave_index": 4,
+      "stage_wave_index": 5,
       "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
-    },
-    {
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
       "wave_index": 5,
-      "label_ko": "중간 분대 협공",
+      "label_ko": "중간 집중 공세",
       "enemy_total": {
-        "infantry_basic": 8,
-        "drone_attack": 4
+        "infantry_basic": 6,
+        "drone_attack": 3
       },
       "boss": false,
       "events": [
@@ -927,975 +2432,2122 @@
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
-      "id": 5,
-      "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
-      "stage_wave_index": 5,
-      "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
+      ]
     },
     {
-      "wave_index": 6,
-      "label_ko": "고속 침투 제대",
-      "enemy_total": {
-        "infantry_basic": 9,
-        "drone_attack": 3
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
       "id": 6,
       "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
       "stage_wave_index": 6,
       "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
-    },
-    {
-      "wave_index": 7,
-      "label_ko": "RPG 선발대 기습",
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
       "enemy_total": {
-        "infantry_basic": 8,
-        "rpg_infantry": 1,
+        "infantry_basic": 7,
         "drone_attack": 3
       },
       "boss": false,
-      "events": [
-        "heavy_artillery_incoming"
-      ],
+      "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 7,
       "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
       "stage_wave_index": 7,
       "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
-    },
-    {
-      "wave_index": 8,
-      "label_ko": "드론 정찰 편대",
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
       "enemy_total": {
         "infantry_basic": 8,
-        "drone_attack": 5
+        "drone_attack": 3,
+        "rpg_infantry": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 8,
       "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
       "stage_wave_index": 8,
       "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
-    },
-    {
-      "wave_index": 9,
-      "label_ko": "적 제파 돌격",
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
       "enemy_total": {
-        "infantry_basic": 10,
-        "rpg_infantry": 2,
-        "drone_attack": 3
+        "infantry_basic": 8,
+        "drone_attack": 3,
+        "rpg_infantry": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 9,
       "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
       "stage_wave_index": 9,
       "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
-    },
-    {
-      "wave_index": 10,
-      "label_ko": "제1작전 총공세",
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
       "enemy_total": {
-        "infantry_basic": 12,
-        "rpg_infantry": 2,
-        "drone_attack": 5
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 2
       },
       "boss": false,
-      "events": [
-        "stage_climax_wave"
-      ],
+      "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 10,
       "stage_id": 1,
-      "stage_name": "제1작전: 전초 경계선 방어",
       "stage_wave_index": 10,
       "total_stage_waves": 10,
-      "difficulty": "보통 (EASY)"
-    },
-    {
-      "wave_index": 1,
-      "label_ko": "협곡 침투 제대",
-      "enemy_total": {
-        "infantry_basic": 7,
-        "drone_attack": 3
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 11,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 1,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
-    },
-    {
-      "wave_index": 2,
-      "label_ko": "RPG 대전차 분대 지원",
-      "enemy_total": {
-        "infantry_basic": 7,
-        "rpg_infantry": 2,
-        "drone_attack": 3
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 12,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 2,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
-    },
-    {
-      "wave_index": 3,
-      "label_ko": "공중 침투 편대",
-      "enemy_total": {
-        "infantry_basic": 6,
-        "drone_attack": 6
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 13,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 3,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
-    },
-    {
-      "wave_index": 4,
-      "label_ko": "혼성 기습 제대",
-      "enemy_total": {
-        "infantry_basic": 8,
-        "rpg_infantry": 3,
-        "drone_attack": 4
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 14,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 4,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
-    },
-    {
-      "wave_index": 5,
-      "label_ko": "전투 로봇 선봉대",
-      "enemy_total": {
-        "infantry_basic": 8,
-        "combat_robot": 2,
-        "drone_attack": 4
-      },
-      "boss": false,
-      "events": [
-        "robot_vanguard"
-      ],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 15,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 5,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
-    },
-    {
-      "wave_index": 6,
-      "label_ko": "RPG 화력 지원대",
-      "enemy_total": {
-        "infantry_basic": 8,
-        "rpg_infantry": 4,
-        "drone_attack": 4
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 16,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 6,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
-    },
-    {
-      "wave_index": 7,
-      "label_ko": "고속 기동 분대",
-      "enemy_total": {
-        "infantry_basic": 10,
-        "combat_robot": 2,
-        "drone_attack": 5
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 17,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 7,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
-    },
-    {
-      "wave_index": 8,
-      "label_ko": "공중 폭격 편대",
-      "enemy_total": {
-        "infantry_basic": 8,
-        "rpg_infantry": 3,
-        "drone_attack": 7
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 18,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 8,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
-    },
-    {
-      "wave_index": 9,
-      "label_ko": "로봇 돌격 제대",
-      "enemy_total": {
-        "infantry_basic": 10,
-        "combat_robot": 3,
-        "rpg_infantry": 3,
-        "drone_attack": 4
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 19,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 9,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
-    },
-    {
+      "stage_name": "제1작전: 전초 경계선 방어",
+      "difficulty": "매우 쉬움 (VERY EASY)",
       "wave_index": 10,
-      "label_ko": "협곡 돌파 총공격 (드론 편대장)",
+      "label_ko": "최종 보스 총공세",
       "enemy_total": {
-        "drone_swarm_commander": 1,
-        "infantry_basic": 10,
-        "rpg_infantry": 3,
-        "drone_attack": 6
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 2
       },
       "boss": true,
       "events": [
-        "boss_drone_incoming"
+        "boss_wave"
       ],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
-      "id": 20,
-      "stage_id": 2,
-      "stage_name": "제2작전: 협곡 돌파 저지",
-      "stage_wave_index": 10,
-      "total_stage_waves": 10,
-      "difficulty": "숙련 (NORMAL)"
+      ]
     },
     {
+      "id": 11,
+      "stage_id": 2,
+      "stage_wave_index": 1,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
       "wave_index": 1,
-      "label_ko": "시가지 선발대",
+      "label_ko": "제1웨이브 공세",
       "enemy_total": {
-        "infantry_basic": 8,
-        "combat_robot": 3,
-        "drone_attack": 4
+        "infantry_basic": 5,
+        "drone_attack": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
-      "id": 21,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 1,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
+      ]
     },
     {
+      "id": 12,
+      "stage_id": 2,
+      "stage_wave_index": 2,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
       "wave_index": 2,
-      "label_ko": "대전차 로켓 분대",
+      "label_ko": "제2웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 6,
+        "drone_attack": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 13,
+      "stage_id": 2,
+      "stage_wave_index": 3,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
+      "wave_index": 3,
+      "label_ko": "제3웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 6,
+        "drone_attack": 2,
+        "rpg_infantry": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 14,
+      "stage_id": 2,
+      "stage_wave_index": 4,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 7,
+        "drone_attack": 3,
+        "rpg_infantry": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 15,
+      "stage_id": 2,
+      "stage_wave_index": 5,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
+      "wave_index": 5,
+      "label_ko": "중간 집중 공세",
+      "enemy_total": {
+        "infantry_basic": 7,
+        "drone_attack": 3,
+        "rpg_infantry": 2
+      },
+      "boss": false,
+      "events": [
+        "reinforcements_incoming"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 16,
+      "stage_id": 2,
+      "stage_wave_index": 6,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
       "enemy_total": {
         "infantry_basic": 8,
-        "rpg_infantry": 4,
+        "drone_attack": 3,
+        "rpg_infantry": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 17,
+      "stage_id": 2,
+      "stage_wave_index": 7,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 18,
+      "stage_id": 2,
+      "stage_wave_index": 8,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 19,
+      "stage_id": 2,
+      "stage_wave_index": 9,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 4,
+        "rpg_infantry": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 20,
+      "stage_id": 2,
+      "stage_wave_index": 10,
+      "total_stage_waves": 10,
+      "stage_name": "제2작전: 험준 협곡 저지선",
+      "difficulty": "쉬움 (EASY)",
+      "wave_index": 10,
+      "label_ko": "최종 보스 총공세",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 5,
+        "rpg_infantry": 3
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 21,
+      "stage_id": 3,
+      "stage_wave_index": 1,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 1,
+      "label_ko": "제1웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 6,
+        "drone_attack": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 22,
+      "stage_id": 3,
+      "stage_wave_index": 2,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 2,
+      "label_ko": "제2웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 6,
+        "drone_attack": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 23,
+      "stage_id": 3,
+      "stage_wave_index": 3,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 3,
+      "label_ko": "제3웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 7,
+        "drone_attack": 3,
+        "rpg_infantry": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 24,
+      "stage_id": 3,
+      "stage_wave_index": 4,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 8,
+        "drone_attack": 3,
+        "rpg_infantry": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 25,
+      "stage_id": 3,
+      "stage_wave_index": 5,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 5,
+      "label_ko": "중간 집중 공세",
+      "enemy_total": {
+        "infantry_basic": 8,
+        "drone_attack": 4,
+        "rpg_infantry": 2
+      },
+      "boss": false,
+      "events": [
+        "reinforcements_incoming"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 26,
+      "stage_id": 3,
+      "stage_wave_index": 6,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 27,
+      "stage_id": 3,
+      "stage_wave_index": 7,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 28,
+      "stage_id": 3,
+      "stage_wave_index": 8,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 4,
+        "rpg_infantry": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 29,
+      "stage_id": 3,
+      "stage_wave_index": 9,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 11,
+        "drone_attack": 5,
+        "rpg_infantry": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 30,
+      "stage_id": 3,
+      "stage_wave_index": 10,
+      "total_stage_waves": 10,
+      "stage_name": "제3작전: 외곽 보급로 사수",
+      "difficulty": "보통 (NORMAL)",
+      "wave_index": 10,
+      "label_ko": "최종 보스 총공세",
+      "enemy_total": {
+        "infantry_basic": 11,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "drone_swarm_commander": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 31,
+      "stage_id": 4,
+      "stage_wave_index": 1,
+      "total_stage_waves": 10,
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 1,
+      "label_ko": "제1웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 7,
+        "drone_attack": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 32,
+      "stage_id": 4,
+      "stage_wave_index": 2,
+      "total_stage_waves": 10,
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 2,
+      "label_ko": "제2웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 7,
+        "drone_attack": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 33,
+      "stage_id": 4,
+      "stage_wave_index": 3,
+      "total_stage_waves": 10,
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 3,
+      "label_ko": "제3웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 8,
+        "drone_attack": 3,
+        "rpg_infantry": 2,
+        "combat_robot": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 34,
+      "stage_id": 4,
+      "stage_wave_index": 4,
+      "total_stage_waves": 10,
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 2,
+        "combat_robot": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 35,
+      "stage_id": 4,
+      "stage_wave_index": 5,
+      "total_stage_waves": 10,
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 5,
+      "label_ko": "중간 집중 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 2,
+        "combat_robot": 2
+      },
+      "boss": false,
+      "events": [
+        "reinforcements_incoming"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 36,
+      "stage_id": 4,
+      "stage_wave_index": 6,
+      "total_stage_waves": 10,
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 4,
+        "rpg_infantry": 3,
         "combat_robot": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
-        "front_ground"
-      ],
-      "id": 22,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 2,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
-    },
-    {
-      "wave_index": 3,
-      "label_ko": "공중 요격 편대",
-      "enemy_total": {
-        "combat_robot": 3,
-        "drone_attack": 7,
-        "infantry_basic": 6
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
-      "id": 23,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 3,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
+      ]
     },
     {
-      "wave_index": 4,
-      "label_ko": "로봇 화력 제대",
-      "enemy_total": {
-        "combat_robot": 4,
-        "rpg_infantry": 4,
-        "infantry_basic": 8
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground"
-      ],
-      "id": 24,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 4,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
-    },
-    {
-      "wave_index": 5,
-      "label_ko": "드론 스웜 편대장 급습",
-      "enemy_total": {
-        "drone_swarm_commander": 1,
-        "combat_robot": 3,
-        "drone_attack": 6
-      },
-      "boss": true,
-      "events": [
-        "boss_drone_incoming"
-      ],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 25,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 5,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
-    },
-    {
-      "wave_index": 6,
-      "label_ko": "시가지 돌파대",
-      "enemy_total": {
-        "infantry_basic": 10,
-        "combat_robot": 4,
-        "rpg_infantry": 4
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground"
-      ],
-      "id": 26,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 6,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
-    },
-    {
-      "wave_index": 7,
-      "label_ko": "복합 화력 편대",
-      "enemy_total": {
-        "combat_robot": 5,
-        "rpg_infantry": 4,
-        "drone_attack": 6
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 27,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 7,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
-    },
-    {
-      "wave_index": 8,
-      "label_ko": "정예 특수 보병",
-      "enemy_total": {
-        "infantry_basic": 12,
-        "combat_robot": 4,
-        "rpg_infantry": 5
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground"
-      ],
-      "id": 28,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 8,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
-    },
-    {
-      "wave_index": 9,
-      "label_ko": "집중 포화 제대",
-      "enemy_total": {
-        "combat_robot": 5,
-        "rpg_infantry": 5,
-        "drone_attack": 8
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 29,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 9,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
-    },
-    {
-      "wave_index": 10,
-      "label_ko": "시가지 결전 (장갑 로봇 보스)",
-      "enemy_total": {
-        "armored_robot_boss": 1,
-        "combat_robot": 4,
-        "rpg_infantry": 4,
-        "drone_attack": 6
-      },
-      "boss": true,
-      "events": [
-        "boss_robot_incoming"
-      ],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 30,
-      "stage_id": 3,
-      "stage_name": "제3작전: 도심 폐허 사수",
-      "stage_wave_index": 10,
-      "total_stage_waves": 10,
-      "difficulty": "정예 (HARD)"
-    },
-    {
-      "wave_index": 1,
-      "label_ko": "야간 침투 제대",
-      "enemy_total": {
-        "combat_robot": 4,
-        "rpg_infantry": 4,
-        "drone_attack": 6,
-        "infantry_basic": 8
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 31,
-      "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
-      "stage_wave_index": 1,
-      "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 2,
-      "label_ko": "고속 기습 편대",
-      "enemy_total": {
-        "combat_robot": 5,
-        "drone_attack": 8,
-        "rpg_infantry": 4
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 32,
-      "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
-      "stage_wave_index": 2,
-      "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 3,
-      "label_ko": "특수 제파 공격",
-      "enemy_total": {
-        "combat_robot": 5,
-        "rpg_infantry": 5,
-        "infantry_basic": 10
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground"
-      ],
-      "id": 33,
-      "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
-      "stage_wave_index": 3,
-      "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 4,
-      "label_ko": "암야의 폭격대",
-      "enemy_total": {
-        "drone_attack": 10,
-        "combat_robot": 5,
-        "rpg_infantry": 4
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 34,
-      "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
-      "stage_wave_index": 4,
-      "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 5,
-      "label_ko": "장갑 로봇 보스 기습",
-      "enemy_total": {
-        "armored_robot_boss": 1,
-        "combat_robot": 4,
-        "rpg_infantry": 5
-      },
-      "boss": true,
-      "events": [
-        "boss_robot_incoming"
-      ],
-      "spawn_zones": [
-        "front_ground"
-      ],
-      "id": 35,
-      "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
-      "stage_wave_index": 5,
-      "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 6,
-      "label_ko": "특수 강습 제대",
-      "enemy_total": {
-        "combat_robot": 6,
-        "rpg_infantry": 5,
-        "drone_attack": 6
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground",
-        "front_air"
-      ],
-      "id": 36,
-      "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
-      "stage_wave_index": 6,
-      "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 7,
-      "label_ko": "전방위 포위망",
-      "enemy_total": {
-        "combat_robot": 6,
-        "rpg_infantry": 6,
-        "infantry_basic": 12
-      },
-      "boss": false,
-      "events": [],
-      "spawn_zones": [
-        "front_ground"
-      ],
       "id": 37,
       "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
       "stage_wave_index": 7,
       "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 8,
-      "label_ko": "공중 드론 스웜",
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
       "enemy_total": {
-        "drone_attack": 12,
-        "combat_robot": 6,
-        "rpg_infantry": 5
+        "infantry_basic": 10,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 38,
       "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
       "stage_wave_index": 8,
       "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 9,
-      "label_ko": "결전 직전 총공세",
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
       "enemy_total": {
-        "combat_robot": 7,
-        "rpg_infantry": 6,
-        "drone_attack": 8,
-        "infantry_basic": 10
+        "infantry_basic": 11,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 39,
       "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
       "stage_wave_index": 9,
       "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 10,
-      "label_ko": "야간 총력전 (드론 편대장 + 정예 로봇)",
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
       "enemy_total": {
-        "drone_swarm_commander": 1,
-        "combat_robot": 6,
-        "rpg_infantry": 6,
-        "drone_attack": 8
+        "infantry_basic": 12,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 2
       },
-      "boss": true,
-      "events": [
-        "boss_drone_incoming"
-      ],
+      "boss": false,
+      "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 40,
       "stage_id": 4,
-      "stage_name": "제4작전: 야간 기습 요격",
       "stage_wave_index": 10,
       "total_stage_waves": 10,
-      "difficulty": "특수작전 (VERY HARD)"
-    },
-    {
-      "wave_index": 1,
-      "label_ko": "총력전 서막",
+      "stage_name": "제4작전: 공업 폐허 시가전",
+      "difficulty": "보통+ (NORMAL+)",
+      "wave_index": 10,
+      "label_ko": "최종 보스 총공세",
       "enemy_total": {
-        "combat_robot": 6,
-        "rpg_infantry": 6,
-        "drone_attack": 8,
-        "infantry_basic": 10
+        "infantry_basic": 12,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3
       },
-      "boss": false,
-      "events": [],
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 41,
       "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
       "stage_wave_index": 1,
       "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
-    },
-    {
-      "wave_index": 2,
-      "label_ko": "지상 돌파 군단",
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 1,
+      "label_ko": "제1웨이브 공세",
       "enemy_total": {
-        "combat_robot": 8,
-        "rpg_infantry": 6,
-        "infantry_basic": 12
+        "infantry_basic": 8,
+        "drone_attack": 3
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
-        "front_ground"
-      ],
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
       "id": 42,
       "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
       "stage_wave_index": 2,
       "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
-    },
-    {
-      "wave_index": 3,
-      "label_ko": "하늘을 뒤덮은 드론",
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 2,
+      "label_ko": "제2웨이브 공세",
       "enemy_total": {
-        "drone_attack": 14,
-        "combat_robot": 6,
-        "rpg_infantry": 6
+        "infantry_basic": 8,
+        "drone_attack": 4
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 43,
       "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
       "stage_wave_index": 3,
       "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
-    },
-    {
-      "wave_index": 4,
-      "label_ko": "정예 강습 제파",
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 3,
+      "label_ko": "제3웨이브 공세",
       "enemy_total": {
-        "combat_robot": 8,
-        "rpg_infantry": 8,
-        "drone_attack": 8
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 2,
+        "combat_robot": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 44,
       "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
       "stage_wave_index": 4,
       "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4,
+        "rpg_infantry": 3,
+        "combat_robot": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
     },
     {
-      "wave_index": 5,
-      "label_ko": "장갑 로봇 보스 결전",
-      "enemy_total": {
-        "armored_robot_boss": 1,
-        "combat_robot": 6,
-        "rpg_infantry": 6
-      },
-      "boss": true,
-      "events": [
-        "boss_robot_incoming"
-      ],
-      "spawn_zones": [
-        "front_ground"
-      ],
       "id": 45,
       "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
       "stage_wave_index": 5,
       "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
-    },
-    {
-      "wave_index": 6,
-      "label_ko": "쉴 새 없는 포격",
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 5,
+      "label_ko": "중간 집중 공세",
       "enemy_total": {
-        "combat_robot": 8,
-        "rpg_infantry": 8,
-        "drone_attack": 10,
-        "infantry_basic": 12
+        "infantry_basic": 10,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 2
       },
       "boss": false,
-      "events": [],
+      "events": [
+        "reinforcements_incoming"
+      ],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 46,
       "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
       "stage_wave_index": 6,
       "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
-    },
-    {
-      "wave_index": 7,
-      "label_ko": "기계화 군단 공세",
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
       "enemy_total": {
-        "combat_robot": 10,
-        "rpg_infantry": 8,
-        "drone_attack": 10
+        "infantry_basic": 11,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 47,
       "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
       "stage_wave_index": 7,
       "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
-    },
-    {
-      "wave_index": 8,
-      "label_ko": "무한 제파 돌격",
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
       "enemy_total": {
-        "combat_robot": 10,
-        "rpg_infantry": 9,
-        "drone_attack": 12,
-        "infantry_basic": 14
+        "infantry_basic": 11,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 2
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
+      ]
+    },
+    {
       "id": 48,
       "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
       "stage_wave_index": 8,
       "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
-    },
-    {
-      "wave_index": 9,
-      "label_ko": "결전의 전야",
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
       "enemy_total": {
-        "combat_robot": 12,
-        "rpg_infantry": 10,
-        "drone_attack": 12
+        "infantry_basic": 12,
+        "drone_attack": 5,
+        "rpg_infantry": 4,
+        "combat_robot": 3
       },
       "boss": false,
       "events": [],
       "spawn_zones": [
         "front_ground",
         "front_air"
-      ],
-      "id": 49,
-      "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
-      "stage_wave_index": 9,
-      "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
+      ]
     },
     {
-      "wave_index": 10,
-      "label_ko": "최후의 결전 (최종 돌격 결전 보스)",
+      "id": 49,
+      "stage_id": 5,
+      "stage_wave_index": 9,
+      "total_stage_waves": 10,
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
       "enemy_total": {
-        "final_assault_boss": 1,
-        "combat_robot": 8,
-        "rpg_infantry": 8,
-        "drone_attack": 10
+        "infantry_basic": 12,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 50,
+      "stage_id": 5,
+      "stage_wave_index": 10,
+      "total_stage_waves": 10,
+      "stage_name": "제5작전: 포격 초토화 지대",
+      "difficulty": "어려움 (HARD)",
+      "wave_index": 10,
+      "label_ko": "최종 보스 총공세",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3,
+        "armored_robot_boss": 1
       },
       "boss": true,
       "events": [
-        "final_boss_incoming"
+        "boss_wave"
       ],
       "spawn_zones": [
         "front_ground",
         "front_air"
+      ]
+    },
+    {
+      "id": 51,
+      "stage_id": 6,
+      "stage_wave_index": 1,
+      "total_stage_waves": 10,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 1,
+      "label_ko": "제1웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 52,
+      "stage_id": 6,
+      "stage_wave_index": 2,
+      "total_stage_waves": 10,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 2,
+      "label_ko": "제2웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 53,
+      "stage_id": 6,
+      "stage_wave_index": 3,
+      "total_stage_waves": 10,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 3,
+      "label_ko": "제3웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 4,
+        "rpg_infantry": 3,
+        "combat_robot": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 54,
+      "stage_id": 6,
+      "stage_wave_index": 4,
+      "total_stage_waves": 10,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 2,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 55,
+      "stage_id": 6,
+      "stage_wave_index": 5,
+      "total_stage_waves": 10,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 5,
+      "label_ko": "중간 집중 공세",
+      "enemy_total": {
+        "infantry_basic": 11,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 3,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [
+        "reinforcements_incoming"
       ],
-      "id": 50,
-      "stage_id": 5,
-      "stage_name": "제5작전: 최종 참호 총결전",
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 56,
+      "stage_id": 6,
+      "stage_wave_index": 6,
+      "total_stage_waves": 10,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 3,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 57,
+      "stage_id": 6,
+      "stage_wave_index": 7,
+      "total_stage_waves": 10,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 58,
+      "stage_id": 6,
+      "stage_wave_index": 8,
+      "total_stage_waves": 10,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 59,
+      "stage_id": 6,
+      "stage_wave_index": 9,
+      "total_stage_waves": 10,
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 60,
+      "stage_id": 6,
       "stage_wave_index": 10,
       "total_stage_waves": 10,
-      "difficulty": "최종 결전 (EXTREME)"
+      "stage_name": "제6작전: 강변 야간 침투로",
+      "difficulty": "어려움+ (HARD+)",
+      "wave_index": 10,
+      "label_ko": "최종 보스 총공세",
+      "enemy_total": {
+        "infantry_basic": 14,
+        "drone_attack": 7,
+        "rpg_infantry": 4,
+        "combat_robot": 4,
+        "enemy_tank": 1,
+        "drone_swarm_commander": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 61,
+      "stage_id": 7,
+      "stage_wave_index": 1,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 1,
+      "label_ko": "제1웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 9,
+        "drone_attack": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 62,
+      "stage_id": 7,
+      "stage_wave_index": 2,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 2,
+      "label_ko": "제2웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 5
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 63,
+      "stage_id": 7,
+      "stage_wave_index": 3,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 3,
+      "label_ko": "제3웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 11,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 64,
+      "stage_id": 7,
+      "stage_wave_index": 4,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 11,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 3,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 65,
+      "stage_id": 7,
+      "stage_wave_index": 5,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 5,
+      "label_ko": "중간 집중 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3,
+        "enemy_tank": 1,
+        "drone_swarm_commander": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 66,
+      "stage_id": 7,
+      "stage_wave_index": 6,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 67,
+      "stage_id": 7,
+      "stage_wave_index": 7,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 68,
+      "stage_id": 7,
+      "stage_wave_index": 8,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 14,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 4,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 69,
+      "stage_id": 7,
+      "stage_wave_index": 9,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 14,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 4,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 70,
+      "stage_id": 7,
+      "stage_wave_index": 10,
+      "total_stage_waves": 10,
+      "stage_name": "제7작전: 철갑 전차 돌파선",
+      "difficulty": "매우 어려움 (VERY HARD)",
+      "wave_index": 10,
+      "label_ko": "최종 보스 총공세",
+      "enemy_total": {
+        "infantry_basic": 15,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 4,
+        "enemy_tank": 3
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 71,
+      "stage_id": 8,
+      "stage_wave_index": 1,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 1,
+      "label_ko": "제1웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 10,
+        "drone_attack": 5
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 72,
+      "stage_id": 8,
+      "stage_wave_index": 2,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 2,
+      "label_ko": "제2웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 11,
+        "drone_attack": 5
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 73,
+      "stage_id": 8,
+      "stage_wave_index": 3,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 3,
+      "label_ko": "제3웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 5,
+        "rpg_infantry": 3,
+        "combat_robot": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 74,
+      "stage_id": 8,
+      "stage_wave_index": 4,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 3,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 75,
+      "stage_id": 8,
+      "stage_wave_index": 5,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 5,
+      "label_ko": "중간 집중 공세",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 4,
+        "enemy_tank": 1,
+        "drone_swarm_commander": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 76,
+      "stage_id": 8,
+      "stage_wave_index": 6,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 4,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 77,
+      "stage_id": 8,
+      "stage_wave_index": 7,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 14,
+        "drone_attack": 7,
+        "rpg_infantry": 4,
+        "combat_robot": 4,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 78,
+      "stage_id": 8,
+      "stage_wave_index": 8,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 15,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 4,
+        "enemy_tank": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 79,
+      "stage_id": 8,
+      "stage_wave_index": 9,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 15,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 4,
+        "enemy_tank": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 80,
+      "stage_id": 8,
+      "stage_wave_index": 10,
+      "total_stage_waves": 10,
+      "stage_name": "제8작전: 기계화 요새 공방전",
+      "difficulty": "매우 어려움+ (VERY HARD+)",
+      "wave_index": 10,
+      "label_ko": "최종 보스 총공세",
+      "enemy_total": {
+        "infantry_basic": 16,
+        "drone_attack": 8,
+        "rpg_infantry": 5,
+        "combat_robot": 5,
+        "enemy_tank": 2,
+        "armored_robot_boss": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 81,
+      "stage_id": 9,
+      "stage_wave_index": 1,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 1,
+      "label_ko": "제1웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 11,
+        "drone_attack": 5
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 82,
+      "stage_id": 9,
+      "stage_wave_index": 2,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 2,
+      "label_ko": "제2웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 6
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 83,
+      "stage_id": 9,
+      "stage_wave_index": 3,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 3,
+      "label_ko": "제3웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 84,
+      "stage_id": 9,
+      "stage_wave_index": 4,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 4,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 85,
+      "stage_id": 9,
+      "stage_wave_index": 5,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 5,
+      "label_ko": "중간 집중 공세",
+      "enemy_total": {
+        "infantry_basic": 14,
+        "drone_attack": 7,
+        "rpg_infantry": 4,
+        "combat_robot": 4,
+        "enemy_tank": 1,
+        "drone_swarm_commander": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 86,
+      "stage_id": 9,
+      "stage_wave_index": 6,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 14,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 4,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 87,
+      "stage_id": 9,
+      "stage_wave_index": 7,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 15,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 4,
+        "enemy_tank": 1
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 88,
+      "stage_id": 9,
+      "stage_wave_index": 8,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 15,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 5,
+        "enemy_tank": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 89,
+      "stage_id": 9,
+      "stage_wave_index": 9,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 16,
+        "drone_attack": 8,
+        "rpg_infantry": 5,
+        "combat_robot": 5,
+        "enemy_tank": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 90,
+      "stage_id": 9,
+      "stage_wave_index": 10,
+      "total_stage_waves": 10,
+      "stage_name": "제9작전: 사령부 외곽 방벽",
+      "difficulty": "극한 (EXTREME)",
+      "wave_index": 10,
+      "label_ko": "최종 보스 총공세",
+      "enemy_total": {
+        "infantry_basic": 17,
+        "drone_attack": 8,
+        "rpg_infantry": 6,
+        "combat_robot": 5,
+        "enemy_tank": 2,
+        "armored_robot_boss": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 91,
+      "stage_id": 10,
+      "stage_wave_index": 1,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 1,
+      "label_ko": "제1웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 12,
+        "drone_attack": 6
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 92,
+      "stage_id": 10,
+      "stage_wave_index": 2,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 2,
+      "label_ko": "제2웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 6
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 93,
+      "stage_id": 10,
+      "stage_wave_index": 3,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 3,
+      "label_ko": "제3웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 13,
+        "drone_attack": 6,
+        "rpg_infantry": 4,
+        "combat_robot": 4
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 94,
+      "stage_id": 10,
+      "stage_wave_index": 4,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 4,
+      "label_ko": "제4웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 14,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 4,
+        "enemy_tank": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 95,
+      "stage_id": 10,
+      "stage_wave_index": 5,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 5,
+      "label_ko": "중간 집중 공세",
+      "enemy_total": {
+        "infantry_basic": 15,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 5,
+        "enemy_tank": 2,
+        "drone_swarm_commander": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 96,
+      "stage_id": 10,
+      "stage_wave_index": 6,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 6,
+      "label_ko": "제6웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 15,
+        "drone_attack": 7,
+        "rpg_infantry": 5,
+        "combat_robot": 5,
+        "enemy_tank": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 97,
+      "stage_id": 10,
+      "stage_wave_index": 7,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 7,
+      "label_ko": "제7웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 16,
+        "drone_attack": 8,
+        "rpg_infantry": 5,
+        "combat_robot": 5,
+        "enemy_tank": 2
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 98,
+      "stage_id": 10,
+      "stage_wave_index": 8,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 8,
+      "label_ko": "제8웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 16,
+        "drone_attack": 8,
+        "rpg_infantry": 6,
+        "combat_robot": 5,
+        "enemy_tank": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 99,
+      "stage_id": 10,
+      "stage_wave_index": 9,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 9,
+      "label_ko": "제9웨이브 공세",
+      "enemy_total": {
+        "infantry_basic": 17,
+        "drone_attack": 8,
+        "rpg_infantry": 6,
+        "combat_robot": 5,
+        "enemy_tank": 3
+      },
+      "boss": false,
+      "events": [],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
+    },
+    {
+      "id": 100,
+      "stage_id": 10,
+      "stage_wave_index": 10,
+      "total_stage_waves": 10,
+      "stage_name": "제10작전: 사령부 중앙 결전지",
+      "difficulty": "지옥 (NIGHTMARE)",
+      "wave_index": 10,
+      "label_ko": "최종 보스 총공세",
+      "enemy_total": {
+        "infantry_basic": 18,
+        "drone_attack": 9,
+        "rpg_infantry": 6,
+        "combat_robot": 6,
+        "enemy_tank": 3,
+        "final_assault_boss": 1
+      },
+      "boss": true,
+      "events": [
+        "boss_wave"
+      ],
+      "spawn_zones": [
+        "front_ground",
+        "front_air"
+      ]
     }
   ]
 }
